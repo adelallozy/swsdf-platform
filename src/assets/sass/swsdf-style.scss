@@ -1,0 +1,191 @@
+@import url("https://fonts.googleapis.com/css?family=Cairo:400,600,700&display=swap&subset=arabic");
+
+// :root {
+//     --font-size:16px;
+//     --font-family-sans-serif: "Cairo", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
+//     --font-family-monospace: SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+// }
+
+// body {
+//   font-family: "Cairo", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
+//     "Helvetica Neue", Arial, "Noto Sans", sans-serif, "Apple Color Emoji",
+//     "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
+// }
+
+// h1,
+// h2,
+// h3,
+// h4,
+// h5,
+// h6,
+// .h1,
+// .h2,
+// .h3,
+// .h4,
+// .h5,
+// .h6 {
+//   font-family: "Cairo", sans-serif;
+//   font-weight: 700;
+//   line-height: 1.2em;
+// }
+// .card .card-header {
+//   border-bottom: 0;
+// }
+
+// .custom-input + .invalid-feedback {
+//   display: block !important;
+// }
+
+// [dir="rtl"] {
+//   .me-1 {
+//     margin-right: unset !important;
+//     margin-left: 0.25rem !important;
+//   }
+
+//   .me-2 {
+//     margin-right: unset !important;
+//     margin-left: 0.5rem !important;
+//   }
+
+//   .me-3 {
+//     margin-right: unset !important;
+//     margin-left: 0.75rem !important;
+//   }
+
+//   .me-4 {
+//     margin-right: unset !important;
+//     margin-left: 1rem !important;
+//   }
+
+//   .me-5 {
+//     margin-right: unset !important;
+//     margin-left: 1.25rem !important;
+//   }
+
+//   .me-6 {
+//     margin-right: unset !important;
+//     margin-left: 1.5rem !important;
+//   }
+
+//   .me-7 {
+//     margin-right: unset !important;
+//     margin-left: 1.75rem !important;
+//   }
+
+//   .me-8 {
+//     margin-right: unset !important;
+//     margin-left: 2rem !important;
+//   }
+
+//   .me-9 {
+//     margin-right: unset !important;
+//     margin-left: 2.25rem !important;
+//   }
+
+//   .ms-1 {
+//     margin-left: unset !important;
+//     margin-right: 0.25rem !important;
+//   }
+
+//   .ms-2 {
+//     margin-left: unset !important;
+//     margin-right: 0.5rem !important;
+//   }
+
+//   .ms-3 {
+//     margin-left: unset !important;
+//     margin-right: 0.75rem !important;
+//   }
+
+//   .ms-4 {
+//     margin-left: unset !important;
+//     margin-right: 1rem !important;
+//   }
+
+//   .ms-5 {
+//     margin-left: unset !important;
+//     margin-right: 1.25rem !important;
+//   }
+
+//   .ms-6 {
+//     margin-left: unset !important;
+//     margin-right: 1.5rem !important;
+//   }
+
+//   .btn .svg-icon {
+//     margin-right: unset;
+//     margin-left: 0.5rem;
+//   }
+
+//   .end-0 {
+//     right: unset !important;
+//     left: 0 !important;
+//   }
+
+//   .start-100 {
+//     left: unset !important;
+//     right: 100% !important;
+//   }
+
+//   .nav {
+//     padding-left: unset;
+//     padding-right: 0;
+//   }
+
+//   .breadcrumb .breadcrumb-item {
+//     padding-right: unset;
+//     padding-left: 0.5rem;
+//   }
+
+//   .card .card-header .card-title .card-label {
+//     margin: 0 0 0 0.75rem;
+//   }
+
+//   .timeline-label .timeline-badge {
+//     margin-left: unset;
+//     margin-right: -0.5rem;
+//   }
+
+//   .ps-3 {
+//     padding-left: unset;
+//     padding-right: 0.75rem !important;
+//   }
+
+//   .column .timeline-label::before {
+//     left: unset;
+//     right: calc(var(--bs-gutter-x) * 0.5);
+//     margin-top: 0.5rem;
+//   }
+
+//   .timeline-label-column::before {
+//     left: unset;
+//     right: calc(var(--bs-gutter-x) * 0.5);
+//     margin-top: 0.5rem;
+//   }
+
+//   .card .card-header .card-title {
+//     display: flex;
+//     align-items: center;
+//     margin: 0.5rem 0 0.5rem 0.5rem;
+//   }
+
+//   .stepper.stepper-pills .stepper-item .stepper-icon {
+//     margin-right: unset;
+//     margin-left: 1.5rem;
+//   }
+//   .stepper.stepper-pills.stepper-column .stepper-line {
+//     left: unset;
+//     right: 0;
+//   }
+// }
+
+// .timeline-label-column::before {
+//   left: calc(var(--bs-gutter-x) * 0.5);
+// }
+
+// .fs-4rem {
+//   font-size: 4rem;
+// }
+// .fs-3rem {
+//   font-size: 3rem;
+// }

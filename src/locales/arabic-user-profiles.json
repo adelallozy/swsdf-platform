@@ -1,0 +1,20 @@
+{
+    "Upload personal photo": "رفع الصورة الشخصية",
+    "Your photo will be used on membership cards and application documents": "ستُستخدم صورتك على بطاقات العضوية ومستندات الطلب",
+    "Photo requirements": "متطلبات الصورة",
+    "Facial features are fully visible from the front.": "يجب أن تكون ملامح الوجه واضحة بالكامل من الأمام.",
+    "Use a white background with even lighting.": "استخدم خلفية بيضاء مع إضاءة متساوية.",
+    "Avoid filters, hats, or sunglasses.": "تجنب الفلاتر أو القبعات أو النظارات الشمسية.",
+    "Personal photo": "الصورة الشخصية",
+    "Photo is required": "الصورة مطلوبة",
+    "Photo uploaded successfully": "تم رفع الصورة بنجاح",
+    "Upload service is temporarily unavailable": "خدمة الرفع غير متاحة مؤقتًا",
+    "Failed to upload photo": "فشل رفع الصورة",
+    "Upload photo": "رفع الصورة",
+    "Drop your photo here or click to upload": "اسحب صورتك هنا أو اضغط لرفعها",
+    "Drop files here or click to upload": "اسحب الملفات هنا أو اضغط لرفعها",
+    "PNG, JPG, or WebP up to 5MB": "PNG أو JPG أو WebP بحد أقصى 5 ميجابايت",
+    "Edit photo": "تحرير الصورة",
+    "Replace photo": "استبدال الصورة",
+    "Remove photo": "إزالة الصورة"
+}

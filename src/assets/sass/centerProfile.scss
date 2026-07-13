@@ -1,0 +1,31 @@
+.item-details {
+  li {
+    @apply tw-flex tw-flex-wrap tw-items-center tw-gap-x-2 tw-gap-y-1 tw-mb-3;
+  }
+  .name {
+    @apply tw-flex tw-items-center tw-gap-2 tw-text-muted-strong;
+  }
+  .text {
+    @apply tw-text-foreground tw-font-medium;
+  }
+}
+
+.status {
+  @apply tw-font-medium tw-text-base tw-text-muted-strong tw-rounded-md tw-px-2;
+  &.Valid {
+    @apply tw-text-white tw-bg-green-600;
+  }
+}
+
+.card-invalid { 
+  background-color: #fee2e2;
+  border-color: #ef4444 ;
+  color: #b91c1c !important;
+
+  .name {
+      color: #b91c1c !important;
+  }
+  .text {
+      color: #991b1b !important;
+  }
+}

@@ -1,0 +1,138 @@
+/* SWSDF + PrimeVue Aura Tailwind entrypoint */
+/* Loads Tailwind layers and adds small base/component tweaks that follow Aura tokens. */
+
+/* Optional: load your fonts (Cairo/Open Sans) */
+@import url('https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;500;700&family=Open+Sans:wght@300;400;600;700&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* ------------------------------
+   Base styles aligned with Aura
+   ------------------------------ */
+@layer base {
+  :root {
+    /* Map to PrimeVue Aura tokens (note the 'p-') */
+    --btn-pay-bg: var(--p-primary-600);
+    --btn-pay-hover: var(--p-primary-700);
+    --btn-pay-active: var(--p-primary-800);
+
+    /* Invoice (emerald) */
+    --btn-invoice-bg: #059669;
+    /* emerald-600 */
+    --btn-invoice-hover: #047857;
+    /* emerald-700 */
+    --btn-invoice-active: #065f46;
+    /* emerald-800 */
+  }
+
+  .dark {
+    color-scheme: dark;
+  }
+
+  html {
+    @apply tw-font-sans;
+  }
+
+  body {
+    @apply tw-bg-p-surface-0 tw-text-p-text;
+  }
+
+  /* Global link style (but exclude our pill links) */
+  a:not(.pill-link) {
+    @apply tw-text-primary tw-underline-offset-2;
+  }
+
+  a:not(.pill-link):hover {
+    @apply tw-text-p-primary-600;
+  }
+}
+
+/* ------------------------------
+   Components (small, app-wide)
+   ------------------------------ */
+@layer components {
+
+  /* Generic button used in older markup; PrimeVue <Button> is preferred */
+  .base-btn {
+    @apply tw-inline-flex tw-items-center tw-justify-center tw-w-full tw-h-12 tw-rounded-xl tw-font-medium tw-transition tw-duration-200 tw-ease-out tw-text-white tw-bg-primary hover:tw-bg-p-primary-600 disabled:tw-opacity-60 disabled:tw-cursor-not-allowed;
+  }
+
+  /* Common label style used in forms */
+  .label {
+    @apply tw-font-medium tw-text-p-text;
+  }
+
+  /* Wrapper to stack label + field + help */
+  .input_wrapper {
+    @apply tw-flex tw-flex-col tw-gap-1;
+  }
+
+  /* Subtle card-like blocks without using <Card> */
+  .surface-block {
+    @apply tw-bg-surface tw-rounded-2xl tw-shadow-card;
+  }
+}
+
+/* ------------------------------
+   Utilities (project flavored)
+   ------------------------------ */
+@layer utilities {
+
+  /* Logical spacing helpers (useful with RTL) */
+  .flow {
+    @apply tw-flex tw-flex-col tw-gap-3;
+  }
+
+  .flow-lg {
+    @apply tw-flex tw-flex-col tw-gap-5;
+  }
+
+  /* Text tones aligned to brand semantics */
+  .text-muted {
+    @apply tw-text-muted;
+  }
+
+  .text-muted-strong {
+    @apply tw-text-muted-strong;
+  }
+
+  /* Reusable pill link (shape/spacing/interaction) */
+  .pill-link {
+    @apply tw-inline-flex tw-items-center tw-gap-2 tw-h-11 tw-px-5 tw-rounded-full tw-shadow-sm tw-transition-colors tw-duration-150 tw-no-underline focus-visible:tw-ring-2;
+  }
+
+  /* Force white text on pill links (beats base a / a:hover) */
+  .pill-link,
+  .pill-link:hover,
+  .pill-link:active {
+    color: #fff !important;
+  }
+
+  /* Payment link backgrounds via CSS vars (with !important to beat any tw-bg-*) */
+  .bg-pay {
+    background-color: var(--btn-pay-bg) !important;
+  }
+
+  .hover\:bg-pay-hover:hover {
+    background-color: var(--btn-pay-hover) !important;
+  }
+
+  .active\:bg-pay-active:active {
+    background-color: var(--btn-pay-active) !important;
+  }
+
+  /* Invoice link backgrounds */
+  .bg-invoice {
+    background-color: var(--btn-invoice-bg) !important;
+  }
+
+  .hover\:bg-invoice-hover:hover {
+    background-color: var(--btn-invoice-hover) !important;
+  }
+
+  .active\:bg-invoice-active:active {
+    background-color: var(--btn-invoice-active) !important;
+  }
+}

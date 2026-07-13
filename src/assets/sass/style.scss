@@ -1,0 +1,848 @@
+$mode: default;
+
+@use "sass:meta";
+
+/* Tailwind layers (use meta.load-css to avoid deprecated @import) */
+@include meta.load-css("tailwindcss/base");
+@include meta.load-css("tailwindcss/components");
+@include meta.load-css("tailwindcss/utilities");
+@import "./animation/animate.css";
+
+/* -------------------------------------------------------
+   Tokens + writing mode / direction
+------------------------------------------------------- */
+:root {
+	/* Design tokens */
+	--page-bg: #ffffff;
+	--surface: #ffffff;
+	--surface-2: #f8fafc;
+	--border: #e2e8f0;
+	--border-strong: #cbd5e1;
+	--primary: #035796;
+	--primary-600: #004b85;
+	--danger: #dc3545;
+	--muted: #64748b;
+	--shadow: 0 1px 1px rgba(2, 6, 23, .05), 0 4px 6px rgba(2, 6, 23, .07);
+
+	/* Prime-friendly control sizing */
+	--ctrl-h: 44px;
+	/* input/select height */
+	--ctrl-r: 14px;
+	/* input/select radius */
+
+	/* Writing mode hint (applied to :root per spec note) */
+	writing-mode: horizontal-tb;
+	text-orientation: mixed;
+}
+
+:root[dir='rtl'] {
+	direction: rtl;
+}
+
+:root[dir='ltr'] {
+	direction: ltr;
+}
+
+/* -------------------------------------------------------
+   PrimeVue polish (non-breaking)
+   - unifies InputText, Select, Dropdown look & feel
+   - clearer focus & error states
+------------------------------------------------------- */
+:where(.p-inputtext) {
+	height: var(--ctrl-h);
+	border-radius: var(--ctrl-r);
+	border: 1px solid var(--border);
+	background: #fff;
+	box-shadow: none;
+}
+
+.p-inputtext:focus {
+	border-color: var(--primary);
+	box-shadow: none;
+}
+
+.p-select {
+	height: var(--ctrl-h);
+	border: 1px solid var(--border);
+	border-radius: var(--ctrl-r);
+	background: #fff;
+}
+
+.p-select .p-select-label {
+	padding-inline: 12px;
+}
+
+.p-select:not(.p-disabled).p-focus {
+	border-color: var(--primary);
+	box-shadow: none;
+}
+
+.p-dropdown {
+	height: var(--ctrl-h);
+	border: 1px solid var(--border);
+	border-radius: var(--ctrl-r);
+	background: #fff;
+}
+
+.p-dropdown:not(.p-disabled).p-focus {
+	border-color: var(--primary);
+	box-shadow: none;
+}
+
+.p-dropdown .p-inputtext {
+	box-shadow: none;
+}
+
+/* Dropdown / Select panels */
+.p-select-panel,
+.p-dropdown-panel {
+	border-radius: 12px;
+}
+
+/* Error visuals (you already pass :invalid) */
+.p-inputtext.p-invalid,
+.p-select.p-invalid,
+.p-dropdown.p-invalid {
+	border-color: var(--danger);
+}
+
+/* Inline message tone */
+.p-message.p-message-danger.p-message-simple {
+	border: none;
+	padding-inline: 0;
+	color: var(--danger);
+}
+
+/* -------------------------------------------------------
+   Components (Tailwind utilities via @apply)
+------------------------------------------------------- */
+@layer components {
+	.base-btn {
+		color: #fff !important;
+		@apply tw-w-fit tw-flex tw-items-center tw-justify-center tw-gap-3 tw-rounded-full tw-py-3 tw-px-8 tw-font-medium tw-duration-300 tw-border tw-border-primary tw-bg-primary hover:tw-cursor-pointer hover:tw-bg-white hover:tw-text-primary hover:tw-border-primary;
+
+		&:hover {
+			color: #035796 !important;
+		}
+
+		&:disabled {
+			@apply tw-bg-[#F0F0F0] tw-text-[#CACBD2] tw-border-[#CACBD2];
+		}
+	}
+
+	.base-btn-white {
+		@apply tw-w-fit tw-flex tw-items-center tw-justify-center tw-gap-3 tw-rounded-full tw-py-3 tw-px-8 tw-font-medium tw-duration-300 tw-border tw-border-primary tw-bg-white tw-text-primary hover:tw-bg-primary hover:tw-text-white;
+
+		&:disabled {
+			@apply tw-bg-[#F0F0F0] tw-text-[#CACBD2];
+		}
+	}
+
+	.base-btn-success {
+		@apply tw-bg-[#07bc0c] tw-font-bold tw-text-white flex-center tw-px-3 tw-py-2 tw-flex tw-rounded-xl tw-items-center tw-justify-center tw-gap-3 tw-border tw-border-[#07bc0c] hover:tw-bg-white hover:tw-text-[#07bc0c] hover:tw-border-[#07bc0c] tw-duration-300;
+
+		&:disabled {
+			@apply tw-bg-[#F0F0F0] tw-text-[#CACBD2];
+		}
+	}
+
+	.base-btn-success-white {
+		@apply tw-bg-white tw-font-bold tw-text-[#07bc0c] flex-center tw-px-3 tw-py-2 tw-flex tw-rounded-xl tw-items-center tw-justify-center tw-gap-3 tw-border tw-border-[#07bc0c] hover:tw-bg-[#07bc0c] hover:tw-text-white hover:tw-border-[#07bc0c] tw-duration-300;
+
+		&:disabled {
+			@apply tw-bg-[#F0F0F0] tw-text-[#CACBD2];
+		}
+	}
+
+	.btn-warning {
+		@apply tw-bg-[#ffc107] tw-font-bold tw-text-white flex-center tw-px-3 tw-py-2 tw-flex tw-rounded-xl tw-items-center tw-justify-center tw-gap-3 tw-border tw-border-[#ffc107] hover:tw-bg-white hover:tw-text-[#ffc107] hover:tw-border-[#ffc107] tw-duration-300;
+	}
+
+	.btn-light-warning {
+		@apply tw-bg-white tw-font-bold tw-text-[#ffc107] flex-center tw-px-3 tw-py-2 tw-flex tw-rounded-xl tw-items-center tw-justify-center tw-gap-3 tw-border tw-border-[#ffc107] hover:tw-bg-[#ffc107] hover:tw-text-white hover:tw-border-white tw-duration-300;
+	}
+
+	.btn-danger {
+		@apply tw-bg-[#dc3545] tw-font-bold tw-text-white flex-center tw-px-3 tw-py-2 tw-flex tw-rounded-xl tw-items-center tw-justify-center tw-gap-3 tw-border tw-border-[#dc3545] hover:tw-bg-white hover:tw-text-[#dc3545] hover:tw-border-[#dc3545] tw-duration-300;
+	}
+
+	.btn-light-danger {
+		@apply tw-bg-white tw-font-bold tw-text-[#dc3545] flex-center tw-px-3 tw-py-2 tw-flex tw-rounded-xl tw-items-center tw-justify-center tw-gap-3 tw-border tw-border-[#dc3545] hover:tw-bg-[#dc3545] hover:tw-text-white hover:tw-border-white tw-duration-300;
+	}
+
+	.bg-warn {
+		@apply tw-bg-[#ffc107] tw-font-bold tw-text-white flex-center tw-px-3 tw-py-2 tw-flex tw-rounded-xl tw-items-center tw-justify-center tw-gap-3 tw-border tw-border-[#ffc107] tw-duration-300;
+		color: #fff !important;
+	}
+
+	.bg-light-warn {
+		@apply tw-bg-white tw-font-bold tw-text-[#ffc107] flex-center tw-px-3 tw-py-2 tw-flex tw-rounded-xl tw-items-center tw-justify-center tw-gap-3 tw-border tw-border-[#ffc107] tw-duration-300;
+	}
+
+	.bg-danger {
+		@apply tw-bg-[#dc3545] tw-font-bold tw-text-white flex-center tw-px-3 tw-py-2 tw-flex tw-rounded-xl tw-items-center tw-justify-center tw-gap-3 tw-border tw-border-[#dc3545] hover:tw-bg-white hover:tw-text-[#dc3545] hover:tw-border-[#dc3545] tw-duration-300;
+		color: #fff !important;
+	}
+
+	.bg-light-danger {
+		@apply tw-bg-white tw-font-bold tw-text-[#dc3545] flex-center tw-px-3 tw-py-2 tw-flex tw-rounded-xl tw-items-center tw-justify-center tw-gap-3 tw-border tw-border-[#dc3545] tw-duration-300;
+	}
+
+	.bg-success {
+		@apply tw-bg-[#07bc0c] tw-font-bold tw-text-white flex-center tw-px-3 tw-py-2 tw-flex tw-rounded-xl tw-items-center tw-justify-center tw-gap-3 tw-border tw-border-[#07bc0c] hover:tw-bg-white hover:tw-text-[#07bc0c] hover:tw-border-[#07bc0c] tw-duration-300;
+		color: #fff !important;
+
+		&:hover {
+			color: #07bc0c !important;
+		}
+	}
+
+	.bg-light-success {
+		@apply tw-bg-white tw-font-bold tw-text-[#07bc0c] flex-center tw-px-3 tw-py-2 tw-flex tw-rounded-xl tw-items-center tw-justify-center tw-gap-3 tw-border tw-border-[#07bc0c] tw-duration-300;
+	}
+
+	.bg-dark {
+		@apply tw-bg-foreground tw-font-bold tw-text-white flex-center tw-px-3 tw-py-2 tw-flex tw-rounded-xl tw-items-center tw-justify-center tw-gap-3 tw-border tw-border-foreground tw-duration-300;
+		color: #fff !important;
+	}
+
+	.bg-light-dark {
+		@apply tw-bg-white tw-font-bold tw-text-foreground flex-center tw-px-3 tw-py-2 tw-flex tw-rounded-xl tw-items-center tw-justify-center tw-gap-3 tw-border tw-border-foreground tw-duration-300;
+	}
+
+	.base-link {
+		@apply tw-text-primary tw-font-bold tw-ease-in-out tw-duration-300;
+
+		&:hover {
+			@apply tw-text-white;
+		}
+
+		i {
+			@apply tw-ms-2;
+		}
+	}
+
+	.actions {
+		@apply tw-flex tw-items-center;
+
+		a,
+		button {
+			&:not(:last-child) {
+				@apply tw-me-4;
+			}
+		}
+	}
+
+	.input_wrapper {
+		@apply tw-gap-1 tw-mb-3;
+
+		label {
+			@apply tw-text-primary tw-font-bold tw-text-sm tw-block tw-mb-1;
+		}
+
+		input,
+		textarea {
+			@apply tw-block tw-min-h-[56px] tw-border tw-font-medium tw-leading-3 tw-rounded-lg tw-py-3 tw-px-3 focus:tw-outline-none focus:tw-shadow-none focus:tw-border-primary tw-w-full tw-caret-primary;
+			background: #0257960d;
+			/* subtle */
+			transition: border .3s ease-in-out;
+
+			&.otp-input {
+				max-width: 80px;
+			}
+		}
+
+		.multiselect__tags {
+			@apply tw-min-h-[56px];
+		}
+
+		/* Prime Dropdown (kept for legacy) */
+		.p-dropdown {
+			@apply tw-border tw-font-medium focus:tw-outline-none focus:tw-shadow-none focus:tw-border-primary tw-w-full tw-caret-primary;
+			background: #0257960d;
+			transition: border .3s ease-in-out;
+
+			&:not(.p-disabled).p-focus {
+				@apply tw-border-primary;
+				box-shadow: none !important;
+			}
+
+			.p-inputtext {
+				@apply tw-shadow-none;
+			}
+
+			.p-dropdown-clear-icon {
+				inset-inline-end: 3rem;
+				left: unset;
+				right: unset;
+			}
+		}
+
+		&.error {
+			label {
+				@apply tw-text-red-500;
+			}
+
+			input,
+			.dp__input_wrap,
+			textarea,
+			.multiselect__tags {
+				@apply tw-text-red-500 tw-border-red-500;
+			}
+		}
+
+		&.otp_inputs {
+			&>div {
+				@apply tw-justify-center;
+
+				&>div {
+					@apply tw-me-3 last:tw-me-0;
+
+					input {
+						@apply tw-text-center tw-border-black tw-font-bold tw-text-xl;
+					}
+				}
+			}
+		}
+	}
+}
+
+/* -------------------------------------------------------
+   Base: Local Cairo (TTF) — place under /public/fonts/
+------------------------------------------------------- */
+@layer base {
+
+	/* 400 Regular */
+	@font-face {
+		font-family: "Cairo";
+		src: url("/fonts/Cairo-Regular.ttf") format("truetype");
+		font-weight: 400;
+		font-style: normal;
+		font-display: swap;
+	}
+
+	/* 500 Medium */
+	@font-face {
+		font-family: "Cairo";
+		src: url("/fonts/Cairo-Medium.ttf") format("truetype");
+		font-weight: 500;
+		font-style: normal;
+		font-display: swap;
+	}
+
+	/* 600 SemiBold */
+	@font-face {
+		font-family: "Cairo";
+		src: url("/fonts/Cairo-SemiBold.ttf") format("truetype");
+		font-weight: 600;
+		font-style: normal;
+		font-display: swap;
+	}
+
+	/* 700 Bold */
+	@font-face {
+		font-family: "Cairo";
+		src: url("/fonts/Cairo-Bold.ttf") format("truetype");
+		font-weight: 700;
+		font-style: normal;
+		font-display: swap;
+	}
+
+	/* Number input spinners (opt-in via .appearance-none) */
+	input[type="number"].appearance-none::-webkit-inner-spin-button,
+	input[type="number"].appearance-none::-webkit-outer-spin-button {
+		-webkit-appearance: none;
+		margin: 0;
+	}
+
+	input[type="number"].appearance-none {
+		-moz-appearance: textfield;
+	}
+
+	/* Default: keep spinners unless .appearance-none */
+	input[type="number"]::-webkit-inner-spin-button,
+	input[type="number"]::-webkit-outer-spin-button {
+		-webkit-appearance: none;
+		margin: 0;
+	}
+
+	input[type="number"] {
+		-moz-appearance: textfield;
+	}
+}
+
+/* Autofill */
+input:-webkit-autofill,
+input:-webkit-autofill:hover,
+input:-webkit-autofill:focus,
+input:-webkit-autofill:active {
+	-webkit-text-fill-color: #000;
+	-webkit-background-clip: text !important;
+	background-color: transparent !important;
+}
+
+/* Scrollbars */
+::-webkit-scrollbar {
+	@apply tw-w-2;
+}
+
+::-webkit-scrollbar-track {
+	@apply tw-bg-gray-100;
+}
+
+::-webkit-scrollbar-thumb {
+	@apply tw-bg-primary tw-rounded-sm;
+}
+
+::-webkit-scrollbar-thumb:hover {
+	@apply tw-bg-primary;
+}
+
+/* Typography base */
+body {
+	font-family: "Cairo", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
+		"Helvetica Neue", Arial, "Noto Sans", sans-serif, "Apple Color Emoji",
+		"Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
+	@apply tw-overflow-x-hidden;
+}
+
+/* Utils */
+.flex-center {
+	@apply tw-justify-center tw-items-center;
+}
+
+.bgi-attachment-fixed {
+	background-attachment: fixed;
+}
+
+.bgi-position-y-bottom {
+	background-position-y: bottom;
+}
+
+.bgi-no-repeat {
+	background-repeat: no-repeat;
+}
+
+.bgi-size-contain {
+	background-size: contain;
+}
+
+/* Print */
+@media print {
+	.tw-container {
+		max-width: unset !important;
+		width: 100% !important;
+		margin: 0 !important;
+		padding: 0 !important;
+	}
+}
+
+/* Loader */
+.lds-dual-ring {
+	display: inline-block;
+	width: 28px;
+	height: 28px;
+}
+
+.lds-dual-ring:after {
+	content: " ";
+	display: block;
+	width: 28px;
+	height: 28px;
+	border-radius: 50%;
+	border: 6px solid var(--primary);
+	border-color: var(--primary) transparent var(--primary) transparent;
+	animation: lds-dual-ring 1.2s linear infinite;
+}
+
+@keyframes lds-dual-ring {
+	0% {
+		transform: rotate(0deg);
+	}
+
+	100% {
+		transform: rotate(360deg);
+	}
+}
+
+/* =========================
+   PrimeVue Forms – Unified
+   ========================= */
+
+/* Base inputs & selects (visual parity) */
+.p-inputtext,
+.p-inputnumber-input,
+.p-password-input,
+.p-textarea,
+.p-calendar .p-inputtext,
+.p-select .p-select-label {
+	padding-inline: 1rem;
+	/* horizontal padding */
+	padding-block: 0.625rem;
+	/* ~10px vertical */
+	min-height: 56px;
+	/* comfortable touch target */
+	line-height: 1.2;
+	border-radius: 0.75rem;
+	/* 12px to match cards/buttons */
+	background-color: #F8FAFD;
+	/* subtle fill */
+	border-color: #E2E8F0;
+	/* slate-200 */
+}
+
+/* Focus state – accessible and consistent */
+.p-inputtext:focus,
+.p-inputnumber-input:focus,
+.p-password-input:focus,
+.p-textarea:focus,
+.p-calendar .p-inputtext:focus,
+.p-select.p-focus .p-select-label {
+	outline: none !important;
+	box-shadow: 0 0 0 3px rgba(3, 87, 150, .15) !important;
+	/* primary glow */
+	border-color: #035796 !important;
+	background-color: #FFFFFF;
+}
+
+/* Placeholder color */
+.p-inputtext::placeholder,
+.p-inputnumber-input::placeholder,
+.p-textarea::placeholder {
+	color: #9AA6B2;
+	/* slate-400 */
+	opacity: 1;
+}
+
+/* Select icons (logical placement for RTL/LTR) */
+.p-select .p-select-dropdown,
+.p-select .p-select-clear {
+	inset-inline-end: 0.5rem;
+}
+
+/* Message spacing under fields */
+.p-message.p-message-sm {
+	margin-top: .375rem;
+}
+
+/* -------------------------
+   PrimeVue Select: structure
+   ------------------------- */
+.input_wrapper .p-select {
+	background-color: #02579605;
+	/* match other inputs */
+	border: 1px solid var(--tw-border-color, #e5e7eb);
+	border-radius: 12px;
+	min-height: 56px;
+	display: flex;
+	align-items: center;
+	overflow: hidden;
+	/* prevents bleed on rounded corners */
+	transition: border-color .2s ease;
+}
+
+.input_wrapper .p-select:not(.p-disabled).p-focus {
+	border-color: var(--primary, #035796);
+	box-shadow: none;
+}
+
+.input_wrapper .p-select.p-invalid,
+.pv-field :deep(.p-select.p-invalid) {
+	border-color: #ef4444 !important;
+	/* error */
+}
+
+/* Unify inner background */
+.input_wrapper .p-select .p-select-label,
+.input_wrapper .p-select .p-select-trigger {
+	background-color: transparent;
+}
+
+/* Trigger (chevron area) */
+.input_wrapper .p-select .p-select-trigger {
+	width: 44px;
+	min-width: 44px;
+	height: 100%;
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	border-inline-start: 1px solid rgba(0, 0, 0, 0.06);
+	/* inner divider */
+}
+
+:root[dir="rtl"] .input_wrapper .p-select .p-select-trigger {
+	border-inline-start: none;
+	border-inline-end: 1px solid rgba(0, 0, 0, 0.06);
+}
+
+/* Label padding inside select */
+.input_wrapper .p-select .p-select-label,
+.p-select .p-select-label {
+	/* keep parity if used outside .input_wrapper */
+	padding-inline: 12px;
+	display: flex;
+	align-items: center;
+	min-height: 56px;
+}
+
+/* Chevron icon styling */
+.input_wrapper .p-select .p-select-dropdown-icon,
+.input_wrapper .p-select .p-icon {
+	opacity: .75;
+}
+
+/* Panel */
+.input_wrapper .p-select-panel,
+.p-select-panel {
+	border-radius: 12px;
+	overflow: hidden;
+}
+
+/* Keep room between clear and chevron */
+.input_wrapper .p-select .p-select-clear {
+	inset-inline-end: 2.5rem;
+}
+
+/* -------------------------
+   Field wrappers & labels
+   ------------------------- */
+.input_wrapper {
+	margin-bottom: 1rem;
+	/* tidy spacing */
+}
+
+.input_wrapper>label {
+	color: #233549;
+	font-weight: 700;
+	font-size: .9rem;
+}
+
+/* Optional section helpers */
+.form-section-title {
+	font-weight: 800;
+	color: #1E2B3A;
+	margin: 1.25rem 0 .5rem;
+}
+
+.form-section-hint {
+	font-size: .8rem;
+	color: #64748B;
+}
+
+/* Deep utility for field padding and error border inside scoped wrappers */
+.pv-field :deep(.p-inputtext),
+.pv-field :deep(.p-select-label) {
+	padding-inline: 12px;
+}
+
+.pv-field :deep(.p-inputtext.p-invalid) {
+	border-color: #ef4444 !important;
+}
+
+/* -------------------------
+   Buttons & card polish
+   ------------------------- */
+button.tw-text-primary.hover\:tw-bg-primary-50 {
+	border-radius: 0.75rem;
+}
+
+.form-card {
+	background: #fff;
+	border: 1px solid #E2E8F0;
+	border-radius: 1rem;
+	box-shadow: 0 8px 30px rgba(3, 87, 150, .06);
+}
+
+.p-select.p-focus .p-select-label,
+.p-select.p-focus .p-inputtext {
+	box-shadow: none !important;
+}
+
+/* ring on the outer container */
+.input_wrapper .p-select {
+	position: relative;
+	/* for clean rendering */
+	overflow: hidden;
+	/* clip inner edges, NOT the outer ring */
+	border-radius: 12px;
+	/* your chosen radius */
+	background-color: #02579605;
+	/* keep unified bg */
+}
+
+/* focused state: ring + border on container */
+.input_wrapper .p-select.p-focus {
+	border-color: #035796 !important;
+	box-shadow: 0 0 0 3px rgba(3, 87, 150, .15) !important;
+	/* outer ring */
+}
+
+/* inner pieces should not show a different radius/bg */
+.input_wrapper .p-select .p-select-label,
+.input_wrapper .p-select .p-select-trigger {
+	background: transparent;
+	border-radius: inherit;
+	/* match container curve */
+}
+
+/* optional: damp icon glow in focus so the ring is the hero */
+.input_wrapper .p-select.p-focus .p-select-dropdown-icon,
+.input_wrapper .p-select.p-focus .p-icon {
+	opacity: .8;
+}
+
+
+.p-inputtext,
+.p-inputnumber-input,
+.p-password-input,
+.p-textarea,
+.p-calendar .p-inputtext {
+	padding-inline: 1rem;
+	padding-block: 0.625rem;
+	min-height: 52px;
+	border-radius: 0.75rem;
+	background-color: #F8FAFD;
+	border-color: #E2E8F0;
+}
+
+/* Focus ring */
+.p-inputtext:focus,
+.p-inputnumber-input:focus,
+.p-password-input:focus,
+.p-textarea:focus,
+.p-calendar .p-inputtext:focus {
+	outline: none !important;
+	box-shadow: 0 0 0 3px rgba(3, 87, 150, .15) !important;
+	border-color: #035796 !important;
+	background-color: #FFFFFF;
+}
+
+/* Placeholder */
+.p-inputtext::placeholder,
+.p-inputnumber-input::placeholder,
+.p-textarea::placeholder {
+	color: #9AA6B2;
+	opacity: 1;
+}
+
+/* PRIMEVUE SELECT (v4) */
+.p-select.p-component {
+	border-radius: 0.75rem;
+	min-height: 56px;
+	background: #F8FAFD;
+	border: 1px solid #E2E8F0;
+	display: flex;
+	align-items: center;
+	overflow: hidden;
+	/* prevent bleed outside radius */
+	transition: border-color .2s ease;
+}
+
+.p-select:not(.p-disabled).p-focus {
+	border-color: #035796;
+	box-shadow: 0 0 0 3px rgba(3, 87, 150, .15);
+	background: #fff;
+}
+
+.p-select .p-select-label {
+	padding-inline: 12px;
+	min-height: 56px;
+	display: flex;
+	align-items: center;
+	background: transparent;
+}
+
+.p-select .p-select-trigger {
+	width: 44px;
+	min-width: 44px;
+	height: 100%;
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	border-inline-start: 1px solid rgba(0, 0, 0, 0.06);
+	background: transparent;
+}
+
+:root[dir="rtl"] .p-select .p-select-trigger {
+	border-inline-start: none;
+	border-inline-end: 1px solid rgba(0, 0, 0, 0.06);
+}
+
+.p-select .p-select-dropdown,
+.p-select .p-select-clear {
+	inset-inline-end: 0.5rem;
+}
+
+.p-select-panel {
+	border-radius: 0.75rem;
+	overflow: hidden;
+}
+
+.p-select.p-invalid,
+.p-select[aria-invalid="true"] {
+	border-color: #ef4444 !important;
+}
+
+/* PRIMEVUE DROPDOWN (older versions or if used in modals) */
+.p-dropdown.p-component {
+	border-radius: 0.75rem;
+	min-height: 56px;
+	background: #F8FAFD;
+	border: 1px solid #E2E8F0;
+	display: flex;
+	align-items: center;
+	overflow: hidden;
+	transition: border-color .2s ease;
+}
+
+.p-dropdown:not(.p-disabled).p-focus {
+	border-color: #035796;
+	box-shadow: 0 0 0 3px rgba(3, 87, 150, .15);
+	background: #fff;
+}
+
+.p-dropdown .p-dropdown-label {
+	padding-inline: 12px;
+	min-height: 56px;
+	display: flex;
+	align-items: center;
+	background: transparent;
+}
+
+.p-dropdown .p-dropdown-trigger {
+	width: 44px;
+	min-width: 44px;
+	height: 100%;
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	border-inline-start: 1px solid rgba(0, 0, 0, 0.06);
+	background: transparent;
+}
+
+:root[dir="rtl"] .p-dropdown .p-dropdown-trigger {
+	border-inline-start: none;
+	border-inline-end: 1px solid rgba(0, 0, 0, 0.06);
+}
+
+.p-dropdown-panel {
+	border-radius: 0.75rem;
+	overflow: hidden;
+}
+
+.p-dropdown.p-invalid,
+.p-dropdown[aria-invalid="true"] {
+	border-color: #ef4444 !important;
+}
+
+/* Messages */
+.p-message.p-message-sm {
+	margin-top: .375rem;
+}
+
+/* Utility hook used in our forms */
+.pv-field .p-inputtext,
+.pv-field .p-select-label,
+.pv-field .p-dropdown-label {
+	padding-inline: 12px;
+}

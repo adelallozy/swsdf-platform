@@ -1,0 +1,81 @@
+/* SWSDF x PrimeVue Aura – visual fix pack
+   Purpose: restore clear borders, spacing, and focus states for form controls
+   Scope: minimal + safe; scoped to .auth_login and PrimeVue input classes
+   Requires: tailwind.config.js with p.* colors defined (as provided)
+*/
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* ---------- PRIME INPUTS (borders, padding, width) ---------- */
+@layer components {
+  /* InputText & Textarea */
+  .auth_login .p-inputtext,
+  .auth_login textarea.p-inputtext {
+    @apply tw-w-full tw-rounded-md tw-border tw-border-p-content-border tw-bg-p-surface-0 tw-text-p-text tw-px-3 tw-py-2;
+  }
+
+  /* Password inner input */
+  .auth_login .p-password input.p-inputtext {
+    @apply tw-w-full tw-rounded-md tw-border tw-border-p-content-border tw-bg-p-surface-0 tw-text-p-text tw-px-3 tw-py-2;
+  }
+
+  /* Focus states use SWSDF blue + Aura focus ring */
+  .auth_login .p-inputtext:focus,
+  .auth_login .p-password input.p-inputtext:focus {
+    outline: none;
+    @apply tw-border-p-primary-500;
+    box-shadow: 0 0 0 var(--p-focus-ring-width) var(--p-focus-ring-color);
+  }
+
+  /* Invalid states use danger color */
+  .auth_login .p-inputtext.p-invalid,
+  .auth_login .p-invalid .p-inputtext,
+  .auth_login .p-password.p-invalid input.p-inputtext {
+    @apply tw-border-danger;
+  }
+
+  /* Labels */
+  .auth_login .label { @apply tw-font-medium tw-text-p-text; }
+
+  /* Field stack spacing */
+  .auth_login .form-field { @apply tw-flex tw-flex-col tw-gap-1; }
+
+  /* Form vertical rhythm (fallback if individual margins got reset) */
+  .auth_login form { @apply tw-space-y-3; }
+
+  /* Ensure error text is red across all components */
+  small.p-error, .p-error {
+    color: var(--p-red-500) !important;
+    font-weight: 500;
+    line-height: 1.25rem; /* ~tw-leading-5 */
+  }
+
+  /* (Optional) make invalid borders clearly red */
+  .p-inputtext.p-invalid,
+  .p-password.p-invalid > .p-inputtext,
+  .p-dropdown.p-invalid {
+    border-color: var(--p-red-400) !important;
+  }
+
+  .p-button {
+    padding: .75rem;
+  }
+  .p-button.p-button-primary {
+    background-color: #2b8aff;
+    border-color: #2b8aff;
+    color: #fff;
+  }
+
+  .p-button.p-button-primary:hover {
+    background-color: #1f6cdb;
+    border-color: #1f6cdb;
+  }
+}
+
+/* ---------- LINKS & MISC ---------- */
+@layer components {
+  .auth_login a { @apply tw-text-primary; }
+  .auth_login a:hover { @apply tw-text-p-primary-600; }
+}

@@ -1,0 +1,11 @@
+/* src/assets/primevue-overrides.css */
+
+:root {
+  --p-primary-color: theme('colors.primary.500');
+  --p-primary-color-text: #ffffff;
+
+  /* optional shades for hover/active states */
+  --p-primary-contrast-color: #ffffff;
+  --p-primary-hover-color: theme('colors.primary.600');
+  --p-primary-active-color: theme('colors.primary.700');
+}

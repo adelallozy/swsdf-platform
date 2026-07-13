@@ -1,0 +1,36 @@
+# ─────────────────────────────────────────────────────────────────────────────
+# Standalone production deployment for SWSDF Platform.
+#
+# SWSDF Platform is deployed independently of the rest of the swsdf.sa stack:
+# copy this directory to the server, then `docker compose up -d --build`.
+# The image bakes in the production VITE_* values (https://swsdf.sa/...) from
+# .env / .env.production at build time, so the running container only serves
+# static files — it reaches the public API over HTTPS and needs no other
+# container on its network.
+#
+# Host port 8911 matches the existing host nginx /app/ block
+# (Docs/nginx-current-app.conf -> proxy_pass http://localhost:8911), so no host
+# nginx change is required. Change the port below only if 8911 is taken.
+#
+# Usage:
+#   docker compose up -d --build       # build & start
+#   docker compose down                # stop & remove
+#   docker compose logs -f             # follow logs
+# ─────────────────────────────────────────────────────────────────────────────
+
+services:
+  swsdf-platform:
+    container_name: "${SWSDF_PLATFORM_CONTAINER:-swsdf-platform}"
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: swsdf-platform:prod
+    ports:
+      - "127.0.0.1:${SWSDF_PLATFORM_PORT:-8911}:8080"
+    restart: always
+    healthcheck:
+      test: ["CMD", "wget", "--spider", "-q", "http://localhost:8080/app/"]
+      interval: 30s
+      timeout: 5s
+      retries: 3
+      start_period: 5s

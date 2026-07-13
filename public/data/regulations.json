@@ -1,0 +1,68 @@
+[
+  {
+    "name": "اللائحة التنظيمية لرياضة الغوص",
+    "i18nKey": null,
+    "type": "pdf",
+    "link": "/media/documents/diving-regulations.pdf"
+  },
+  {
+    "name": "ضوابط عضوية مراكز الغوص",
+    "i18nKey": null,
+    "type": "pdf",
+    "link": "/media/documents/guidelines_appendix_b.pdf"
+  },
+  {
+    "name": "ضوابط الترخيص الوطني للغواصين المحترفين",
+    "i18nKey": null,
+    "type": "pdf",
+    "link": "/media/documents/guidelines_appendix_c.pdf"
+  },
+  {
+    "name": "ضوابط الغواصين الغير محترفين",
+    "i18nKey": null,
+    "type": "pdf",
+    "link": "/media/documents/guidelines_appendix_d.pdf"
+  },
+  {
+    "name": "مزايا الترخيص والخدمات والمحفزات",
+    "i18nKey": null,
+    "type": "pdf",
+    "link": "/media/documents/guidelines_appendix_e.pdf"
+  },
+  {
+    "name": "ضوابط عقود التعاون بين مراكز الغوص والغواصين المحترفين",
+    "i18nKey": null,
+    "type": "pdf",
+    "link": "/media/documents/guidelines_appendix_f.pdf"
+  },
+  {
+    "name": "ضوابط تنظيم رحلات الغوص",
+    "i18nKey": null,
+    "type": "pdf",
+    "link": "/media/documents/guidelines_appendix_g.pdf"
+  },
+  {
+    "name": "آلية اصدار تصاريح الغوص من الشواطئ العامة",
+    "i18nKey": null,
+    "type": "pdf",
+    "link": "/media/documents/issuing-diving-permits-mechanism.pdf"
+  },
+  {
+    "name": "نموذج تصريح غوص من الشاطئ",
+    "i18nKey": null,
+    "type": "pdf",
+    "link": "/documents/beach-diving-permit-form.pdf"
+  },
+  {
+    "name": "دليل مراكز الغوص لإصدار تصاريح الغوص من منصة زاول",
+    "i18nKey": null,
+    "type": "pdf",
+    "link": "/documents/diving-permits-user-guide.pdf"
+  },
+  {
+    "name": "دليل الغواصين المحترفين والممارسين لإصدار تصاريح الغوص من منصة زاول",
+    "i18nKey": null,
+    "type": "pdf",
+    "link": "/documents/zawil-diving-permits-for-divers"
+  }
+]

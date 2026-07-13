@@ -1,0 +1,30 @@
+/* Simple, scoped typography colors for the auth pages */
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  /* Default text color inside auth layout */
+  .auth_layout { @apply tw-text-foreground; }
+
+  /* Headings */
+  .auth_layout h1,
+  .auth_layout h2,
+  .auth_layout h3,
+  .auth_layout h4,
+  .auth_layout h5,
+  .auth_layout h6 { @apply tw-text-foreground; }
+
+  /* Labels (both semantic <label> and utility .label) */
+  .auth_layout label,
+  .auth_layout .label { @apply tw-text-foreground tw-font-medium; }
+
+  /* Muted helper text */
+  .auth_layout small,
+  .auth_layout .help,
+  .auth_layout .description { @apply tw-text-muted; }
+
+  /* Links follow brand primary with a subtle hover */
+  .auth_layout a { @apply tw-text-primary tw-underline-offset-2; }
+  .auth_layout a:hover { @apply tw-text-p-primary-600; }
+}

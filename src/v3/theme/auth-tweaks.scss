@@ -1,0 +1,156 @@
+/* ============================================================
+   SWSDF Auth Tweaks
+   - Focused on Login/Register/Auth views
+   - Import AFTER Aura overrides and main style.scss
+   - Ensures PrimeVue inputs, labels, borders, and buttons
+     respect SWSDF blue brand scale
+   ============================================================ */
+
+/* Tailwind layers */
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* ============================================================
+   Brand Variables
+   These override Aura’s CSS vars so PrimeVue buttons,
+   focus borders, and active states all use SWSDF blue.
+   ============================================================ */
+@layer base {
+  :where(:root) {
+    /* Brand Primary Scale */
+    --p-primary-50:  #e9f2fa;
+    --p-primary-100: #cfe3f4;
+    --p-primary-200: #a4cceb;
+    --p-primary-300: #77b3e0;
+    --p-primary-400: #4f99d0;
+    --p-primary-500: #035796; /* SWSDF Blue */
+    --p-primary-600: #034d86;
+    --p-primary-700: #033f6d;
+    --p-primary-800: #023457;
+    --p-primary-900: #01253c;
+    --p-primary-950: #001a2b;
+
+    /* PrimeVue primary shortcuts */
+    --p-primary-color: var(--p-primary-500);
+    --p-primary-contrast-color: #ffffff;
+    --p-primary-hover-color: var(--p-primary-600);
+    --p-primary-active-color: var(--p-primary-700);
+
+    /* Focus rings */
+    --p-focus-ring-width: 1px;
+    --p-focus-ring-style: solid;
+    --p-focus-ring-color: var(--p-primary-color);
+    --p-focus-ring-offset: 2px;
+    --p-focus-ring-shadow: none;
+
+    /* Form field focus */
+    --p-form-field-focus-border-color: var(--p-primary-color);
+  }
+
+  .dark {
+    /* Dark mode brand scale */
+    --p-primary-50:  #d8e7f6;
+    --p-primary-100: #b7d4ef;
+    --p-primary-200: #8ab9e4;
+    --p-primary-300: #5c9cd6;
+    --p-primary-400: #2f7fca;
+    --p-primary-500: #2a6ea9;
+    --p-primary-600: #235d8f;
+    --p-primary-700: #1c4a72;
+    --p-primary-800: #153755;
+    --p-primary-900: #0f2940;
+    --p-primary-950: #0a1d2d;
+
+    --p-primary-color: var(--p-primary-500);
+    --p-primary-contrast-color: #ffffff;
+    --p-primary-hover-color: var(--p-primary-400);
+    --p-primary-active-color: var(--p-primary-300);
+
+    --p-focus-ring-color: var(--p-primary-color);
+    --p-form-field-focus-border-color: var(--p-primary-color);
+  }
+}
+
+/* ============================================================
+   Auth Page Specific Tweaks
+   ============================================================ */
+@layer components {
+  /* Increase vertical spacing between stacked fields */
+  .auth_login form {
+    @apply tw-space-y-4 md:tw-space-y-5;
+  }
+
+  /* Old custom wrapper: bump bottom margin */
+  .auth_login .input_wrapper {
+    @apply tw-mb-4;
+  }
+
+  /* PrimeVue input fields */
+  .auth_login .p-inputtext,
+  .auth_login textarea.p-inputtext {
+    @apply tw-w-full tw-rounded-lg tw-border tw-border-p-content-border
+           tw-bg-[#02579605] tw-px-3 tw-py-3 tw-font-medium;
+  }
+
+  /* PrimeVue Password input */
+  .auth_login .p-password input.p-inputtext {
+    @apply tw-w-full tw-rounded-lg tw-border tw-border-p-content-border
+           tw-bg-[#02579605] tw-px-3 tw-py-3 tw-font-medium;
+  }
+
+  /* Focus state: SWSDF blue, no shadow */
+  .auth_login .p-inputtext:focus,
+  .auth_login .p-password input.p-inputtext:focus {
+    outline: none;
+    box-shadow: none;
+    @apply tw-border-primary;
+  }
+
+  /* Dropdown styled like custom inputs */
+  .auth_login .p-dropdown {
+    @apply tw-w-full tw-rounded-lg tw-border tw-border-p-content-border tw-bg-[#02579605];
+  }
+  .auth_login .p-dropdown:not(.p-disabled).p-focus {
+    box-shadow: none !important;
+    @apply tw-border-primary;
+  }
+  .auth_login .p-dropdown .p-inputtext {
+    @apply tw-shadow-none;
+  }
+
+  /* Labels and help text */
+  .auth_login .label,
+  .auth_login label {
+    @apply tw-text-foreground tw-font-medium tw-text-sm;
+  }
+  .auth_login small,
+  .auth_login .help,
+  .auth_login .description {
+    @apply tw-text-muted;
+  }
+
+  /* Breathing room above submit button */
+  .auth_login .submit-spacer {
+    @apply tw-mt-12;
+  }
+  .bg-swsdf-light {
+    @apply tw-relative tw-bg-gradient-to-br tw-from-primary-50 tw-via-white tw-to-primary-100;
+    background-image: radial-gradient(
+        at 20% 30%,
+        rgba(3, 87, 150, 0.08) 0px,
+        transparent 50%
+      ),
+      radial-gradient(
+        at 80% 40%,
+        rgba(79, 153, 208, 0.08) 0px,
+        transparent 50%
+      ),
+      radial-gradient(
+        at 50% 90%,
+        rgba(3, 87, 150, 0.05) 0px,
+        transparent 50%
+      );
+    background-size: cover;
+  }
+}

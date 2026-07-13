@@ -1,0 +1,7 @@
+name: Context7 MCP server
+version: 0.0.1
+schema: v1
+mcpServers:
+  - name: Context7
+    url: http://localhost:8080/mcp
+    type: streamable-http

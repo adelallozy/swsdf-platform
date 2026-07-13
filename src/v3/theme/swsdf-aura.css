@@ -1,0 +1,54 @@
+/* Light mode (root) */
+:root {
+  /* Brand Primary Scale – tuned around #035796 */
+  --p-primary-50:  #e9f2fa;
+  --p-primary-100: #cfe3f4;
+  --p-primary-200: #a4cceb;
+  --p-primary-300: #77b3e0;
+  --p-primary-400: #4f99d0;
+  --p-primary-500: #035796; /* SWSDF blue */
+  --p-primary-600: #034d86;
+  --p-primary-700: #033f6d;
+  --p-primary-800: #023457;
+  --p-primary-900: #01253c;
+  --p-primary-950: #001a2b;
+
+  /* Primary shortcuts used by Aura semantics */
+  --p-primary-color: var(--p-primary-500);
+  --p-primary-contrast-color: #ffffff;
+  --p-primary-hover-color: var(--p-primary-600);
+  --p-primary-active-color: var(--p-primary-700);
+
+  /* Focus ring & focus borders use brand primary */
+  --p-focus-ring-width: 1px;
+  --p-focus-ring-style: solid;
+  --p-focus-ring-color: var(--p-primary-color);
+  --p-focus-ring-offset: 2px;
+  --p-focus-ring-shadow: none;
+
+  /* Form field focus border uses primary */
+  --p-form-field-focus-border-color: var(--p-primary-color);
+}
+
+/* Optional Dark mode overrides (if you toggle `.dark` on <html> or <body>) */
+.dark {
+  --p-primary-50:  #d8e7f6;
+  --p-primary-100: #b7d4ef;
+  --p-primary-200: #8ab9e4;
+  --p-primary-300: #5c9cd6;
+  --p-primary-400: #2f7fca;
+  --p-primary-500: #2a6ea9; /* slightly lighter for contrast on dark */
+  --p-primary-600: #235d8f;
+  --p-primary-700: #1c4a72;
+  --p-primary-800: #153755;
+  --p-primary-900: #0f2940;
+  --p-primary-950: #0a1d2d;
+
+  --p-primary-color: var(--p-primary-500);
+  --p-primary-contrast-color: #ffffff;
+  --p-primary-hover-color: var(--p-primary-400);
+  --p-primary-active-color: var(--p-primary-300);
+
+  --p-focus-ring-color: var(--p-primary-color);
+  --p-form-field-focus-border-color: var(--p-primary-color);
+}

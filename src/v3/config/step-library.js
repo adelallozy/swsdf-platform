@@ -1,0 +1,98 @@
+// src/config/step-library.js
+
+export const STEP_LIBRARY = {
+  profile: {
+    id: "profile",
+    title: "Profile",
+    description: "Complete personal details",
+    icon: "👤",
+    required: true,
+    editable: true,
+    entities: ["profile"],
+  },
+  photo: {
+    id: "photo",
+    title: "Portrait",
+    description: "Upload a passport-style photo",
+    icon: "📷",
+    required: true,
+    editable: true,
+    entities: ["photo"],
+  },
+  memberships: {
+    id: "memberships",
+    title: "Memberships",
+    description: "Manage diving memberships",
+    icon: "🤝",
+    required: true,
+    editable: true,
+    entities: ["memberships"],
+  },
+  contracts: {
+    id: "contracts",
+    title: "Work Contracts",
+    description: "Upload work contracts",
+    icon: "📄",
+    required: true,
+    editable: true,
+    entities: ["contracts"],
+  },
+  licenseCard: {
+    id: "licenseCard",
+    title: "License Card",
+    description: "Upload your license card",
+    icon: "💳",
+    required: true,
+    editable: true,
+    entities: ["licenseCard"],
+  },
+  files: {
+    id: "files",
+    title: "Attachments",
+    description: "Upload related documents",
+    icon: "📁",
+    required: true,
+    editable: true,
+    entities: ["files", "quotation"],
+  },
+  centerProfile: {
+    id: "centerProfile",
+    title: "Center Profile",
+    description: "Update center details",
+    icon: "🏢",
+    required: true,
+    editable: true,
+    entities: ["centerProfile"],
+  },
+  activities: {
+    id: "activities",
+    title: "Activities",
+    description: "Review diving activities",
+    icon: "🏊",
+    required: true,
+    editable: false,
+    entities: ["centerProfile"],
+  },
+  internationalMemberships: {
+    id: "internationalMemberships",
+    title: "International Memberships",
+    description: "Add memberships",
+    icon: "🌍",
+    required: false,
+    editable: true,
+    entities: ["internationalMemberships"],
+  },
+  administrators: {
+    id: "administrators",
+    title: "Administrators",
+    description: "Assign admins",
+    icon: "👥",
+    required: true,
+    editable: true,
+    entities: ["administrators"],
+  },
+};
+
+export function useSteps(...stepKeys) {
+  return stepKeys.map((key) => ({ ...STEP_LIBRARY[key] }));
+}
