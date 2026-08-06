@@ -379,7 +379,7 @@ describe('UserProfileUpsert - Smart Loading', () => {
    - Verify request includes all payload keys in query params
    - Verify NO requests to entity-specific endpoints
 
-2. **Data Verification**
+2. **review**
    - Check that all required entities are present in response
    - Verify component renders correctly with loaded data
    - Test create/edit/delete workflows

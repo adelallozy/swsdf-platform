@@ -14,7 +14,7 @@ import {
 import {
   isApplicantDraftStage,
   isApplicantEditableStage,
-  isDataVerificationStage,
+  isReviewStage,
 } from "@/v3/utils/applicationWorkflow.js";
 
 const { capture } = useErrorHandler();
@@ -79,7 +79,7 @@ export function useApplicationStore() {
   });
 
   const canRecallApplication = computed(() => {
-    return isDataVerificationStage(application.value?.stage);
+    return isReviewStage(application.value?.stage);
   });
 
   // ────────────────────────────────────────────────────────────────────────
@@ -198,7 +198,7 @@ export function useApplicationStore() {
 
   /**
    * Recall application
-   * Recalls an application from Data Verification back to applicant draft.
+   * Recalls an application from review back to applicant draft.
    * Uses loading key: 'application-recalling'
    * @param {string|number} applicationId - The application ID to recall
    * @returns {Promise<Object>} Response data from server

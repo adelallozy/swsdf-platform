@@ -107,7 +107,7 @@ function setAxiosAuthHeader(jwt) {
 }
 
 // ---- Persistence ------------------------------------------------------------
-function saveAuthToStorage() {
+export function saveAuthToStorage() {
   try {
     localStorage.setItem(USER_KEY, JSON.stringify(user.value ?? null));
     localStorage.setItem(TOKEN_KEY, token.value ?? "");
@@ -382,7 +382,27 @@ export async function signIn(credentials) {
     });
 
     if (!res.ok) {
-      const errorText = await res.text().catch(() => "Unknown error");
+      // Handle 429 rate limited — return flag for centered banner display
+      if (res.status === 429) {
+        const errorData429 = await res.json().catch(() => null);
+        return {
+          success: false,
+          rateLimited: true,
+          errorMessage: errorData429?.message || "Too many login attempts. Please wait and try again.",
+        };
+      }
+
+      // Handle 403 verification_required — return instead of throwing
+      const errorData = await res.json().catch(() => null);
+      if (res.status === 403 && errorData?.verification_required) {
+        return {
+          success: false,
+          verificationRequired: true,
+          email: errorData?.user?.email || credentials.email,
+        };
+      }
+
+      const errorText = errorData?.message || res.statusText || "Unknown error";
       // console.error('❌ Sign-in failed:', {
       //     status: res.status,
       //         statusText: res.statusText,

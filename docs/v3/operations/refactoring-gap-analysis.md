@@ -137,7 +137,7 @@ public function newLicenseProfile()
             'status NOT IN' => ['Canceled', 'Closed', 'Rejected', 'Approved', 'Completed'],
             'stage IN' => [
                 'Data Entry',
-                'Data Verification',
+                'review',
                 'Technical Review',
                 'Financial Audit',
                 'Management Approval'

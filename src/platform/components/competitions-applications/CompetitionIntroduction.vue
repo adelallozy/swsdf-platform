@@ -68,7 +68,7 @@
             function startEdit() {  applicationStore.isEditing = true ; }
             const canEdit = computed(()=>{ 
                 if(applicationStore.application == null ) { return false ; }
-                return applicationStore.application.stage == 'Data Verification' || ['draft', 'applicant_revision'].includes(applicationStore.application.stage)  });
+                return applicationStore.application.stage == 'review' || ['draft', 'applicant_revision'].includes(applicationStore.application.stage)  });
 
             function closeIntroduction(){
                 applicationStore.introduction = false ;  

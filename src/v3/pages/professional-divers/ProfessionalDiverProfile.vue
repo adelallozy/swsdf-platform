@@ -16,7 +16,7 @@
                         {{ $t('It looks like you don\'t have a professional diver license linked to this account yet.') }}
                     </p>
                     <router-link 
-                        :to="{ name: 'professional-divers-license-instructions' }"
+                        :to="{ name: 'professional-diver-new-license' }"
                         class="pill-link tw-w-full tw-inline-flex tw-items-center tw-justify-center tw-gap-3 tw-bg-sky-600 tw-text-white tw-font-semibold tw-text-lg tw-px-8 tw-py-4 tw-rounded-xl hover:tw-bg-sky-500 hover:tw-scale-[1.02] active:tw-scale-[0.98] tw-transition-all tw-shadow-lg tw-shadow-sky-200"
                     >
                         <i class="pi pi-plus-circle"></i>
@@ -43,6 +43,7 @@
                                     avatarRingClass
                                 ]"
                                 loading="lazy"
+                                @error="photoError = true"
                             />
                             <div
                                 v-else
@@ -52,7 +53,7 @@
                                 ]"
                                 aria-hidden="true"
                             >
-                                {{ initials }}
+                                <i class="pi pi-user"></i>
                             </div>
                             
                             <!-- Status Badge (Absolute) -->
@@ -241,6 +242,7 @@
     PROFESSIONAL_DIVERS_APPS_RENEW_LICENSE,
     PROFESSIONAL_DIVERS_APPS_UPDATE,
     PROFESSIONAL_DIVERS_PICK,
+    MEDIA_BASE_URL,
   } from '@/v3/config/apiEndpoints.js'
 
   const PICK = PROFESSIONAL_DIVERS_PICK
@@ -266,14 +268,14 @@
   const licenseCard = ref(null) // <-- new
   const memberships = ref([])
   const contracts = ref([])
+  const photoError = ref(false)
   
  
  
   /** Derived */
   const photoUrl = computed(() => {
-	const p = usersPicture.value?.portrait_link || usersPicture.value?.link
-	if (!p) return ''
-	return p.startsWith('http') ? p : WEB_BASE + p
+    if (photoError.value) return null
+	return buildMediaUrl(usersPicture.value?.portrait_link || usersPicture.value?.link)
   })
   
   const displayName = computed(() => {
@@ -282,11 +284,6 @@
 	  : (license.value?.name_en && locale.value !== 'ar'
 		  ? license.value.name_en
 		  : (license.value?.name || ''))
-  })
-  
-  const initials = computed(() => {
-	const base = displayName.value || ''
-	return base.split(/\s+/).slice(0, 2).map(s => s[0] || '').join('').toUpperCase()
   })
   
   const expiry = computed(() => license.value?.expiry_on || license.value?.expires_on)
@@ -351,6 +348,18 @@ const avatarRingClass = computed(() => {
  
   
   /** Utils */
+  function buildMediaUrl(link) {
+	if (!link) return ''
+
+	const raw = String(link).trim()
+	if (!raw) return ''
+	if (/^https?:\/\//i.test(raw)) return raw
+
+	const normalizedBase = String(MEDIA_BASE_URL || '/')
+	const base = normalizedBase.endsWith('/') ? normalizedBase : `${normalizedBase}/`
+	return `${base}${raw.replace(/^\//, '')}`
+  }
+
   function formatRange(start, end, auto_renewal = 0) {
 	if (!start) return ''
 	return `${start} — ${ (auto_renewal) ? t('Present') : (end ? end : t('Present')) }`
@@ -488,6 +497,7 @@ const avatarRingClass = computed(() => {
 	loading.value = true
 	error.value = null
     notFound.value = false
+    photoError.value = false
 	try {
 	  const data = await apiGet(PICK)
 	  license.value = data.license || null
@@ -496,6 +506,9 @@ const avatarRingClass = computed(() => {
 	  memberships.value = Array.isArray(data.memberships) ? data.memberships : []
 	  contracts.value = Array.isArray(data.diverContracts) ? data.diverContracts : []
 	} catch (e) {
+	  if (e?.status === 401) {
+        return
+      }
 	  if (e?.status === 404) {
         // Handle 404 silently -> show "Not Found" UI
         notFound.value = true

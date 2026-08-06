@@ -12,6 +12,14 @@
       </h1>
 
       <div class="register_form tw-pb-11">
+        <div class="tw-bg-blue-50 tw-border tw-border-blue-200 tw-text-blue-800 tw-rounded-lg tw-p-4 tw-mb-6 tw-text-sm">
+          <p class="tw-font-semibold tw-mb-2">{{ $t('Choose your account type') }}</p>
+          <div class="tw-space-y-1">
+            <p><span class="tw-font-semibold">{{ $t('Personal') }}:</span> {{ $t('For athletes and professional divers') }}</p>
+            <p><span class="tw-font-semibold">{{ $t('Business') }}:</span> {{ $t('For diving centers and vendors') }}</p>
+          </div>
+        </div>
+
         <MasterForm
           ref="mfRef"
           :schema="schema"
@@ -22,6 +30,12 @@
         <p v-if="apiErrorKey" class="tw-text-danger tw-text-center tw-mt-4">
           {{ $t(apiErrorKey) }}
         </p>
+
+        <!-- Rate limit error — centered banner -->
+        <div v-if="rateLimitError" class="tw-bg-red-50 tw-border tw-border-red-400 tw-text-red-700 tw-rounded-lg tw-p-4 tw-mt-4 tw-text-center">
+          <p class="tw-font-semibold">{{ $t('Too Many Requests') }}</p>
+          <p class="tw-text-sm tw-mt-1">{{ $t(rateLimitError) }}</p>
+        </div>
 
         <AppButton
           type="button"
@@ -57,8 +71,8 @@ import { makeSignUpSchema } from '@/v3/schema/auth/signUp.js';
 import { useNotification } from '@/v3/composables/useNotification.js';
 import { useErrorHandler } from '@/v3/composables/useErrorHandler.js';
 import { ERROR_TYPES, apiPost } from '@/v3/services/httpClient.js';
+import { AUTH_SIGN_UP } from '@/v3/config/apiEndpoints.js';
 
-const SIGNUP_URL = import.meta.env.VITE_USERS_SIGN_UP || '/users/sign-up';
 const SERVER_TO_FORM_FIELD_MAP = {
     confirmPassword: 'password_confirmation',
     passwordConfirmation: 'password_confirmation'
@@ -74,6 +88,7 @@ const schema = ref(makeSignUpSchema());
 const formIsValid = ref(false);
 const submitting = ref(false);
 const apiErrorKey = ref('');
+const rateLimitError = ref('');
 
 const canSubmit = computed(() => formIsValid.value && !submitting.value);
 const authLocale = computed(() => (locale.value === 'en' ? 'en' : 'ar'));
@@ -109,6 +124,7 @@ async function onSubmit({ formData }) {
     if (submitting.value) return;
 
     apiErrorKey.value = '';
+    rateLimitError.value = '';
 
     if (String(formData.password_confirmation || '') !== String(formData.password || '')) {
         mfRef.value?.applyServerErrors?.({
@@ -120,7 +136,7 @@ async function onSubmit({ formData }) {
     submitting.value = true;
 
     try {
-        await apiPost(SIGNUP_URL, formData);
+        const response = await apiPost(AUTH_SIGN_UP, formData);
 
         notifySuccess('You have successfully created an account!', {
             summary: 'Create account',
@@ -128,9 +144,23 @@ async function onSubmit({ formData }) {
         });
 
         window.setTimeout(() => {
-            router.push({ name: 'sign-in', params: { locale: authLocale.value } });
+            // Redirect to email verification if the API requires it
+            if (response?.verification_required) {
+                router.push({
+                    name: 'verify-email',
+                    params: { locale: authLocale.value },
+                    query: { email: formData.email }
+                });
+            } else {
+                router.push({ name: 'sign-in', params: { locale: authLocale.value } });
+            }
         }, 900);
     } catch (error) {
+        if (error?.status === 429) {
+            rateLimitError.value = 'Too many signup attempts. Please wait and try again later.';
+            return;
+        }
+
         if (error?.name === ERROR_TYPES.VALIDATION || error?.status === 422) {
             const serverErrors = normalizeServerErrors(error.validationErrors || error.payload?.errors || {});
             mfRef.value?.applyServerErrors?.(serverErrors);

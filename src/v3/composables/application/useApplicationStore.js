@@ -15,7 +15,7 @@ import {
 import {
   isApplicantDraftStage,
   isApplicantEditableStage,
-  isDataVerificationStage,
+  isReviewStage,
 } from "@/v3/utils/applicationWorkflow.js";
 import {
   APPLICATIONS_DELETE,
@@ -57,6 +57,14 @@ const payload = {
   // Athlete Registration entities
   user_profile_picture: ref(null),
   sport: ref(null),
+
+  // Vendor Registration entities
+  vendor_profile: ref(null),
+  vendor_contacts: ref([]),
+  vendor_contact_updates: ref([]),
+  active_vendor_profile: ref(null),
+  active_vendor_contacts: ref([]),
+  managed_vendor_contacts: ref([]),
 
   // Diving Center entities
   center_profile: ref(null),
@@ -140,6 +148,14 @@ export function useApplicationStore() {
     // Athlete Registration
     payload.user_profile_picture.value = null;
     payload.sport.value = null;
+
+    // Vendor Registration
+    payload.vendor_profile.value = null;
+    payload.vendor_contacts.value = [];
+    payload.vendor_contact_updates.value = [];
+    payload.active_vendor_profile.value = null;
+    payload.active_vendor_contacts.value = [];
+    payload.managed_vendor_contacts.value = [];
 
     // Diving Center
     payload.center_profile.value = null;
@@ -276,6 +292,12 @@ export function useApplicationStore() {
             quotations: "quotations",
             actions: "actions",
             center_profile: "center_profile",
+            vendor_profile: "vendor_profile",
+            vendor_contacts: "vendor_contacts",
+            vendor_contact_updates: "vendor_contact_updates",
+            active_vendor_profile: "active_vendor_profile",
+            active_vendor_contacts: "active_vendor_contacts",
+            managed_vendor_contacts: "managed_vendor_contacts",
             active_files: "active_files",
             active_international_memberships:
               "active_international_memberships",
@@ -495,9 +517,10 @@ export function useApplicationStore() {
 
     return await withLoading("application-submitting", async () => {
       try {
-        const baseUrl = application.value?.stage === 'applicant_revision'
-          ? RESUBMIT_URL
-          : SUBMIT_URL;
+        const baseUrl =
+          application.value?.stage === "applicant_revision"
+            ? RESUBMIT_URL
+            : SUBMIT_URL;
         const endpoint = baseUrl.replace("{appId}", appId);
         const res = await apiPost(endpoint, {});
 
@@ -650,7 +673,7 @@ export function useApplicationStore() {
   });
 
   const canRecallApplication = computed(() => {
-    return isDataVerificationStage(application.value?.stage);
+    return isReviewStage(application.value?.stage);
   });
 
   // application.purpose is deprecated in new v3 work. Keep it only as a
@@ -856,7 +879,7 @@ Applications can be deleted only when stage is:
 - 'draft'
 
 Applications can be recalled only when stage is:
-- 'Data Verification'
+- 'review'
 
 PAYLOAD STRUCTURE:
 ==================

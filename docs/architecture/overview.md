@@ -1,6 +1,6 @@
 # Universal Roles & Architecture Reference
 
-Last updated: 2026-07-12
+Last updated: 2026-07-16
 
 * **Single source of UX truth:** Pages/components decide UX (redirects, toasts). Services/composables only fetch, normalize, and **rethrow**.
 * **No hidden side-effects:** No notifications, no navigation inside services.
@@ -11,20 +11,28 @@ Last updated: 2026-07-12
 ## Routing & Navigation
 
 * External base namespace: `/app/`, configured by Vite and nginx. Router definitions remain relative to this base.
-* Locale-prefixed application routes are exposed as `/app/:locale(ar|en)/*`.
+* **All application routes require a `:locale(ar|en)` segment.** The top-level route (`AppRoot`) is `/:locale(ar|en)`; every workspace, applications, profile, invoice, and payment route is a child of this locale-prefixed root.
+* Locale-prefixed application routes are exposed as `/app/:locale(ar|en)/*` (e.g. `/app/ar/applications`).
+* The root path `/` redirects to `/{resolvedLocale}`.
 * Auth routes are exposed as `/app/:locale(ar|en)/auth/*` and remain guest-only.
 * Auth guard runs in `beforeEach`. If unauthenticated → redirect to sign-in after storing `last_page`.
+* **Locale auto-fill guard:** `beforeEach` detects name-based navigations that are missing the `locale` param and resolves it from the current route or `localStorage`. This allows existing components to call `router.push({ name: 'user-applications' })` without passing `locale` explicitly.
 * **Locale handling:** if the route contains `:locale`, set the locale accordingly before rendering; keep document title in sync with `to.meta.pageTitle`.
+* Redirects within the locale tree use `to.params.locale || resolveLocale()` instead of stale module-load-time `locale.value`.
+* Backward-compatible redirect shims (`workspace`, `user-applications`, `platform-applications`) resolve the locale and redirect to the canonical locale-prefixed target.
 * Always scroll to top on route change.
 * Never add `/app` to route definitions or named-route navigation; Vite's history base adds it externally.
-* Route inventory: `../reference/website-pages.md` (auto-generated).
+* Route inventory: `../reference/website-pages.md` (auto-generated — regenerate after route changes).
 
 ### Key Routes
 
 | Purpose | Route | Name |
 |---------|-------|------|
-| Workspace dashboard | `/app` | `workspace-index` |
+| Workspace dashboard | `/app/:locale` | `workspace-index` |
 | Applications hub | `/app/:locale/applications` | `applications-index` |
+| Professional diver new license | `/app/:locale/applications/professional-diver-new-license` | `professional-diver-new-license` |
+| Dive center new membership | `/app/:locale/applications/diving-centers-new-membership` | `diving-centers-new-membership` |
+| Athlete new registration | `/app/:locale/applications/athlete-new-registration` | `athlete-new-registration` |
 | Sport fishing create | `/app/:locale/applications/sport-fishing-register/:eventId` | `sport-fishing-register` |
 | Sport fishing edit | `/app/:locale/applications/sport-fishing-team-update/:appId` | `fishing-team-update` |
 | Application summary | `/app/:locale/applications/:appId/summary` | `app-summary` |
@@ -41,8 +49,8 @@ Last updated: 2026-07-12
   * development: `http://localhost:8910/`
   * production: `https://swsdf.sa/`
 * Header/footer logos and breadcrumb `Home` use normal anchors to the localized public website root.
-* Private workspace navigation uses named Vue Router routes and remains under `/app/`.
-* The breadcrumb `Workspace` item targets `AppRoot`; routes without `:locale` must not receive a `locale` parameter.
+* Private workspace navigation uses named Vue Router routes and remains under `/app/:locale/`.
+* All application routes carry a `:locale` param. The breadcrumb `Workspace` item targets `AppRoot`; the locale auto-fill guard resolves the param when components navigate by name without it.
 
 ### Header
 
@@ -88,12 +96,14 @@ Last updated: 2026-07-12
 * `Content-Type: application/json` unless body is `FormData`.
 * `credentials: 'include'`.
 * Status handling:
-  * **401**: call `signOut()`, throw `{ name: 'UNAUTHORIZED' }`.
+  * **401**: always call `signOut('unauthorized')`, then throw `{ name: 'UNAUTHORIZED', status: 401 }`. `signOut()` makes a best-effort request to the configured `users/logout` endpoint, clears all local authentication state, and emits `AUTH_SIGNOUT`. The application-level listener redirects only protected routes to sign-in and preserves the current route in the `redirect` query; public routes remain in place.
   * **204**: return `null`.
-  * **422**: throw `{ name: 'VALIDATION', status: 422, validationErrors: { field: [msg] } }`.
-  * **409**: throw `{ name: 'CONFLICT', status: 409, payload }`.
+  * **422**: throw `{ name: 'VALIDATION_ERROR', status: 422, validationErrors: { field: [msg] } }`.
+  * **409**: throw `{ name: 'CONFLICT_ERROR', status: 409, payload }`.
   * **>=500**: throw generic HTTP error.
 * Services/composables **must** `capture(err, …)` once and **rethrow**.
+* `Api` endpoints use Bearer JWT authentication. `credentials: 'include'` does not replace the `Authorization` header for these endpoints.
+* Page-level callers must not toast, capture, or redirect again for a normalized 401. Return from the local catch block and let the centralized authentication lifecycle own the transition.
 
 ---
 
@@ -103,6 +113,7 @@ Use `src/v3/utils/errors.js` helpers:
 
 * **422 (validation)** → `MasterForm.applyServerErrors(errors)`. No toast.
 * **409 (conflict)** → navigate to redirect target or show toast.
+* **401 (unauthorized)** → no page-level toast or redirect; `httpClient.js` and the `AUTH_SIGNOUT` listener own sign-out and navigation.
 * **404** → `router.replace({ name: 'error-404' })`.
 * **>=500** → `router.replace({ name: 'error-404' })`.
 * **Fallback** → `notifyError(userMessage(err))`.

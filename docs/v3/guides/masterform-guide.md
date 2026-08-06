@@ -1077,19 +1077,67 @@ import { apiGet, apiPost, apiDelete } from '@/v3/services/httpClient'
 
 ---
 
-### Pitfall 12: Validation Pipe Syntax Error
+### Pitfall 13: Calling `setFieldValue` Before MasterForm Has Mounted
 
 **Problem:**
-```javascript
-validation:pipe(string(), maxLength(10)) // ❌ Missing space
-```
+A parent component sets field values in its own `onMounted` before MasterForm's `onMounted` has initialized `formData`. The keys do not exist yet, so `setFieldValue` silently does nothing.
 
 **Solution:**
-```javascript
-validation: pipe(string(), maxLength(10)) // ✅ Correct
+Use the `initial-values` prop instead. MasterForm initializes `formData` from `initialValues` in its own `onMounted`, and deep-watches the prop for reactive updates.
+
+```vue
+<template>
+  <MasterForm
+    ref="formRef"
+    :schema="schema"
+    :initial-values="initialValues"
+    @submit="handleSubmit"
+    @validity="handleValidity"
+  />
+</template>
+
+<script setup>
+import { ref, onMounted } from 'vue'
+
+const schema = makeMySchema()
+const initialValues = ref({})
+
+onMounted(async () => {
+  // MasterForm mounts with its complete, stable field structure.
+  initialValues.value = { name: 'John', account_type: 'personal' }
+
+  // Later, after an API response, update initialValues again.
+  const response = await apiGet('/account')
+  initialValues.value = { name: response.user.name, account_type: response.user.account_type }
+})
+</script>
 ```
 
-**Why:** JavaScript syntax errors prevent the schema from loading.
+**Why:** MasterForm copies `schema` once on mount and initializes `formData` from `initialValues` (or `schema[key].value`). The `initialValues` prop is deep-watched, so updating it after mount reactively updates the form fields. `setFieldValue` only works on keys that already exist in `formData`.
+
+---
+
+### Pitfall 14: Double-Translation of Password Placeholders
+
+**Problem:**
+Password fields using `componentProps.toggleMask` go through `resolvePasswordComponentProps`, which previously read the already-translated placeholder from `resolveComponentAttrs` and passed it through `t()` again. This produced `[intlfy] Not found` console warnings when the Arabic translation was passed back as a key.
+
+**Solution:**
+`resolvePasswordComponentProps` now reads the raw placeholder from `input.placeholder` or `input.attrs.placeholder` (the untranslated schema value) and translates it once. No action needed in consuming components — just ensure `placeholder` in the schema is a literal English string.
+
+```javascript
+// ✅ Correct — placeholder is a literal English key, translated once
+{
+  type: 'password',
+  label: 'Password',
+  placeholder: 'Enter your password',
+  attrs: { type: 'password', autocomplete: 'new-password' },
+  componentProps: { toggleMask: true, feedback: false },
+  validation: pipe(string(), minLength(6))
+}
+```
+
+**Why:** MasterForm translates `label`, `placeholder`, and `attrs.placeholder` through `resolveText()` which calls `t()`. The password component props builder must read the raw schema value, not the pre-resolved attrs, to avoid double-translation.
 
 ---
 
@@ -1356,6 +1404,6 @@ Before deploying a form with MasterForm:
 
 ---
 
-**Last Updated:** January 6, 2026
-**Version:** 1.0
+**Last Updated:** July 29, 2026
+**Version:** 1.1
 **Status:** Complete

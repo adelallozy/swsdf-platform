@@ -52,6 +52,12 @@
                     </RouterLink>
 
                     <!-- API/global error -->
+                    <!-- Rate limit error — centered banner -->
+                    <div v-if="rateLimitError" class="tw-bg-red-50 tw-border tw-border-red-400 tw-text-red-700 tw-rounded-lg tw-p-4 tw-mt-4 tw-text-center">
+                        <p class="tw-font-semibold">{{ $t('Too Many Requests') }}</p>
+                        <p class="tw-text-sm tw-mt-1">{{ rateLimitError }}</p>
+                    </div>
+
                     <p v-if="apiError" class="tw-text-danger tw-text-center tw-mt-3">{{ $t(apiError) }}</p>
 
                     <!-- Submit -->
@@ -112,6 +118,7 @@
 
     const submitting = ref(false)
     const apiError = ref('')
+    const rateLimitError = ref('')
     const authLocale = computed(() => {
         const routeLocale = route.params?.locale
         if (routeLocale === 'ar' || routeLocale === 'en') {
@@ -162,9 +169,30 @@
 
         submitting.value = true
         apiError.value = ''
+        rateLimitError.value = ''
 
         try {
-            const response = await signIn(form); 
+            const response = await signIn(form);
+
+            if (response.rateLimited) {
+                rateLimitError.value = response.errorMessage || 'Too many login attempts. Please wait and try again.';
+                return;
+            }
+
+            if (response.verificationRequired) {
+                toast.add({
+                    severity: 'info',
+                    summary: 'Email Verification',
+                    detail: 'Please verify your email to continue.',
+                    life: 3000
+                });
+                router.push({
+                    name: 'verify-email',
+                    params: { locale: authLocale.value },
+                    query: { email: response.email }
+                });
+                return;
+            }
 
             if (isAuthenticated.value) {
                 toast.add({ 
@@ -197,13 +225,10 @@
             const message = e?.message || 'An unexpected error occurred'
             apiError.value = message;
 
-            error(message || 'An unexpected error occurred', {
+            error(message, {
                 summary: 'Login Failure',
                 life: 3000
             });
-
-            // Optionally capture error
-            // capture(message, { where: 'LoginForm', email: form.email })
 
         } finally {
             submitting.value = false

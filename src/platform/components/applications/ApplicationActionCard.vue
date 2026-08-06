@@ -4,7 +4,7 @@
     class="tw-flex tw-items-center tw-flex-wrap tw-gap-2 tw-w-fit tw-ms-auto"
     v-if="
       application.stage == 'Data Entry' ||
-      application.stage == 'Data Verification'
+      application.stage == 'review'
     "
   >
     <input-button

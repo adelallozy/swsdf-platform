@@ -1,7 +1,7 @@
 // FILE: src/v3/services/httpClient.js
 // TOKEN: HTTP-CLIENT-v3-2025-10-16-01
 
-import { signOut, token, isAuthenticated } from "@/v3/composables/useAuth.js";
+import { signOut, token } from "@/v3/composables/useAuth.js";
 import { useErrorHandler } from "@/v3/composables/useErrorHandler.js";
 
 const API_URL = import.meta.env.VITE_API_URL;
@@ -81,11 +81,7 @@ async function apiRequest(url, method = "GET", options = {}) {
 
     // 401 → sign out + bubble
     if (res.status === 401) {
-      // Only force a global sign-out if we actually had a session.
-      // Public visitors (no token/auth) should just see the local error.
-      if (token?.value || isAuthenticated?.value) {
-        await signOut();
-      }
+      await signOut("unauthorized");
       const err = new Error("Unauthorized");
       err.name = ERROR_TYPES.UNAUTHORIZED;
       err.status = 401;

@@ -4,6 +4,20 @@ Use this file as the first context document for every new refactoring task, issu
 
 First read [swsdf-platform-work-context.md](./swsdf-platform-work-context.md) for the current deployment boundary, recent changes, known follow-up work, and resume prompt.
 
+Active deferred feature registry:
+[HR Leave Deferred Work](./hr-leave-deferred-work.md).
+
+Active Vendor Registration context:
+[root documentation index](../../Docs/Vendor%20Registration/README.md) and
+[resume context](../../Docs/Vendor%20Registration/vendor-registration-resume-context.md).
+
+Active account registration, account-type, email-verification, and application
+eligibility context:
+[root documentation index](../../Docs/Account%20Registration/README.md),
+[requirements](../../Docs/Account%20Registration/account-registration-requirements.md),
+and
+[implementation plan](../../Docs/Account%20Registration/account-registration-implementation-plan.md).
+
 ## SWSDF Platform Boundary
 
 This repository is the private platform split of the larger public website.
@@ -114,6 +128,31 @@ Before coding, create or update:
 
 Keep requirements focused on user-facing behavior and business rules. Keep specs focused on implementation details, files, endpoints, state, validation, and edge cases.
 
+For Vendor Registration, the cross-project contract and resume state live under
+`Docs/Vendor Registration/`. Keep the local requirement/spec files as pointers
+and update the root documents rather than forking the contract.
+
+For signup, email verification, account settings, account-sensitive routing, or
+application eligibility, start with `Docs/Account Registration/`. Local
+requirement/spec documents must describe platform implementation without
+redefining canonical account values or domain eligibility.
+
+### Work On API Integrations
+
+Read in this order:
+
+1. [v3/reference/http-client.md](./v3/reference/http-client.md)
+2. [architecture/overview.md](./architecture/overview.md#http-client--error-semantics)
+3. [v3/guides/global-guide.md](./v3/guides/global-guide.md#api-client-import-pattern)
+4. [v3/config/apiEndpoints.js](../src/v3/config/apiEndpoints.js)
+
+Current HTTP contract:
+
+- Use only `src/v3/services/httpClient.js` helpers in new v3 code.
+- Read normalized status from `error.status`, not Axios-style `error.response.status`.
+- Every 401 is owned by centralized sign-out and protected-route navigation; local callers return silently.
+- Use centralized endpoint constants and do not add component-specific Bearer headers.
+
 ### Work On Forms Or Schemas
 
 Read in this order:
@@ -146,7 +185,7 @@ Current lifecycle contract:
 
 - Applicant-editable stages are `draft` and `applicant_revision`.
 - Applicant delete is only allowed in `draft`.
-- Applicant recall is only allowed from `Data Verification`.
+- Applicant recall is only allowed from `review`.
 - Do not support old stage names through normalization helpers in v3. If old labels appear, fix the backend/migration/source data instead of accepting aliases in frontend code.
 - Applicant-facing cards should display `status` labels, not `stage`.
 - Duplicate/create conflicts should read the blocking app from `error.payload.application` or `error.payload.body.application`.

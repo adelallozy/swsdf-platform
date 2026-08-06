@@ -65,7 +65,7 @@
           >
             <span v-if="!saving">{{ t('Upload photo') }}</span>
             <span v-else class="tw-inline-flex tw-items-center tw-gap-2">
-              <span class="lds-dual-ring"></span>{{ t('Common.Saving') }}
+              <span class="lds-dual-ring"></span>{{ t('Saving') }}
             </span>
           </AppButton>
         </div>

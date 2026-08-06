@@ -32,7 +32,7 @@
       class="tw-flex-auto tw-w-100 tw-flex-col tw-mb-5 input_wrapper"
       :class="{ error: !!err(key) }"
     >
-      <label class="tw-block tw-font-semibold tw-mb-1" size="large" :for="key">
+      <label :id="`${key}-label`" class="tw-block tw-font-semibold tw-mb-1" size="large" :for="key">
         {{ resolveText(input.label) }}
         <i v-if="input.required" class="pi pi-asterisk" style="font-variant-position: super; font-size: .7rem"></i>
       </label>
@@ -52,6 +52,8 @@
         :attrs="resolveComponentAttrs(input.attrs)"
         :invalid="!!err(key)"
         :aria-invalid="!!err(key)"
+        :aria-labelledby="`${key}-label`"
+        :required="!!input.required"
         @blur="onFieldBlur(key)"
         @change="onFieldChange(key)"
         @complete="(event) => onAutocompleteComplete(key, event)"
@@ -72,6 +74,8 @@
         :attrs="resolveComponentAttrs(input.attrs)"
         :invalid="!!err(key)"
         :aria-invalid="!!err(key)"
+        :aria-labelledby="`${key}-label`"
+        :required="!!input.required"
         @blur="onFieldBlur(key)"
         @change="onFieldChange(key)"
       />
@@ -275,7 +279,7 @@ function resolvePasswordComponentProps(input) {
 
   return {
     ...componentProps,
-    placeholder: resolveText(input?.placeholder || attrs?.placeholder),
+    placeholder: resolveText(input?.placeholder || input?.attrs?.placeholder),
     inputProps,
   }
 }

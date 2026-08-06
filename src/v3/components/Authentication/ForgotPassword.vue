@@ -40,6 +40,11 @@
         </div>
 
         <!-- API/global error -->
+        <div v-if="rateLimitError" class="tw-bg-red-50 tw-border tw-border-red-400 tw-text-red-700 tw-rounded-lg tw-p-4 tw-text-center">
+          <p class="tw-font-semibold">{{ $t('Too Many Requests') }}</p>
+          <p class="tw-text-sm tw-mt-1">{{ rateLimitError }}</p>
+        </div>
+
         <p v-if="apiError" class="tw-text-danger tw-text-center">{{ apiError }}</p>
 
         <!-- Submit -->
@@ -85,6 +90,7 @@ const form = reactive({ email: '' })
 const errors = reactive({ email: '' })
 const submitting = ref(false)
 const apiError = ref('')
+const rateLimitError = ref('')
 const authLocale = computed(() => {
   const routeLocale = route.params?.locale
   if (routeLocale === 'ar' || routeLocale === 'en') {
@@ -110,6 +116,7 @@ function validate() {
 async function onSubmit() {
   if (!validate()) return
   submitting.value = true
+  rateLimitError.value = ''
 
   try {
     await apiPost(ENDPOINT, { email: form.email })
@@ -121,13 +128,14 @@ async function onSubmit() {
       detail: 'Please check your email inbox for reset instructions',
       life: 2500
     })
-
-    // brief delay so toast is visible, then route back to sign-in
-    // setTimeout(() => , 900)
   } catch (e) {
-    const message = e?.message || 'An unexpected error occurred'
-    apiError.value = message
-    capture(message, { where: 'ResetPassword', email: form.email })
+    if (e?.status === 429) {
+      rateLimitError.value = 'Too many attempts. Please wait and try again later.'
+    } else {
+      const message = e?.message || 'An unexpected error occurred'
+      apiError.value = message
+      capture(message, { where: 'ResetPassword', email: form.email })
+    }
   } finally {
     submitting.value = false
   }

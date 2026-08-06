@@ -1,4 +1,4 @@
-# SWSDF App Documentation
+# SWSDF Platform Documentation
 
 Private platform documentation for the SWSDF application.
 
@@ -12,6 +12,9 @@ docs/
 ├── architecture/             System architecture & patterns
 │   ├── overview.md           Routing, state, HTTP client, error handling, config
 │   └── kickoff-templates.md  Entity index grid kickoff patterns
+├── guides/                   Deployment and operational guides
+│   ├── production-deployment.md       Complete production deployment and rollback runbook
+│   └── private-docker-hub-image.md  Build, push, pull, and roll back the private nginx image
 ├── v3/                       v3 architecture docs
 │   ├── guides/               Development guides
 │   │   ├── global-guide.md              Coding standards, forbidden deps, layout rules
@@ -67,7 +70,8 @@ docs/
 │   │   ├── website-pages-list.md   Curated route list
 │   │   ├── payload-system.md       Payload data model
 │   │   ├── forms-index.md          Forms documentation index
-│   │   └── issues-and-fixes.md     Known issues & fixes
+│   │   ├── http-client.md           Canonical HTTP and authentication lifecycle contract
+│   │   └── issues-and-fixes.md      Known issues & fixes
 │   └── operations/           v3 operational tracking
 │       ├── pd-new-license-profile-prefill-implementation.md Professional diver prefill implementation
 │       ├── refactoring-backlog-website-components.md  Website component migration backlog
@@ -90,6 +94,17 @@ docs/
 → `swsdf-platform-work-context.md` for current state, deployment rules, known follow-up work, and the resume prompt
 → `START_HERE.md` for task lanes, source-of-truth order, and docs update rules
 
+**Working on Vendor Registration?**
+→ `../../Docs/Vendor Registration/README.md` for the cross-project document index
+→ `../../Docs/Vendor Registration/vendor-registration-resume-context.md` for the current checkpoint and next tasks
+→ `v3/requirements/vendor-contacts.md` and `v3/specs/vendor-contacts.md` for local pointers to the canonical contact documents
+
+**Publishing the private nginx image?**
+→ `guides/private-docker-hub-image.md` for Docker Hub repository creation, image build/push, production pull, and rollback
+
+**Deploying to production?**
+→ `guides/production-deployment.md` for server preparation, versioned bundle synchronization, nginx, Cloudflare, verification, and rollback
+
 **Checking legacy dependency cleanup?**
 → `operations/legacy-dependency-migration-progress.md` for Axios and legacy plugin migration status
 
@@ -100,6 +115,9 @@ docs/
 **Starting a new feature?**
 → `v3/guides/global-guide.md` for coding standards
 → `v3/guides/refactoring-guide.md` for the refactoring process
+
+**Integrating an API?**
+→ `v3/reference/http-client.md` for request helpers, normalized errors, JWT/401 behavior, and caller responsibilities
 
 **Building a form?**
 → `v3/guides/masterform-guide.md` for MasterForm usage

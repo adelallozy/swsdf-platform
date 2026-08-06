@@ -33,6 +33,11 @@
 - **Mobile Tuning**: Reduce gutters and connector spacing; ensure stacked layout without overlapping markers.
 - **RTL Support**: Align timeline to **right in LTR** and **left in RTL** so the vertical line sits near the reading edge.
 
+## User-Facing Naming
+- Use plain human language for all user-facing labels, not technical or implementation names.
+- Never expose internal table names, column names, or workflow concepts to the user.
+- Examples: "Contact Persons" (not "Contact Person Actions"), "Contact saved" (not "Contact action removed"), "Deactivate" (not "Request deactivation"), "New contact" (not "Pending addition").
+
 ## Form Submission Guard
 - **Prevent double submits**: Always lock submission with `useLoading` and guard in `onSubmit` using `isLoadingKey` (or a computed `saving` flag).
 - **Wrap the full submit**: Call `withLoading` around the entire submit flow so the loading lock is set before any async work starts.
@@ -111,6 +116,32 @@ try {
   if (error.response?.status === 404) { ... }
 }
 ```
+
+#### Unauthorized Responses
+
+`httpClient.js` owns the complete API `401` lifecycle:
+
+1. It calls `signOut('unauthorized')` for every 401, including requests made after local auth state has already been cleared.
+2. `signOut()` performs a best-effort request to `VITE_AUTHENTICATOR_SIGN_OUT` (`users/logout`), clears user/token/expiry storage, and emits `AUTH_SIGNOUT`.
+3. The application-level listener redirects only routes marked `meta.auth` or `meta.requiresAuth` to sign-in and includes the current route as the `redirect` query.
+4. Public routes do not redirect merely because one of their API requests returned 401.
+5. The client throws an error with `error.name === ERROR_TYPES.UNAUTHORIZED` and `error.status === 401` after local cleanup.
+
+Page and component catch blocks must return silently for 401. They must not show an unauthorized toast, call `signOut()` again, or implement their own sign-in redirect:
+
+```javascript
+try {
+  await apiGet(PROTECTED_ENDPOINT);
+} catch (error) {
+  if (error.status === 401) {
+    return;
+  }
+
+  // Handle endpoint-specific errors only.
+}
+```
+
+Do not make a protected CakePHP endpoint unauthenticated to avoid a 401, and do not add a component-specific `Authorization` header. The shared client attaches the current Bearer JWT when available.
 
 ## API Endpoints Configuration
 - **Use centralized API endpoints from `@/v3/config/apiEndpoints.js`** - This is the single source of truth for all API endpoints

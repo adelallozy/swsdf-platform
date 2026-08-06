@@ -66,6 +66,8 @@ Registered current card names include:
 - `DivingCenterInternationalMembershipsCard`
 - `DivingCenterAdministratorsCard`
 - `ActiveFilesCard`
+- `VendorProfileCard`
+- `VendorContactsCard`
 
 If a configured component is missing from the registry, the page logs a warning and skips it.
 
@@ -98,9 +100,9 @@ When the "Next" button is clicked:
 | `draft` | Delete | `store.deleteApplication(application.id)` | Navigate to `user-applications` |
 | `draft`, `applicant_revision` | Next | Registered step action or scroll target | Continue completion flow |
 | `draft`, `applicant_revision` | Submit or resubmit | `store.submitApplication(application.id)` | Navigate to `user-applications` |
-| `Data Verification` | Recall | `store.recallApplication(application.id)` | Store handles recall |
+| `review` | Recall | `store.recallApplication(application.id)` | Store handles recall |
 
-The page does not render submit or recall actions outside `draft`, `applicant_revision`, and `Data Verification`. Delete is only rendered in `draft`.
+The page does not render submit or recall actions outside `draft`, `applicant_revision`, and `review`. Delete is only rendered in `draft`.
 
 ---
 
@@ -117,5 +119,6 @@ Confirmed behavior:
 
 - [Application Store](../composables/useApplicationStore.md)
 - [Payload System](../reference/payload-system.md)
+- [Vendor Registration](../../../../Docs/Vendor%20Registration/README.md)
 - [Application Config](../../../src/v3/config/application-config.js)
 - [Cards Style Guide](../style/cards.md)

@@ -1,19 +1,18 @@
 # ─────────────────────────────────────────────────────────────────────────────
 # Standalone production deployment for SWSDF Platform.
 #
-# SWSDF Platform is deployed independently of the rest of the swsdf.sa stack:
-# copy this directory to the server, then `docker compose up -d --build`.
-# The image bakes in the production VITE_* values (https://swsdf.sa/...) from
-# .env / .env.production at build time, so the running container only serves
-# static files — it reaches the public API over HTTPS and needs no other
-# container on its network.
+# Build the Vite bundle outside Docker with `npm ci && npm run build`. The
+# reusable nginx image contains only nginx and its configuration; dist/ is
+# mounted read-only and can be deployed independently from the server image.
 #
 # Host port 8911 matches the existing host nginx /app/ block
 # (Docs/nginx-current-app.conf -> proxy_pass http://localhost:8911), so no host
 # nginx change is required. Change the port below only if 8911 is taken.
 #
 # Usage:
-#   docker compose up -d --build       # build & start
+#   npm ci && npm run build            # produce dist/ outside Docker
+#   docker compose build               # only when nginx/config changes
+#   docker compose up -d               # serve the current dist/
 #   docker compose down                # stop & remove
 #   docker compose logs -f             # follow logs
 # ─────────────────────────────────────────────────────────────────────────────
@@ -24,9 +23,15 @@ services:
     build:
       context: .
       dockerfile: Dockerfile
-    image: swsdf-platform:prod
+      args:
+        IMAGE_VERSION: "${SWSDF_PLATFORM_NGINX_TAG:-1.0.0}"
+        VCS_REF: "${SWSDF_PLATFORM_NGINX_REVISION:-unknown}"
+        BUILD_DATE: "${SWSDF_PLATFORM_NGINX_BUILD_DATE:-unknown}"
+    image: ${SWSDF_PLATFORM_NGINX_IMAGE:-swsdf-platform-nginx}:${SWSDF_PLATFORM_NGINX_TAG:-1.0.0}
     ports:
       - "127.0.0.1:${SWSDF_PLATFORM_PORT:-8911}:8080"
+    volumes:
+      - "${SWSDF_PLATFORM_DIST_PATH:-./dist}:/usr/share/nginx/html/app:ro"
     restart: always
     healthcheck:
       test: ["CMD", "wget", "--spider", "-q", "http://localhost:8080/app/"]

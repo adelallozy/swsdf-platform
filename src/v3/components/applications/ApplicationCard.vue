@@ -238,7 +238,7 @@ const statusPill = computed(() => {
 /** View Link Logic */
 const viewLink = computed(() => {
     const app = props.application
-    
+
     if (app.purpose == 'sport-fishing-competition-team-registration') {
         return {
             to: true,
@@ -247,8 +247,15 @@ const viewLink = computed(() => {
             }
         }
     }
-    
-    if (app.target === 'Athletes' || isProDiverApp.value) {
+
+    const summaryTargets = [
+        'Athletes',
+        'Professional Divers',
+        'Diving Centers',
+        'DiveCenters',
+        'Vendors',
+    ]
+    if (summaryTargets.includes(app.target) || isProDiverApp.value) {
         return {
             to: true,
             props: {
@@ -256,7 +263,7 @@ const viewLink = computed(() => {
             }
         }
     }
-    
+
     return {
         to: true,
         props: {

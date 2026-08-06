@@ -148,7 +148,7 @@ async function loadSitesFromRoute() {
     // res is already parsed JSON
   } catch (err) {
     // Network errors, 4xx, 5xx land here
-    if (err.response?.status === 500) { ... }
+    if (err.status === 500) { ... }
   }
 }
 ```
@@ -157,11 +157,12 @@ async function loadSitesFromRoute() {
 ```javascript
 // Correct pattern
 catch (err) {
-  if (err.name === 'AbortError') return
+  if (err.status === 401) return
+  if (err.name === 'TIMEOUT') return
   
-  if (err.response?.status === 404) {
+  if (err.status === 404) {
     // Not found
-  } else if (err.response?.status >= 500) {
+  } else if (err.status >= 500) {
     // Server error
   } else {
     // Network error
@@ -172,6 +173,10 @@ catch (err) {
   pagination.value = null
 }
 ```
+
+`httpClient.js` throws normalized standard `Error` objects, not Axios response
+objects. Centralized authentication owns 401 sign-out and navigation, so local
+callers must not toast or redirect for that status.
 
 ---
 
@@ -321,4 +326,3 @@ Your actual component is **excellent** and handles edge cases well:
 9. Document **two loading patterns** (simple vs. overlay) as implementation choice
 10. Add section on **URL cleanliness** (removing `page=1`, empty params)
 11. Expand **AbortController section** with complete pattern
-

@@ -8,6 +8,7 @@
 - **Create new v3 component** in `src/v3/` alongside original
 - **Use v3 composables**: `useLoading`, `useNotification`, `useErrorHandler`
 - **Use v3 httpClient**: Import `apiGet`, `apiPost` from `@/v3/services/httpClient.js`
+- **Keep 401 handling centralized**: Return silently from local catches; do not toast, sign out, or redirect again
 - **Use centralized endpoints**: Import from `@/v3/config/apiEndpoints.js`
 - **Use v3 components**: `Breadcrumb`, `PageHeading` (auto-read from route metadata)
 - **Use router-link for navigation**: Style as button for user-facing navigation
@@ -58,6 +59,10 @@ async function loadData() {
     });
     return response;
   } catch (e) {
+    if (e.status === 401) {
+      return;
+    }
+
     capture(e, {
       context: 'ComponentName.loadData',
       fallback: 'Failed to load data'
@@ -83,6 +88,7 @@ This guide documents the rules, patterns, and best practices for refactoring leg
 
 **Related Guides:**
 - [Global Development Guide](./global-guide.md) - Overall coding standards and forbidden dependencies
+- [HTTP Client Reference](../reference/http-client.md) - Request behavior, normalized errors, authentication lifecycle, and migration rules
 - [MasterForm Component Guide](./masterform-guide.md) - Canonical MasterForm usage and schema guidance
 - [Translation Guide](./translation-guide.md) - i18n strategy and best practices
 

@@ -40,7 +40,7 @@
 
 ## 4. Forms & Pages
 - Before editing, call `await store.loadApplication(appId);` and respect `store.canModifyApplication.value` (see `UserProfileUpsert.vue`).
-- Applicant edit stages are `draft` and `applicant_revision`; delete is only allowed in `draft`, and recall is only allowed in `Data Verification`.
+- Applicant edit stages are `draft` and `applicant_revision`; delete is only allowed in `draft`, and recall is only allowed in `review`.
 - Forms that change data outside the summary should reload the relevant entity or entire payload before navigating back.
 - Non-card screens (ApplicationFiles, TeamUpsert) still benefit from the store for gating and shared actions.
 

@@ -47,6 +47,11 @@
         </div>
 
         <!-- API/global error -->
+        <div v-if="rateLimitError" class="tw-bg-red-50 tw-border tw-border-red-400 tw-text-red-700 tw-rounded-lg tw-p-4 tw-text-center">
+          <p class="tw-font-semibold">{{ $t('Too Many Requests') }}</p>
+          <p class="tw-text-sm tw-mt-1">{{ rateLimitError }}</p>
+        </div>
+
         <p v-if="apiError" class="tw-text-danger tw-text-center">{{ apiError }}</p>
 
         <!-- Submit -->
@@ -90,8 +95,9 @@ const form = reactive({ password: '', confirm: '' })
 const errors = reactive({ password: '', confirm: '' })
 const submitting = ref(false)
 const verifying = ref(false)
-const apiError = ref('')
 const jwtToken = ref('')
+const apiError = ref('')
+const rateLimitError = ref('')
 const authLocale = computed(() => {
     const routeLocale = route.params?.locale
     if (routeLocale === 'ar' || routeLocale === 'en') {
@@ -159,6 +165,7 @@ async function checkToken() {
 async function onSubmit() {
     if (!validate()) return
     submitting.value = true
+    rateLimitError.value = ''
 
     const params = new URLSearchParams();
     params.append("token", route.query.token );
@@ -182,9 +189,13 @@ async function onSubmit() {
 
         localStorage.removeItem('last_page')
     } catch (e) {
-        const message = e?.message || 'An unexpected error occurred'
-        apiError.value = message
-        capture(message, { where: 'Reset user password, From ResetPassword.vue by onSubmit' })
+        if (e?.status === 429) {
+            rateLimitError.value = 'Too many attempts. Please wait and try again later.'
+        } else {
+            const message = e?.message || 'An unexpected error occurred'
+            apiError.value = message
+            capture(message, { where: 'Reset user password, From ResetPassword.vue by onSubmit' })
+        }
     } finally {
         submitting.value = false
     }

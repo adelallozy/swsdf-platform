@@ -306,7 +306,7 @@ await store.submitApplication(123);
 
 ### recallApplication()
 
-Recall an application from `Data Verification` back to applicant draft.
+Recall an application from `review` back to applicant draft.
 
 #### Signature
 
@@ -500,7 +500,7 @@ const canModifyApplication = computed(() => {
 });
 ```
 
-Editable applicant stages are `draft` and `applicant_revision`. Delete is only allowed in `draft`; recall is only allowed in `Data Verification`.
+Editable applicant stages are `draft` and `applicant_revision`. Delete is only allowed in `draft`; recall is only allowed in `review`.
 
 ---
 

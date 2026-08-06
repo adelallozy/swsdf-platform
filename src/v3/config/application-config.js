@@ -780,6 +780,110 @@ export const APPLICATION_CONFIG = {
   },
 
   //============================================================================
+  // VENDOR REGISTRATION
+  //============================================================================
+  "Vendor Registration": {
+    displayName: "Vendor Registration",
+
+    payloadKeys: [
+      "vendor_profile",
+      "vendor_contact_updates",
+      "files",
+      "actions",
+    ],
+
+    requiredFiles: ["Commercial Registration", "National Address"],
+    acceptedFiles: [
+      "Commercial Registration",
+      "VAT Registration Certificate",
+      "National Address",
+      "Other",
+    ],
+
+    steps: [
+      {
+        id: "vendor_profile",
+        label: "Vendor Profile",
+        type: "entity",
+        blocking: true,
+        component: "VendorProfileCard",
+      },
+      {
+        id: "vendor_contact_updates",
+        label: "Contact Persons",
+        type: "entity",
+        blocking: true,
+        component: "VendorContactUpdatesCard",
+      },
+      {
+        id: "files",
+        label: "Required Documents",
+        type: "files",
+        blocking: true,
+        component: "FilesCard",
+      },
+    ],
+
+    summaryLayout: [
+      "ApplicationInfoCard",
+      "VendorProfileCard",
+      "VendorContactUpdatesCard",
+      "FilesCard",
+      "ActionsTrackingCard",
+    ],
+  },
+  "Vendor Profile Update": {
+    displayName: "Vendor Profile Update",
+
+    payloadKeys: [
+      "vendor_profile",
+      "vendor_contact_updates",
+      "files",
+      "actions",
+    ],
+
+    requiredFiles: [],
+    acceptedFiles: [
+      "Commercial Registration",
+      "VAT Registration Certificate",
+      "National Address",
+      "Other",
+    ],
+
+    steps: [
+      {
+        id: "vendor_profile",
+        label: "Vendor Profile",
+        type: "entity",
+        blocking: true,
+        component: "VendorProfileCard",
+      },
+      {
+        id: "vendor_contact_updates",
+        label: "Contact Person Actions",
+        type: "entity",
+        blocking: true,
+        component: "VendorContactUpdatesCard",
+      },
+      {
+        id: "files",
+        label: "Supporting Documents",
+        type: "files",
+        blocking: false,
+        component: "FilesCard",
+      },
+    ],
+
+    summaryLayout: [
+      "ApplicationInfoCard",
+      "VendorProfileCard",
+      "VendorContactUpdatesCard",
+      "FilesCard",
+      "ActionsTrackingCard",
+    ],
+  },
+
+  //============================================================================
   // DIVING CENTER NEW MEMBERSHIP
   //============================================================================
   "Diving Center New Membership": {

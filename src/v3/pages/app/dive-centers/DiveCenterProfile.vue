@@ -421,7 +421,6 @@ const admins = ref([]);
 const certs = ref([]);
 const proDivers = ref([]);
 const inspections = ref([]);
-const activeLogoFile = ref(null);
 
 async function loadProfile() {
   const res = await apiGet(DIVING_CENTERS_VIEW + centerId.value);
@@ -430,7 +429,6 @@ async function loadProfile() {
   certs.value = res.certificates || [];
   proDivers.value = res.affiliatedProDivers || [];
   inspections.value = res.inspections || [];
-  activeLogoFile.value = res.activeLogoFile || null;
   logoError.value = false;
 }
 
@@ -452,10 +450,7 @@ function getMembershipStatus(expiryDate) {
 
 const membershipStatus = computed(() => getMembershipStatus(center.value?.membership_expiry_on));
 
-const logoSrc = computed(() => {
-  const link = activeLogoFile.value?.path || center.value?.logo;
-  return buildFileUrl(link);
-});
+const logoSrc = computed(() => buildFileUrl(center.value?.logo));
 const logoError = ref(false);
 
 const activities = computed(() => {

@@ -35,8 +35,14 @@ export const AUTH_FORGOT_PASSWORD =
   import.meta.env.VITE_USERS_FORGOT_PASSWORD || "users/forgot-password";
 export const AUTH_RESET_PASSWORD =
   import.meta.env.VITE_RESET_PASSWORD_URL || "users/reset-password";
+export const AUTH_SEND_VERIFICATION_CODE =
+  import.meta.env.VITE_SEND_VERIFICATION_CODE || "users/send-verification-code";
+export const AUTH_VERIFY_CODE =
+  import.meta.env.VITE_VERIFY_CODE || "users/verify-code";
 export const AUTH_GET_DOCUMENTS =
   import.meta.env.VITE_USER_DOCUMENTS || "users/get-documents";
+export const AUTH_UPDATE_ACCOUNT =
+  import.meta.env.VITE_UPDATE_ACCOUNT || "users/update-account";
 
 // ──────────────────────────────────────────────────────────────────────────────
 // CONTENT ENDPOINTS
@@ -166,6 +172,38 @@ export const DIVING_CENTERS_ADMIN_CANCEL =
 export const DIVING_CENTERS_ADMIN_RESTORE =
   import.meta.env.VITE_APPS_DIVING_CENTERS_ADMIN_RESTORE ||
   "diving-centers-applications/restore-admin-profile/";
+
+// ──────────────────────────────────────────────────────────────────────────────
+// VENDORS ENDPOINTS
+// ──────────────────────────────────────────────────────────────────────────────
+
+export const VENDORS_APPS_CREATE_REGISTRATION =
+  import.meta.env.VITE_VENDORS_APPS_CREATE_REGISTRATION ||
+  "vendors-applications/new-registration";
+export const VENDORS_APPS_GET_REGISTRATION_OPTIONS =
+  import.meta.env.VITE_VENDORS_APPS_GET_REGISTRATION_OPTIONS ||
+  "vendors-applications/registration-options";
+export const VENDORS_APPS_UPDATE_PROFILE =
+  import.meta.env.VITE_VENDORS_APPS_UPDATE_PROFILE ||
+  "vendors-applications/update-profile/";
+export const VENDORS_INDEX = import.meta.env.VITE_VENDORS_INDEX || "vendors";
+export const VENDORS_PICK =
+  import.meta.env.VITE_VENDORS_PICK || "vendors/view/";
+export const VENDORS_APPS_CREATE_PROFILE_UPDATE =
+  import.meta.env.VITE_VENDORS_APPS_CREATE_PROFILE_UPDATE ||
+  "vendors-applications/new-profile-update/";
+export const VENDORS_APPS_ADD_CONTACT_UPDATE =
+  import.meta.env.VITE_VENDORS_APPS_ADD_CONTACT_UPDATE ||
+  "vendors-applications/add-contact-update/";
+export const VENDORS_APPS_DEACTIVATE_CONTACT_UPDATE =
+  import.meta.env.VITE_VENDORS_APPS_DEACTIVATE_CONTACT_UPDATE ||
+  "vendors-applications/deactivate-contact-update/";
+export const VENDORS_APPS_REACTIVATE_CONTACT_UPDATE =
+  import.meta.env.VITE_VENDORS_APPS_REACTIVATE_CONTACT_UPDATE ||
+  "vendors-applications/reactivate-contact-update/";
+export const VENDORS_APPS_DELETE_CONTACT_UPDATE =
+  import.meta.env.VITE_VENDORS_APPS_DELETE_CONTACT_UPDATE ||
+  "vendors-applications/delete-contact-update/";
 
 // ──────────────────────────────────────────────────────────────────────────────
 // EVENTS ENDPOINTS

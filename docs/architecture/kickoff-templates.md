@@ -134,43 +134,22 @@ Everything else (Entity View, Grouped Tables, base blocks, utils, services) rema
 ## `/src/v3/services/httpClient.js`
 
 ```js
-// Simple, dependency-free HTTP helpers. JS-only.
-// Optional base URL via VITE_API_BASE_URL
-const BASE = import.meta.env.VITE_API_BASE_URL || '';
-
-async function handle(res) {
-  if (!res.ok) {
-    const payload = await res.json().catch(() => ({}));
-    const err = new Error(payload.message || `HTTP ${res.status}`);
-    err.status = res.status;
-    err.payload = payload;
-    throw err;
-  }
-  const text = await res.text();
-  try { return JSON.parse(text); } catch { return text; }
-}
-
-export async function apiGet(url, opts = {}) {
-  const res = await fetch(BASE + url, {
-    method: 'GET',
-    headers: { 'Accept': 'application/json', ...(opts.headers || {}) },
-    credentials: 'include',
-    ...opts,
-  });
-  return handle(res);
-}
-
-export async function apiPost(url, body = {}, opts = {}) {
-  const res = await fetch(BASE + url, {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json', 'Accept': 'application/json', ...(opts.headers || {}) },
-    credentials: 'include',
-    body: JSON.stringify(body),
-    ...opts,
-  });
-  return handle(res);
-}
+import {
+  apiGet,
+  apiPost,
+  apiPatch,
+  apiPut,
+  apiDelete,
+  ERROR_TYPES,
+} from '@/v3/services/httpClient.js';
 ```
+
+Do not copy or reimplement the HTTP client in a feature. The canonical service
+attaches the current Bearer JWT, sends locale and JSON headers, supports
+`FormData`, and normalizes 401/409/422/HTTP errors. Every 401 is processed by
+centralized `signOut('unauthorized')`; page catch blocks return silently and do
+not show another toast or redirect. See
+[HTTP Client Reference](../v3/reference/http-client.md).
 
 ## `/src/v3/utils/url.js`
 
@@ -592,4 +571,3 @@ onMounted(loadData)
 * [ ] No Arabic literals in code.
 * [ ] Images use `loading="lazy"`; large media avoided in lists.
 * [ ] Reveal observer disconnects on unmount.
- 

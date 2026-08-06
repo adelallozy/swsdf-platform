@@ -1,7 +1,7 @@
 export const APPLICATION_STAGES = Object.freeze({
   DRAFT: "draft",
   APPLICANT_REVISION: "applicant_revision",
-  DATA_VERIFICATION: "Data Verification",
+  REVIEW: "review",
 });
 
 export function isApplicantEditableStage(stage) {
@@ -19,8 +19,8 @@ export function isApplicantRevisionStage(stage) {
   return stage === APPLICATION_STAGES.APPLICANT_REVISION;
 }
 
-export function isDataVerificationStage(stage) {
-  return stage === APPLICATION_STAGES.DATA_VERIFICATION;
+export function isReviewStage(stage) {
+  return stage === APPLICATION_STAGES.REVIEW;
 }
 
 export function getConflictApplication(error) {

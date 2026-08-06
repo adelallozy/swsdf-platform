@@ -1,33 +1,4 @@
-# Keep the build context lean. Anything not needed to produce dist/ is excluded.
-# NOTE: .env and .env.production are INTENTIONALLY kept — Vite reads VITE_*
-# values from them at build time.
-
-node_modules
-dist
-.vite
-.vite-cache
-.git
-.gitignore
-.gitattributes
-
-# Editor / tooling state
-.continue
-.kilo
-.vscode
-.idea
-.DS_Store
-
-# Docs and reference files are not needed inside the image
-docs
-*.md
-tsconfig.tsbuildinfo
-unused-files.txt
-
-# Dev-only env files (production env is loaded via .env.production)
-.env.development
-.env.local
-.env.*.local
-
-# Docker metadata must not be copied into the image build context copy step
-Dockerfile
-.dockerignore
+# The reusable nginx image only needs its Dockerfile and nginx configuration.
+*
+!Dockerfile
+!nginx.conf

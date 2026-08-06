@@ -63,12 +63,11 @@
 </template>
 
 <script setup>
-import axios from "axios";
-import { ref, computed } from "vue";
+import { computed } from "vue";
 import { useI18n } from "vue-i18n";
 
 import { Menu, MenuButton, MenuItems, MenuItem } from "@headlessui/vue";
-import { toast } from "vue3-toastify";
+import { signOut } from "@/v3/composables/useAuth.js";
 
 const { locale } = useI18n();
 
@@ -77,7 +76,7 @@ const userData = computed(() => JSON.parse(localStorage.getItem("user-data")));
 
 const emit = defineEmits(["loggedout"]);
 
-const profileItems = ref([
+const profileItems = computed(() => [
   {
     label: "Workspace",
     icon: "fa-regular fa-user",
@@ -89,18 +88,16 @@ const profileItems = ref([
     icon: "fa-regular fa-file",
     path: { name: "platform-applications", params: { locale: locale.value } },
   },
+
+  {
+    label: "Account Settings",
+    icon: "fa-regular fa-gear",
+    path: { name: "account-settings", params: { locale: locale.value } },
+  },
 ]);
 
-function logout() {
-  axios.get(`users/logout`).then((res) => {
-    localStorage.removeItem("user-data");
-    localStorage.removeItem("jwt");
-    localStorage.removeItem("jwt_expiry");
-    localStorage.removeItem("jwt_token");
-    localStorage.removeItem("jwt_token_expiry");
-    location.reload();
-    toast.success(res.data.Message);
-  });
+async function logout() {
+  await signOut("user");
 }
 </script>
 

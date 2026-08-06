@@ -52,6 +52,8 @@ Confirmed v3 target:
 
 - `src/v3/services/httpClient.js` is the canonical v3 HTTP client.
 - New or refactored v3 code should use `apiGet`, `apiPost`, `apiPut`, `apiPatch`, and `apiDelete` from `src/v3/services/httpClient.js`.
+- Do not reproduce Axios response shapes or create feature-local fetch wrappers. Read status from `error.status`; every 401 is owned by the client's centralized `signOut('unauthorized')` lifecycle.
+- Canonical behavior and migration examples are documented in [HTTP Client Reference](../v3/reference/http-client.md).
 
 ## Other Legacy Dependencies
 

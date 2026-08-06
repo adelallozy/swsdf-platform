@@ -23,7 +23,7 @@ const resolveLocale = (candidate) => {
 
 const routes = [
   {
-    path: "/",
+    path: "/:locale(ar|en)",
     name: "AppRoot",
     component: () => import("@/v3/layouts/MainLayout.vue"),
     meta: {
@@ -32,7 +32,10 @@ const routes = [
       pageTitle: "Workspace",
       title: "Workspace",
     },
-    redirect: { name: "workspace-index" },
+    redirect: (to) => ({
+      name: "workspace-index",
+      params: { locale: to.params.locale },
+    }),
     children: [
       {
         path: "",
@@ -47,6 +50,7 @@ const routes = [
         name: "athlete-registration",
         component: () => import("@/platform/views/athletes/Profile.vue"),
       },
+
       {
         path: "applications",
         component: () => import("@/platform/views/Applications/Home.vue"),
@@ -54,21 +58,48 @@ const routes = [
         meta: {
           title: "Applications",
         },
-        redirect: {
+        redirect: (to) => ({
           name: "applications-index",
-          params: {
-            locale: locale.value,
-          },
-        },
+          params: { locale: to.params.locale || resolveLocale() },
+        }),
         children: [
           {
             path: "",
-            name: "user-applications",
-            redirect: {
-              name: "applications-index",
-              params: {
-                locale: locale.value,
-              },
+            name: "applications-index",
+            component: () =>
+              import("@/v3/pages/applications/ApplicationsIndex.vue"),
+            meta: {
+              auth: true,
+              authGuard: "auth",
+              pageTitle: t("My applications"),
+              title: t("My applications"),
+            },
+          },
+
+          {
+            path: "professional-diver-new-license",
+            name: "professional-diver-new-license",
+            component: () =>
+              import(
+                "@/v3/pages/applications/professional-divers/NewLicense.vue"
+              ),
+            meta: {
+              auth: true,
+              authGuard: "auth",
+              pageTitle: t("Professional Diver New License Application"),
+              title: t("Professional Diver New License Application"),
+            },
+          },
+          {
+            path: "athlete-new-registration",
+            name: "athlete-new-registration",
+            component: () =>
+              import("@/v3/pages/applications/athletes/NewAthlete.vue"),
+            meta: {
+              auth: true,
+              authGuard: "auth",
+              pageTitle: t("New Athlete Registration"),
+              title: t("New Athlete Registration"),
             },
           },
 
@@ -76,12 +107,25 @@ const routes = [
             path: "diving-centers-new-membership",
             name: "diving-centers-new-membership",
             component: () =>
-              import(
-                "@/v3/pages/applications/dive-centers/NewMembership.vue"
-              ),
+              import("@/v3/pages/applications/dive-centers/NewMembership.vue"),
             meta: {
-              pageTitle: t("Diving Center New Membership"),
               auth: true,
+              authGuard: "auth",
+              pageTitle: t("Diving Center New Membership"),
+              title: t("Diving Center New Membership"),
+            },
+          },
+
+          {
+            path: "vendor-registration",
+            name: "vendor-registration",
+            component: () =>
+              import("@/v3/pages/applications/vendors/NewRegistration.vue"),
+            meta: {
+              auth: true,
+              authGuard: "auth",
+              pageTitle: t("Vendor Registration"),
+              title: t("Vendor Registration"),
             },
           },
 
@@ -126,9 +170,7 @@ const routes = [
             path: "fishing-new-team-registration/:eventId(\\d+)",
             name: "fishing-new-team-registration",
             component: () =>
-              import(
-                "@/v3/pages/applications/sport-fishing/TeamUpsert.vue"
-              ),
+              import("@/v3/pages/applications/sport-fishing/TeamUpsert.vue"),
             meta: {
               pageTitle: t(
                 "Sport Fishing Championship Registration Application"
@@ -150,10 +192,10 @@ const routes = [
           {
             path: "new-athlete",
             name: "new-athlete",
-            redirect: () => ({
+            redirect: (to) => ({
               name: "athlete-new-registration",
               params: {
-                locale: locale.value,
+                locale: to.params.locale || resolveLocale(),
               },
             }),
             meta: {
@@ -172,6 +214,234 @@ const routes = [
             props: true,
             meta: {
               title: "Professional Divers Applications",
+            },
+          },
+
+          {
+            name: "sport-fishing-register",
+            path: "sport-fishing-register/:eventId(\\d+)",
+            component: () =>
+              import("@/v3/pages/applications/sport-fishing/TeamUpsert.vue"),
+            props: (route) => ({
+              eventId: Number(route.params.eventId),
+              mode: "create",
+            }),
+          },
+          {
+            name: "fishing-team-update",
+            path: "sport-fishing-team-update/:appId(\\d+)",
+            component: () =>
+              import("@/v3/pages/applications/sport-fishing/TeamUpsert.vue"),
+            props: (route) => ({
+              eventId: Number(route.params.eventId),
+              mode: "create",
+            }),
+          },
+
+          {
+            name: "app-summary",
+            path: ":appId(\\d+)/summary",
+            component: () =>
+              import("@/v3/pages/applications/ApplicationSummary.vue"),
+            props: true,
+          },
+          {
+            name: "app-waiver",
+            path: ":appId(\\d+)/waiver",
+            component: () => import("@/v3/pages/applications/Waiver.vue"),
+            props: true,
+          },
+          {
+            name: "app-new-files",
+            path: ":appId(\\d+)/new-files",
+            component: () =>
+              import("@/v3/pages/applications/ApplicationFiles.vue"),
+            props: true,
+          },
+          {
+            path: ":appId(\\d+)/add-fishing-participant",
+            name: "fishing-participant-add",
+            component: () =>
+              import(
+                "@/v3/pages/applications/sport-fishing/ParticipantAdd.vue"
+              ),
+            meta: {
+              requiresAuth: true,
+              title: "Add Participant",
+            },
+          },
+          {
+            path: ":appId(\\d+)/professional-divers/add-membership",
+            name: "pd-membership-add",
+            component: () =>
+              import(
+                "@/v3/pages/applications/professional-divers/AddMembership.vue"
+              ),
+            meta: {
+              requiresAuth: true,
+              title: "Add International Membership",
+            },
+          },
+          {
+            path: ":appId(\\d+)/professional-divers/add-contract",
+            name: "pd-contract-add",
+            component: () =>
+              import(
+                "@/v3/pages/applications/professional-divers/AddContract.vue"
+              ),
+            meta: {
+              requiresAuth: true,
+              title: "Add Work Contract",
+            },
+          },
+
+          {
+            path: ":appId(\\d+)/file-upload",
+            name: "application-file-upload",
+            component: () =>
+              import("@/v3/pages/applications/ApplicationFileUpload.vue"),
+            meta: { requiresAuth: true },
+          },
+
+          {
+            path: ":appId/personal-photo-upload",
+            name: "applicant-personal-photo-upload",
+            component: () =>
+              import(
+                "@/v3/pages/applications/ApplicantPersonalPhotoUpload.vue"
+              ),
+            meta: { requiresAuth: true },
+          },
+
+          {
+            path: "user-profile-edit/:appId(\\d+)",
+            name: "user-profile-edit",
+            component: () =>
+              import("@/v3/pages/applications/UserProfileUpsert.vue"),
+            meta: {
+              requiresAuth: true,
+              pageTitle: t("Update personal information"),
+            },
+          },
+          {
+            path: ":appId(\\d+)/athletes/update-sport",
+            name: "athlete-sport-selection",
+            component: () =>
+              import("@/v3/pages/applications/athletes/UpdateAthleteSport.vue"),
+            meta: {
+              requiresAuth: true,
+              pageTitle: t("Update Sport"),
+              title: "Update Sport",
+            },
+          },
+          {
+            path: ":appId(\\d+)/professional-divers/update-license-informations",
+            name: "pd-license-info-update",
+            component: () =>
+              import(
+                "@/v3/pages/applications/professional-divers/UpdateLicenseInformations.vue"
+              ),
+            meta: {
+              requiresAuth: true,
+              pageTitle: t("License Informations"),
+              title: "License Informations",
+            },
+          },
+          {
+            path: ":appId(\\d+)/dive-centers/profile/edit",
+            name: "dive-center-profile-edit",
+            component: () =>
+              import(
+                "@/v3/pages/applications/dive-centers/UpdateCenterProfile.vue"
+              ),
+            meta: {
+              requiresAuth: true,
+              pageTitle: t("Update Center Profile"),
+              title: "Update Center Profile",
+            },
+          },
+          {
+            path: ":appId(\\d+)/vendors/profile/edit",
+            name: "vendor-profile-edit",
+            component: () =>
+              import("@/v3/pages/applications/vendors/UpdateVendorProfile.vue"),
+            meta: {
+              requiresAuth: true,
+              pageTitle: t("Update Vendor Profile"),
+              title: "Update Vendor Profile",
+            },
+          },
+          {
+            path: ":appId(\\d+)/vendors/contact-updates/add",
+            name: "vendor-contact-update-add",
+            component: () =>
+              import("@/v3/pages/applications/vendors/AddVendorContactUpdate.vue"),
+            meta: {
+              requiresAuth: true,
+              pageTitle: t("Add Contact"),
+              title: "Add Contact",
+            },
+          },
+          {
+            path: ":appId(\\d+)/dive-centers/activities/edit",
+            name: "dive-center-activities-edit",
+            component: () =>
+              import(
+                "@/v3/pages/applications/dive-centers/UpdateActivities.vue"
+              ),
+            meta: {
+              requiresAuth: true,
+              pageTitle: t("Update Diving Activities"),
+              title: "Update Diving Activities",
+            },
+          },
+          {
+            path: ":appId(\\d+)/dive-centers/administrators/edit",
+            redirect: (to) => ({
+              name: "dive-center-administrator-add",
+              params: {
+                appId: to.params.appId,
+                locale: to.params.locale || resolveLocale(),
+              },
+            }),
+          },
+          {
+            path: ":appId(\\d+)/dive-centers/administrators/add",
+            name: "dive-center-administrator-add",
+            component: () =>
+              import(
+                "@/v3/pages/applications/dive-centers/DCAdministratorUpsert.vue"
+              ),
+            meta: {
+              requiresAuth: true,
+              pageTitle: t("Add Administrator"),
+              title: "Add Administrator",
+            },
+          },
+          {
+            path: ":appId(\\d+)/dive-centers/administrators/:profileId(\\d+)/edit",
+            name: "dive-center-administrator-edit",
+            component: () =>
+              import(
+                "@/v3/pages/applications/dive-centers/DCAdministratorUpsert.vue"
+              ),
+            meta: {
+              requiresAuth: true,
+              pageTitle: t("Update Administrator"),
+              title: "Update Administrator",
+            },
+          },
+          {
+            path: ":appId(\\d+)/dive-centers/international-memberships/add",
+            name: "dive-center-international-membership-add",
+            component: () =>
+              import(
+                "@/v3/pages/applications/dive-centers/AddInternationalMembership.vue"
+              ),
+            meta: {
+              requiresAuth: true,
+              pageTitle: t("Add International Membership"),
+              title: "Add International Membership",
             },
           },
 
@@ -250,9 +520,7 @@ const routes = [
                 path: "update-user-profile",
                 name: "update-user-profile",
                 component: () =>
-                  import(
-                    "@/platform/views/Applications/UpdateUserProfile.vue"
-                  ),
+                  import("@/platform/views/Applications/UpdateUserProfile.vue"),
                 meta: {
                   pageTitle: t("Applicant Personal Information"),
                 },
@@ -284,10 +552,7 @@ const routes = [
                   name: "athlete-sport-selection",
                   params: {
                     appId: to.params.id,
-                    locale:
-                      i18n.global.locale?.value ||
-                      i18n.global.locale ||
-                      "ar",
+                    locale: to.params.locale || resolveLocale(),
                   },
                 }),
                 meta: {
@@ -301,10 +566,7 @@ const routes = [
                   name: "app-summary",
                   params: {
                     appId: to.params.id,
-                    locale:
-                      i18n.global.locale?.value ||
-                      i18n.global.locale ||
-                      "ar",
+                    locale: to.params.locale || resolveLocale(),
                   },
                 }),
                 meta: {
@@ -316,9 +578,7 @@ const routes = [
                 path: "update-user-picture",
                 name: "update-user-picture",
                 component: () =>
-                  import(
-                    "@/platform/views/Applications/ApplicantPicture.vue"
-                  ),
+                  import("@/platform/views/Applications/ApplicantPicture.vue"),
                 meta: {
                   pageTitle: t("Personal Picture"),
                 },
@@ -327,9 +587,7 @@ const routes = [
                 path: "update-user-photo",
                 name: "update-user-photo",
                 component: () =>
-                  import(
-                    "@/v3/pages/applications/ApplicationPhotoUpload.vue"
-                  ),
+                  import("@/v3/pages/applications/ApplicationPhotoUpload.vue"),
                 meta: {
                   pageTitle: t("Personal Picture"),
                 },
@@ -416,6 +674,60 @@ const routes = [
       },
 
       {
+        path: "user-applications",
+        name: "user-applications",
+        redirect: (to) => ({
+          name: "applications-index",
+          params: { locale: to.params.locale || resolveLocale() },
+        }),
+      },
+      {
+        path: "platform-applications",
+        name: "platform-applications",
+        redirect: (to) => ({
+          name: "applications-index",
+          params: { locale: to.params.locale || resolveLocale() },
+        }),
+      },
+
+      {
+        path: "dive-centers",
+        name: "diving-center-membership",
+        component: () =>
+          import("@/v3/pages/app/dive-centers/DiveCentersIndex.vue"),
+        meta: {
+          auth: true,
+          authGuard: "auth",
+          title: "Dive Centers",
+          pageTitle: t("Dive Centers"),
+        },
+      },
+      {
+        path: "dive-center/:id(\\d+)",
+        name: "diving-center-show",
+        component: () =>
+          import("@/v3/pages/app/dive-centers/DiveCenterProfile.vue"),
+        meta: {
+          auth: true,
+          authGuard: "auth",
+          title: "Dive Centers",
+          pageTitle: t("Dive Centers"),
+        },
+      },
+      {
+        path: "vendors",
+        name: "vendor-profile",
+        component: () =>
+          import("@/v3/pages/app/vendors/VendorProfileView.vue"),
+        meta: {
+          auth: true,
+          authGuard: "auth",
+          title: "Vendors",
+          pageTitle: t("Vendor Profile"),
+        },
+      },
+
+      {
         path: "professional-diver-license",
         name: "professional-diver-license",
         component: () =>
@@ -439,16 +751,29 @@ const routes = [
         },
       },
       {
+        path: "account-settings",
+        name: "account-settings",
+        component: () => import("@/v3/pages/AccountSettings.vue"),
+        meta: {
+          auth: true,
+          authGuard: "auth",
+          pageTitle: "Account Settings",
+          title: "Account Settings",
+        },
+      },
+      {
         path: "invoices/view/:id(\\d+)",
         name: "quotation-view",
         component: () => import("@/v3/pages/quotations/QuotationItemsView.vue"),
         meta: {
+          auth: true,
+          authGuard: "auth",
           pageTitle: "Details of the fee",
           title: "Details of the fee",
         },
       },
       {
-        path: ":locale(ar|en)/invoices/:id(\\d+)",
+        path: "invoices/:id(\\d+)",
         name: "invoice-view",
         component: () => import("@/v3/pages/invoices/index.vue"),
         meta: {
@@ -458,7 +783,7 @@ const routes = [
         },
       },
       {
-        path: ":locale(ar|en)/invoice-review/:id(\\d+)",
+        path: "invoice-review/:id(\\d+)",
         name: "invoice-review",
         component: () => import("@/platform/views/invoices/Review.vue"),
         meta: {
@@ -472,6 +797,9 @@ const routes = [
         path: "payments/confirm-payment/:id(\\d+)",
         name: "confirm-payment",
         component: () => import("@/v3/pages/payments/ConfirmPayment.vue"),
+        meta: {
+          auth: false,
+        },
       },
 
       {
@@ -486,364 +814,54 @@ const routes = [
           },
         ],
       },
-      {
-        path: ":locale(ar|en)",
-        name: "web-app-index",
-        meta: {
-          auth: true,
-          authGuard: "auth",
-          pageTitle: "Workspace",
-          title: "Workspace",
-        },
-        redirect: (to) => {
-          return { name: "workspace-index" };
-        },
-        children: [
-          {
-            path: "dive-centers",
-            name: "diving-center-membership",
-            component: () =>
-              import("@/v3/pages/app/dive-centers/DiveCentersIndex.vue"),
-            meta: {
-              auth: true,
-              authGuard: "auth",
-              title: "Dive Centers",
-              pageTitle: t("Dive Centers"),
-            },
-          },
-          {
-            path: "dive-center/:id(\\d+)",
-            name: "diving-center-show",
-            component: () =>
-              import("@/v3/pages/app/dive-centers/DiveCenterProfile.vue"),
-            meta: {
-              auth: true,
-              authGuard: "auth",
-              title: "Dive Centers",
-              pageTitle: t("Dive Centers"),
-            },
-          },
-          {
-            path: "applications",
-            name: "platform-applications",
-            meta: {
-              auth: true,
-              authGuard: "auth",
-              title: "Applications",
-              pageTitle: t("Applications"),
-            },
-            redirect: (to) => {
-              return { name: "applications-index" };
-            },
-            children: [
-              {
-                path: "",
-                name: "applications-index",
-                component: () =>
-                  import("@/v3/pages/applications/ApplicationsIndex.vue"),
-                meta: {
-                  auth: true,
-                  authGuard: "auth",
-                  pageTitle: t("My applications"),
-                  title: t("My applications"),
-                },
-              },
-
-              {
-                path: "professional-diver-new-license",
-                name: "professional-diver-new-license",
-                component: () =>
-                  import(
-                    "@/v3/pages/applications/professional-divers/NewLicense.vue"
-                  ),
-                meta: {
-                  auth: true,
-                  authGuard: "auth",
-                  pageTitle: t("Professional Diver New License Application"),
-                  title: t("Professional Diver New License Application"),
-                },
-              },
-              {
-                path: "athlete-new-registration",
-                name: "athlete-new-registration",
-                component: () =>
-                  import("@/v3/pages/applications/athletes/NewAthlete.vue"),
-                meta: {
-                  auth: true,
-                  authGuard: "auth",
-                  pageTitle: t("New Athlete Registration"),
-                  title: t("New Athlete Registration"),
-                },
-              },
-
-              {
-                name: "sport-fishing-register",
-                path: "sport-fishing-register/:eventId(\\d+)",
-                component: () =>
-                  import("@/v3/pages/applications/sport-fishing/TeamUpsert.vue"),
-                props: (route) => ({
-                  eventId: Number(route.params.eventId),
-                  mode: "create",
-                }),
-              },
-              {
-                name: "fishing-team-update",
-                path: "sport-fishing-team-update/:appId(\\d+)",
-                component: () =>
-                  import("@/v3/pages/applications/sport-fishing/TeamUpsert.vue"),
-                props: (route) => ({
-                  eventId: Number(route.params.eventId),
-                  mode: "create",
-                }),
-              },
-
-              {
-                name: "app-summary",
-                path: ":appId(\\d+)/summary",
-                component: () =>
-                  import("@/v3/pages/applications/ApplicationSummary.vue"),
-                props: true,
-              },
-              {
-                name: "app-waiver",
-                path: ":appId(\\d+)/waiver",
-                component: () => import("@/v3/pages/applications/Waiver.vue"),
-                props: true,
-              },
-              {
-                name: "app-new-files",
-                path: ":appId(\\d+)/new-files",
-                component: () =>
-                  import("@/v3/pages/applications/ApplicationFiles.vue"),
-                props: true,
-              },
-              {
-                path: ":appId(\\d+)/add-fishing-participant",
-                name: "fishing-participant-add",
-                component: () =>
-                  import(
-                    "@/v3/pages/applications/sport-fishing/ParticipantAdd.vue"
-                  ),
-                meta: {
-                  requiresAuth: true,
-                  title: "Add Participant",
-                },
-              },
-              {
-                path: ":appId(\\d+)/professional-divers/add-membership",
-                name: "pd-membership-add",
-                component: () =>
-                  import(
-                    "@/v3/pages/applications/professional-divers/AddMembership.vue"
-                  ),
-                meta: {
-                  requiresAuth: true,
-                  title: "Add International Membership",
-                },
-              },
-              {
-                path: ":appId(\\d+)/professional-divers/add-contract",
-                name: "pd-contract-add",
-                component: () =>
-                  import(
-                    "@/v3/pages/applications/professional-divers/AddContract.vue"
-                  ),
-                meta: {
-                  requiresAuth: true,
-                  title: "Add Work Contract",
-                },
-              },
-
-              {
-                path: ":appId(\\d+)/file-upload",
-                name: "application-file-upload",
-                component: () =>
-                  import("@/v3/pages/applications/ApplicationFileUpload.vue"),
-                meta: { requiresAuth: true },
-              },
-
-              {
-                path: ":appId/personal-photo-upload",
-                name: "applicant-personal-photo-upload",
-                component: () =>
-                  import(
-                    "@/v3/pages/applications/ApplicantPersonalPhotoUpload.vue"
-                  ),
-                meta: { requiresAuth: true },
-              },
-
-              {
-                path: "user-profile-edit/:appId(\\d+)",
-                name: "user-profile-edit",
-                component: () =>
-                  import("@/v3/pages/applications/UserProfileUpsert.vue"),
-                meta: {
-                  requiresAuth: true,
-                  pageTitle: t("Update personal information"),
-                },
-              },
-              {
-                path: ":appId(\\d+)/athletes/update-sport",
-                name: "athlete-sport-selection",
-                component: () =>
-                  import("@/v3/pages/applications/athletes/UpdateAthleteSport.vue"),
-                meta: {
-                  requiresAuth: true,
-                  pageTitle: t("Update Sport"),
-                  title: "Update Sport",
-                },
-              },
-              {
-                path: ":appId(\\d+)/professional-divers/update-license-informations",
-                name: "pd-license-info-update",
-                component: () =>
-                  import(
-                    "@/v3/pages/applications/professional-divers/UpdateLicenseInformations.vue"
-                  ),
-                meta: {
-                  requiresAuth: true,
-                  pageTitle: t("License Informations"),
-                  title: "License Informations",
-                },
-              },
-              {
-                path: ":appId(\\d+)/dive-centers/profile/edit",
-                name: "dive-center-profile-edit",
-                component: () =>
-                  import(
-                    "@/v3/pages/applications/dive-centers/UpdateCenterProfile.vue"
-                  ),
-                meta: {
-                  requiresAuth: true,
-                  pageTitle: t("Update Center Profile"),
-                  title: "Update Center Profile",
-                },
-              },
-              {
-                path: ":appId(\\d+)/dive-centers/activities/edit",
-                name: "dive-center-activities-edit",
-                component: () =>
-                  import(
-                    "@/v3/pages/applications/dive-centers/UpdateActivities.vue"
-                  ),
-                meta: {
-                  requiresAuth: true,
-                  pageTitle: t("Update Diving Activities"),
-                  title: "Update Diving Activities",
-                },
-              },
-              {
-                path: ":appId(\\d+)/dive-centers/administrators/edit",
-                redirect: (to) => ({
-                  name: "dive-center-administrator-add",
-                  params: {
-                    appId: to.params.appId,
-                    locale: to.params.locale,
-                  },
-                }),
-              },
-              {
-                path: ":appId(\\d+)/dive-centers/administrators/add",
-                name: "dive-center-administrator-add",
-                component: () =>
-                  import(
-                    "@/v3/pages/applications/dive-centers/DCAdministratorUpsert.vue"
-                  ),
-                meta: {
-                  requiresAuth: true,
-                  pageTitle: t("Add Administrator"),
-                  title: "Add Administrator",
-                },
-              },
-              {
-                path: ":appId(\\d+)/dive-centers/administrators/:profileId(\\d+)/edit",
-                name: "dive-center-administrator-edit",
-                component: () =>
-                  import(
-                    "@/v3/pages/applications/dive-centers/DCAdministratorUpsert.vue"
-                  ),
-                meta: {
-                  requiresAuth: true,
-                  pageTitle: t("Update Administrator"),
-                  title: "Update Administrator",
-                },
-              },
-              {
-                path: ":appId(\\d+)/dive-centers/international-memberships/add",
-                name: "dive-center-international-membership-add",
-                component: () =>
-                  import(
-                    "@/v3/pages/applications/dive-centers/AddInternationalMembership.vue"
-                  ),
-                meta: {
-                  requiresAuth: true,
-                  pageTitle: t("Add International Membership"),
-                  title: "Add International Membership",
-                },
-              },
-            ],
-          },
-          {
-            path: "professional-diver-license",
-            redirect: (to) => ({ name: "professional-diver-license" }),
-          },
-          {
-            path: "athlete-profile",
-            redirect: (to) => ({ name: "athlete-profile" }),
-          },
-          {
-            path: "invoices/view/:id(\\d+)",
-            redirect: (to) => ({ name: "quotation-view" }),
-          },
-        ],
-      },
     ],
+  },
+
+  {
+    path: "/",
+    redirect: () => `/${resolveLocale()}`,
   },
 
   {
     path: "/workspace",
     name: "workspace",
-    redirect: { name: "AppRoot" },
+    redirect: () => ({
+      name: "workspace-index",
+      params: { locale: resolveLocale() },
+    }),
   },
 
   {
     path: "/payments/confirm-payment/:id(\\d+)",
-    redirect: (to) => ({ name: "confirm-payment", params: { id: to.params.id } }),
+    redirect: (to) => ({
+      name: "confirm-payment",
+      params: { locale: resolveLocale(), id: to.params.id },
+    }),
   },
 
   {
     path: "/paylink/confirm-payment",
-    redirect: { name: "confirm-paylink-payment" },
+    redirect: () => ({
+      name: "confirm-paylink-payment",
+      params: { locale: resolveLocale() },
+    }),
   },
   {
     path: "/:locale(ar|en)/platform",
     name: "platform-index",
-    redirect: (to) => ({ name: "AppRoot" }),
+    redirect: (to) => ({
+      name: "AppRoot",
+      params: { locale: to.params.locale || resolveLocale() },
+    }),
   },
   {
     path: "/quotations/pay-invoice/:id(\\d+)",
     redirect: (to) => {
-      const locale = resolveLocale();
       return {
         name: "invoice-review",
-        params: { locale, id: to.params.id },
+        params: { locale: resolveLocale(), id: to.params.id },
       };
     },
-  },
-
-  {
-    path: "/:locale(ar|en)/invoices/:id(\\d+)",
-    redirect: (to) => ({
-      name: "invoice-view",
-      params: { locale: to.params.locale, id: to.params.id },
-    }),
-  },
-  {
-    path: "/:locale(ar|en)/invoice-review/:id(\\d+)",
-    redirect: (to) => ({
-      name: "invoice-review",
-      params: { locale: to.params.locale, id: to.params.id },
-    }),
   },
 
   {
@@ -914,6 +932,16 @@ const routes = [
           guest: true,
         },
       },
+      {
+        path: "verify-email",
+        name: "verify-email",
+        component: () =>
+          import("@/v3/components/Authentication/VerifyEmail.vue"),
+        meta: {
+          pageTitle: t("Verify your email"),
+          guest: true,
+        },
+      },
     ],
   },
 
@@ -952,6 +980,32 @@ const router = createRouter({
 
 // router.beforeEach
 router.beforeEach((to, from, next) => {
+  // —— Locale auto-fill for name-based navigations missing the locale param ——
+  const needsLocale =
+    to.matched.length > 0 &&
+    to.matched.some((record) => /:locale/.test(record.path));
+
+  if (
+    needsLocale &&
+    (!to.params.locale ||
+      (to.params.locale !== "ar" && to.params.locale !== "en"))
+  ) {
+    const resolvedLocale = from.params.locale || resolveLocale();
+    if (to.name) {
+      return next({
+        name: to.name,
+        params: { ...to.params, locale: resolvedLocale },
+        query: to.query,
+        hash: to.hash,
+      });
+    }
+    return next({
+      path: `/${resolvedLocale}${to.path}`,
+      query: to.query,
+      hash: to.hash,
+    });
+  }
+
   // —— Locale handling (from :locale param) ——
   const t = i18n.global.t;
   const currentLocale = i18n.global.locale?.value || i18n.global.locale;
@@ -977,7 +1031,6 @@ router.beforeEach((to, from, next) => {
   }
 
   // —— Title / heading handling (supports i18n keys) ——
-  // Prefer meta.pageTitleKey (i18n key). Fallback to meta.pageTitle (raw string).
   const pageTitleKey = to.meta && to.meta.pageTitleKey;
   const rawPageTitle = to.meta && to.meta.pageTitle;
   const pageTitle = pageTitleKey ? t(pageTitleKey) : rawPageTitle || "";

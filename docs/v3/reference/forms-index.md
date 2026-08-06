@@ -22,6 +22,11 @@ This index links to the canonical MasterForm guide and supporting references. Al
 | User Profile Schema | Schema with validation and dynamic options | [`src/v3/schema/userProfile.js`](../../../src/v3/schema/userProfile.js) |
 | Dive Center Profile Update | Form with dynamic region/city loading | [`src/v3/pages/applications/dive-centers/UpdateCenterProfile.vue`](../../../src/v3/pages/applications/dive-centers/UpdateCenterProfile.vue) |
 | Sport Fishing Team Upsert | Form with team and boat fields | [`src/v3/pages/applications/sport-fishing/TeamUpsert.vue`](../../../src/v3/pages/applications/sport-fishing/TeamUpsert.vue) |
+| Vendor Registration | Authenticated vendor draft creation with services and geography | [`src/v3/pages/applications/vendors/NewRegistration.vue`](../../../src/v3/pages/applications/vendors/NewRegistration.vue) |
+| Vendor Profile Edit | Edit the profile attached to an applicant-editable vendor application | [`src/v3/pages/applications/vendors/UpdateVendorProfile.vue`](../../../src/v3/pages/applications/vendors/UpdateVendorProfile.vue) |
+| Add Vendor Contact | Dedicated application-scoped contact form | [`src/v3/pages/applications/vendors/AddVendorContact.vue`](../../../src/v3/pages/applications/vendors/AddVendorContact.vue) |
+| Vendor Profile Schema | Canonical profile fields and serialization | [`src/v3/schema/applications/vendorProfile.js`](../../../src/v3/schema/applications/vendorProfile.js) |
+| Vendor Contact Schema | Contact fields and serialization | [`src/v3/schema/applications/vendorContact.js`](../../../src/v3/schema/applications/vendorContact.js) |
 
 ---
 

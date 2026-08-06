@@ -1,37 +1,40 @@
 import { pipe, string, minLength, maxLength, regex } from "valibot";
 
+const ACCOUNT_TYPE_OPTIONS = [
+  { label: "Personal", value: "personal" },
+  { label: "Business", value: "business" },
+];
+
 export function makeSignUpSchema() {
   return {
-    first_name: {
-      type: "text",
-      label: "First name",
+    account_type: {
+      type: "radioTiles",
+      label: "Account type",
       value: "",
+      options: ACCOUNT_TYPE_OPTIONS,
       validation: pipe(
-        string("First name is required"),
-        minLength(1, "First name is required"),
-        maxLength(100, "First name must not exceed 100 characters")
+        string("Account type is required"),
+        minLength(1, "Account type is required")
       ),
       attrs: {
-        placeholder: "Enter your first name",
-        autocomplete: "given-name",
-        maxlength: 100,
+        class: "account-type-tiles",
       },
       required: true,
     },
 
-    last_name: {
+    alias: {
       type: "text",
-      label: "Last name",
+      label: "Account name",
       value: "",
       validation: pipe(
-        string("Last name is required"),
-        minLength(1, "Last name is required"),
-        maxLength(100, "Last name must not exceed 100 characters")
+        string("Account name is required"),
+        minLength(1, "Account name is required"),
+        maxLength(20, "Account name must not exceed 20 characters")
       ),
       attrs: {
-        placeholder: "Enter your last name",
-        autocomplete: "family-name",
-        maxlength: 100,
+        placeholder: "Enter your account name",
+        autocomplete: "nickname",
+        maxlength: 20,
       },
       required: true,
     },
