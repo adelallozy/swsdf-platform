@@ -204,20 +204,6 @@ const routes = [
           },
 
           {
-            path: ":id(\\d+)/professional-diver",
-            name: "professional-diver-application-review",
-            component: () =>
-              import(
-                "@/platform/views/Applications/professional-divers/ApplicationReview.vue"
-              ),
-
-            props: true,
-            meta: {
-              title: "Professional Divers Applications",
-            },
-          },
-
-          {
             name: "sport-fishing-register",
             path: "sport-fishing-register/:eventId(\\d+)",
             component: () =>
@@ -575,15 +561,6 @@ const routes = [
               },
 
               {
-                path: "update-user-picture",
-                name: "update-user-picture",
-                component: () =>
-                  import("@/platform/views/Applications/ApplicantPicture.vue"),
-                meta: {
-                  pageTitle: t("Personal Picture"),
-                },
-              },
-              {
                 path: "update-user-photo",
                 name: "update-user-photo",
                 component: () =>
@@ -592,64 +569,6 @@ const routes = [
                   pageTitle: t("Personal Picture"),
                 },
               },
-              {
-                path: "add-professional-diver-international-qualifications",
-                name: "add-professional-diver-international-qualifications",
-                component: () =>
-                  import(
-                    "@/platform/views/Applications/professional-divers/AddProfissionalQualification.vue"
-                  ),
-                meta: {
-                  pageTitle: t("Add International Membership"),
-                },
-              },
-              {
-                path: "add-professional-diver-international-qualification",
-                name: "add-professional-diver-international-qualification",
-                component: () =>
-                  import(
-                    "@/platform/views/Applications/professional-divers/AddQualification.vue"
-                  ),
-                meta: {
-                  pageTitle:
-                    "Adding Professional diver international memberships",
-                },
-              },
-              {
-                path: "add-professional-diver-contract",
-                name: "add-professional-diver-contract",
-                component: () =>
-                  import(
-                    "@/platform/views/Applications/professional-divers/AddWorkContract.vue"
-                  ),
-                meta: {
-                  pageTitle: "Add professional diver work contracts",
-                },
-              },
-              {
-                path: "register-professional-diver-contract",
-                name: "register-professional-diver-contract",
-                component: () =>
-                  import(
-                    "@/platform/views/Applications/professional-divers/AddWorkContract.vue"
-                  ),
-                meta: {
-                  pageTitle: "Add professional diver work contracts",
-                },
-              },
-
-              {
-                path: "professional-diver-work-contract",
-                name: "professional-diver-work-contract",
-                component: () =>
-                  import(
-                    "@/platform/views/Applications/professional-divers/WorkContract.vue"
-                  ),
-                meta: {
-                  pageTitle: t("professional_divers.work-contract"),
-                },
-              },
-
               {
                 path: "new-file",
                 name: "new-application-file",

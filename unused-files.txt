@@ -16,8 +16,6 @@ src/components/applications/LicenseCardSVG.vue
 src/components/applications/ProfessionalDiverApplicationDisclaimer.vue
 src/components/applications/ProfessionalDiverLicenseCardCard.vue
 src/components/applications/ProfessionalDiverLicenseCardForm.vue
-src/components/applications/ProfessionalDiverQualificationsCard.vue
-src/components/applications/ProfessionalDiverSkillForm.vue
 src/components/applications/ProfessionalDiverWorkContractForm.vue
 src/components/calendar/CalendarApp1.vue
 src/components/cards/Card2.vue
@@ -55,8 +53,6 @@ src/layout/header/partials/activity-timeline/Item5.vue
 src/layout/toolbar/MobilePageTitle.vue
 
 ## [source] platform/ - unused platform views/components
-src/platform/components/applications/professional-diver/MembershipsReview.vue
-src/platform/components/applications/professional-diver/QualificationsReview1.vue
 src/platform/components/competitions/_RaceScoring copy.vue
 src/platform/components/competitions/_backup_RaceStart.vue
 src/platform/components/competitions/_newRacerModel.vue

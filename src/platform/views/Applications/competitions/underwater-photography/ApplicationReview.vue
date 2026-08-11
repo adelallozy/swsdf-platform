@@ -5,10 +5,6 @@
         <div class="tw-flex tw-items-center tw-justify-between tw-gap-3">
             <general-breadcrumb :items="breads" />
         </div>
-        <license-summary 
-            v-if="application" 
-            :application="application" 
-            :event="event" />
 
         <DetailsCard 
             :user-profile="userProfile" 
@@ -27,7 +23,6 @@
 const PICK_RELATIVES = import.meta.env.VITE_COMPITION_FREEDIVING_PICK_RELATIVES;
 import axios from "axios";
 import { onMounted, ref, watch, reactive } from "vue";
-import LicenseSummary from "@/platform/components/applications/Summary.vue";	
 import ApplicationFiles from "@/v3/components/Applications/Files.vue";
 
 import DetailsCard from "@/platform/components/applications/compititons/underwater-photography/Details.vue";

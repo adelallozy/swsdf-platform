@@ -68,6 +68,7 @@ const payload = {
 
   // Diving Center entities
   center_profile: ref(null),
+  center_active_contracts: ref([]),
   active_files: ref([]),
   active_international_memberships: ref([]),
   application_international_memberships: ref([]),
@@ -292,6 +293,7 @@ export function useApplicationStore() {
             quotations: "quotations",
             actions: "actions",
             center_profile: "center_profile",
+            center_active_contracts: "center_active_contracts",
             vendor_profile: "vendor_profile",
             vendor_contacts: "vendor_contacts",
             vendor_contact_updates: "vendor_contact_updates",

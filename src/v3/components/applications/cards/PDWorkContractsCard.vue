@@ -104,7 +104,8 @@ function membershipStatusIcon(contract) {
 
 /**
  * Determines if delete button should be shown for a contract.
- * Only shows when canEdit is true AND membership is approved.
+ * Only shows when canEdit is true AND contract is proposed active (new_status === 'approved').
+ * "active" is the canonical UI term for the backend "approved" status value.
  *
  * @param {Object} contract - The contract object
  * @returns {boolean} True if delete button should be shown
@@ -115,7 +116,8 @@ function canShowDelete(contract) {
 
 /**
  * Determines if restore button should be shown for a contract.
- * Only shows when canEdit is true AND contract was approved and now canceled.
+ * Only shows when canEdit is true AND contract was active (status === 'approved')
+ * and is now proposed for cancellation (new_status === 'inactive').
  *
  * @param {Object} contract - The contract object
  * @returns {boolean} True if restore button should be shown
@@ -127,6 +129,7 @@ function canShowRestore(contract) {
 }
 
 // Add button: canEdit AND activeCount < MAX_CONTRACTS
+// activeCount counts contracts proposed as active (new_status === 'approved')
 const canShowAdd = computed(() => {
     const activeCount = contracts.value.filter(c => lc(c?.new_status) === 'approved').length;
     return canEdit.value && activeCount < MAX_CONTRACTS;
@@ -138,7 +141,8 @@ const canShowAdd = computed(() => {
 
 /**
  * Returns display status for a contract with label and severity.
- * Priority: Canceled > Under Review > Approved
+ * Priority: Pending Cancel > Inactive > Unverified > Active
+ * "active" is the canonical UI term for the backend "approved" status value.
  *
  * @param {Object} contract - The contract object
  * @returns {{label: string, severity: string}} Status object with label and severity
@@ -147,24 +151,24 @@ function displayStatus(contract) {
     const newStatus = lc(contract?.new_status);
     const currentStatus = lc(contract?.status);
     
-    // Canceled (Pending Deletion) - Enhanced UX message
+    // Pending Cancel: currently active, proposed for cancellation
     if (newStatus === 'inactive' && currentStatus === 'approved') {
         return { label: t('Cancellation will be completed after application approval'), severity: 'warn' };
     }
     
-    // Canceled (Inactive)
+    // Inactive
     if (currentStatus === 'inactive') {
         return { label: t('Inactive'), severity: 'danger' };
     }
     
-    // Under Review (Unverified)
+    // Unverified: newly added, proposed active but awaiting admin review
     if (newStatus === 'approved' && currentStatus === 'unverified') {
         return { label: t('Unverified'), severity: 'warn' };
     }
     
-    // Approved
+    // Active: proposed active and already active
     if (newStatus === 'approved' && currentStatus === 'approved') {
-        return { label: t('Approved'), severity: 'success' };
+        return { label: t('Active'), severity: 'success' };
     }
     
     // Fallback: use new_status if available
@@ -202,6 +206,8 @@ function getStatusSeverity(status) {
 
 const validationErrors = computed(() => {
     const errors = [];
+    // Count contracts proposed as active (new_status === 'approved').
+    // A currently unverified contract proposed as active satisfies this; admin review promotes it.
     const activeCount = contracts.value.filter(c => lc(c?.new_status) === 'approved').length;
 
     if (activeCount < MIN_CONTRACTS) {
@@ -521,10 +527,10 @@ NAVIGATION:
 
 STATUS DISPLAY:
 ============
-- Unverified: warn (yellow)
-- Verified/Approved: success (green)
-- Canceled/Pending Deletion: warn (yellow)
-- Inactive/Canceled: danger (red)
+- Unverified: warn (yellow) — newly added, proposed active, awaiting admin review
+- Active: success (green) — proposed active and already active (backend "approved")
+- Cancellation pending: warn (yellow) — currently active, proposed for cancellation
+- Inactive: danger (red)
 
 USAGE:
 ======

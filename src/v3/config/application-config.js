@@ -935,6 +935,37 @@ export const APPLICATION_CONFIG = {
   },
 
   //============================================================================
+  // DIVING CENTER — PROFESSIONAL DIVERS CONTRACTS UPDATES
+  // One application per selected professional-diver contract (cancellation).
+  // No files. The pd_contracts payload key is loaded by the shared backend
+  // ApplicationPayloadComponent::loadPDContracts() for the application.
+  //============================================================================
+  "Professional Divers Contracts Updates": {
+    displayName: "Professional Divers Contracts Updates",
+
+    payloadKeys: ["center_profile", "center_active_contracts", "actions"],
+
+    requiredFiles: [],
+    acceptedFiles: [],
+
+    steps: [
+      {
+        id: "pd_contracts",
+        label: "Professional Diver Work Contracts",
+        type: "entity",
+        blocking: true,
+        component: "DivingCenterProfessionalDiverContractUpdateCard",
+      },
+    ],
+
+    summaryLayout: [
+      "ApplicationInfoCard",
+      "DivingCenterProfessionalDiverContractUpdateCard",
+      "ActionsTrackingCard",
+    ],
+  },
+
+  //============================================================================
   // JETSKI COMPETITION PARTICIPATION
   //============================================================================
   "Jetski Competition Participation": {

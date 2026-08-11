@@ -249,6 +249,11 @@ const COMPONENT_REGISTRY = {
       "@/v3/components/applications/cards/DivingCenterAdministratorsCard.vue"
     )
   ),
+  DivingCenterProfessionalDiverContractUpdateCard: defineAsyncComponent(() =>
+    import(
+      "@/v3/components/applications/cards/DivingCenterProfessionalDiverContractUpdateCard.vue"
+    )
+  ),
   ActiveFilesCard: defineAsyncComponent(() =>
     import("@/v3/components/applications/cards/ActiveFilesCard.vue")
   ),
@@ -296,7 +301,7 @@ const COMPONENT_REGISTRY = {
 // COMPOSABLES
 // ────────────────────────────────────────────────────────────────────────────
 
-const { t, te, locale } = useI18n();
+const { t, locale } = useI18n();
 const route = useRoute();
 const router = useRouter();
 const confirm = useConfirm();
@@ -552,11 +557,10 @@ onMounted(async () => {
     application.value?.flow,
     application.value?.purpose
   );
-  const resolvedHeadingTitle =
-    headingTitle && te(headingTitle) ? t(headingTitle) : headingTitle || "";
 
   setHeading({
-    title: resolvedHeadingTitle,
+    // PageHeading owns the single translation pass for the title.
+    title: headingTitle || "",
     visible: true,
   });
 });

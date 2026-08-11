@@ -78,4 +78,8 @@ function setLangDir(lang) {
 
 <style lang="scss">
 	@use "assets/sass/swsdf-style";
+
+	#app {
+		background-color: #f8fbfd;
+	}
 </style>

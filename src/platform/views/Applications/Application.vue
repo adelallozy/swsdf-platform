@@ -96,14 +96,6 @@
 							id: application.id,
 						},
 					});
-			} 
-			if ( target == "Professional Divers"  ) {
-				router.replace({
-					name: "professional-diver-application-review",
-					params: {
-						id: application.id,
-					},
-				});
 			}
 		}
 

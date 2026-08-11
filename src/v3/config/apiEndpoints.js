@@ -149,6 +149,23 @@ export const DIVING_CENTERS_APPS_CREATE_UPDATE =
 export const DIVING_CENTERS_APPS_CREATE_ADMIN_UPDATE =
   import.meta.env.VITE_DIVING_CENTERS_APPS_NEW_ADMIN_UPDATE ||
   "diving-centers-applications/new-admin-update/";
+// NOTE: Assumption — backend initiation endpoint for the
+// "Professional Divers Contracts Updates" flow (one application per
+// professional-diver contract) is POST {endpoint}{centerId}/{contractId}.
+// If the backend agent ships a different dashed route under
+// diving-centers-applications, override VITE_DIVING_CENTERS_APPS_PD_CONTRACTS_UPDATE
+// in .env or update this fallback to match.
+export const DIVING_CENTERS_APPS_PD_CONTRACTS_UPDATE =
+  import.meta.env.VITE_DIVING_CENTERS_APPS_PD_CONTRACTS_UPDATE ||
+  "diving-centers-applications/professional-divers-contracts-update/";
+
+// Add a contract to an existing cancellation application
+export const DIVING_CENTERS_APPS_ADD_CONTRACT_CANCELLATION =
+  "diving-centers-applications/add-contract-cancellation/";
+
+// Remove a contract from a cancellation application (un-select)
+export const DIVING_CENTERS_APPS_REMOVE_CONTRACT_CANCELLATION =
+  "diving-centers-applications/remove-contract-cancellation/";
 
 // Admin Profile Endpoints
 export const DIVING_CENTERS_ADMIN_FIND =

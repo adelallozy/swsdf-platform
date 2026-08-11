@@ -5,12 +5,6 @@
       <div class="tw-flex tw-items-center tw-justify-between tw-gap-3">
         <general-breadcrumb :items="breads" />
       </div>
-      <license-summary 
-        v-if="application" 
-        :application="application" 
-        :applicationNotes = "applicationEntities?.notes"
-        :event="event" 
-        />
 
       <router-link
         v-if="['draft', 'applicant_revision'].includes(application.stage)"
@@ -76,7 +70,6 @@
 const PICK_RELATIVES = import.meta.env.VITE_COMPITION_FREEDIVING_PICK_RELATIVES;
 import axios from "axios";
 import { onMounted, ref, watch, reactive } from "vue";
-import LicenseSummary from "@/platform/components/applications/Summary.vue";
 
 import AthletesCard from "@/platform/components/applications/compititons/free-diving/AthletesCard.vue";
 import WorkLeaveCard from "@/platform/components/applications/compititons/free-diving/WorkLeaveCard.vue";
