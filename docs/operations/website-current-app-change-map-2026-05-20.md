@@ -28,20 +28,33 @@ Mapping rules:
 | M | `src/composables/useApplicationStore.js` | `src/composables/useApplicationStore.js` | Equivalent exists. |
 | M | `src/locales/ar.json` | `src/locales/ar.json` | Equivalent exists. |
 | M | `src/locales/en.json` | `src/locales/en.json` | Equivalent exists. |
-| M | `src/platform/components/Summary.vue` | `src/platform/components/Summary.vue` | Equivalent exists. |
-| M | `src/platform/components/applications/ApplicationActionCard.vue` | `src/platform/components/applications/ApplicationActionCard.vue` | Equivalent exists. |
+| ~~M~~ | ~~`src/platform/components/Summary.vue`~~ | — | **Removed** — legacy, orphaned. |
+| ~~M~~ | ~~`src/platform/components/applications/ApplicationActionCard.vue`~~ | — | **Removed** — only used by deleted Summary.vue. |
 | M | `src/platform/components/applications/ApplicationCard.vue` | `src/platform/components/applications/ApplicationCard.vue` | Equivalent exists. |
 | M | `src/platform/components/applications/ProfileDetails.vue` | `src/platform/components/applications/ProfileDetails.vue` | Equivalent exists. |
-| M | `src/platform/components/applications/Summary.vue` | `src/platform/components/applications/Summary.vue` | Equivalent exists. |
+| ~~M~~ | ~~`src/platform/components/applications/Summary.vue`~~ | — | **Removed** — legacy, replaced by v3 `ApplicationSummary.vue`. |
 | M | `src/platform/components/applications/UserProfileFiles.vue` | `src/platform/components/applications/UserProfileFiles.vue` | Equivalent exists. |
 | M | `src/platform/components/applications/compititons/free-diving/AthletesCard.vue` | `src/platform/components/applications/compititons/free-diving/AthletesCard.vue` | Equivalent exists. |
 | M | `src/platform/components/applications/compititons/free-diving/WorkLeaveCard.vue` | `src/platform/components/applications/compititons/free-diving/WorkLeaveCard.vue` | Equivalent exists. |
 | M | `src/platform/components/applications/compititons/jetsky/Details.vue` | `src/platform/components/applications/compititons/jetsky/Details.vue` | Equivalent exists. |
 | M | `src/platform/components/applications/compititons/underwater-photography/Details.vue` | `src/platform/components/applications/compititons/underwater-photography/Details.vue` | Equivalent exists. |
-| M | `src/platform/components/applications/professional-diver/MembershipsReview.vue` | `src/platform/components/applications/professional-diver/MembershipsReview.vue` | Equivalent exists. |
+| ~~M~~ | ~~`src/platform/components/applications/professional-diver/MembershipsReview.vue`~~ | — | **Removed** — legacy, orphaned. |
 | M | `src/platform/components/applications/professional-diver/ProfileDetails.vue` | `src/platform/components/applications/professional-diver/ProfileDetails.vue` | Equivalent exists. |
-| M | `src/platform/components/applications/professional-diver/QualificationsReview1.vue` | `src/platform/components/applications/professional-diver/QualificationsReview1.vue` | Equivalent exists. |
-| M | `src/platform/components/applications/professional-diver/WorkContracts.vue` | `src/platform/components/applications/professional-diver/WorkContracts.vue` | Equivalent exists. |
+| ~~M~~ | ~~`src/platform/components/applications/professional-diver/QualificationsReview1.vue`~~ | — | **Removed** — legacy, orphaned. |
+| ~~M~~ | ~~`src/platform/components/applications/professional-diver/WorkContracts.vue`~~ | — | **Removed** — legacy, replaced by v3 `PDWorkContractsCard.vue`. |
+| ~~M~~ | ~~`src/platform/components/applications/professional-diver/WorkContractForm.vue`~~ | — | **Removed** — legacy, replaced by v3 `AddContract.vue`. |
+| ~~M~~ | ~~`src/platform/components/applications/InvoiceSummary.vue`~~ | — | **Removed** — legacy, replaced by v3 `QuotationCard.vue`. |
+| ~~M~~ | ~~`src/platform/components/applications/UserPicture.vue`~~ | — | **Removed** — legacy, replaced by v3 `ApplicantPersonalPhotoUpload.vue`. |
+| ~~M~~ | ~~`src/platform/views/Applications/ApplicantPicture.vue`~~ | — | **Removed** — legacy, replaced by v3 `ApplicationPhotoUpload.vue`. |
+| ~~M~~ | ~~`src/platform/views/Applications/professional-divers/ApplicantPicture.vue`~~ | — | **Removed** — legacy orphan. |
+| ~~M~~ | ~~`src/platform/views/Applications/professional-divers/ApplicationReview.vue`~~ | — | **Removed** — legacy, replaced by v3 `ApplicationSummary.vue`. |
+| ~~M~~ | ~~`src/platform/views/Applications/professional-divers/AddWorkContract.vue`~~ | — | **Removed** — legacy, replaced by v3 `AddContract.vue`. |
+| ~~M~~ | ~~`src/platform/views/Applications/professional-divers/WorkContract.vue`~~ | — | **Removed** — legacy orphan. |
+| ~~M~~ | ~~`src/platform/views/professional-divers/Profile.vue`~~ | — | **Removed** — legacy, replaced by v3 `ProfessionalDiverProfile.vue`. |
+| ~~M~~ | ~~`src/v3/components/Applications/ProfessionalDivers/Memberships.vue`~~ | — | **Removed** — legacy, replaced by v3 `PDMembershipsCard.vue`. |
+| ~~M~~ | ~~`src/platform/components/applications/professional-diver/MembershipForm.vue`~~ | — | **Removed** — legacy, replaced by v3 MasterForm in `AddMembership.vue`. |
+| ~~M~~ | ~~`src/platform/views/Applications/professional-divers/AddQualification.vue`~~ | — | **Removed** — legacy, replaced by v3 `AddMembership.vue`. |
+| ~~M~~ | ~~`src/platform/views/Applications/professional-divers/AddProfissionalQualification.vue`~~ | — | **Removed** — legacy orphan. |
 | M | `src/platform/components/competitions-applications/CompetitionIntroduction.vue` | `src/platform/components/competitions-applications/CompetitionIntroduction.vue` | Equivalent exists. |
 | M | `src/platform/components/diving-centers/Membership.vue` | `src/platform/components/diving-centers/Membership.vue` | Equivalent exists. |
 | M | `src/platform/components/widgets/application.vue` | `src/platform/components/widgets/application.vue` | Equivalent exists. |

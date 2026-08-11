@@ -32,7 +32,6 @@ All routes below are children of `/app` and require authentication. The root `/`
 | `/app/applications/underwater-photography-competition-registration/:eventId` | `underwater-photography-competition-registration` | `platform/views/Applications/competitions/underwater-photography/NewRegistration.vue` | Underwater photography competition registration |
 | `/app/applications/fishing-new-team-registration/:eventId` | `fishing-new-team-registration` | `v3/pages/applications/sport-fishing/TeamUpsert.vue` | Sport fishing team registration |
 | `/app/applications/new-athlete` | `new-athlete` | Redirect | Compatibility route that redirects to `athlete-new-registration` |
-| `/app/applications/:id/professional-diver` | `professional-diver-application-review` | `platform/views/Applications/professional-divers/ApplicationReview.vue` | Professional diver application review |
 | `/app/applications/:id` | `application-home` | `platform/views/Applications/Application.vue` | Application details hub |
 
 ### Application Detail Sub-routes (under `/app/applications/:id`)
@@ -46,15 +45,9 @@ All routes below are children of `/app` and require authentication. The root `/`
 | `/app/applications/:id/update-underwater-participation-competition-application/:participantId` | `update-underwater-participation-competition-application` | `platform/views/Applications/competitions/underwater-photography/UpdateInformation.vue` | Update underwater photo info |
 | `/app/applications/:id/add-working-leave` | `add-working-leave` | `platform/views/Applications/competitions/free-diving/NewWorkLeave.vue` | Add working leave |
 | `/app/applications/:id/update-user-profile` | `update-user-profile` | `platform/views/Applications/UpdateUserProfile.vue` | Update applicant profile |
-| `/app/applications/:id/update-user-picture` | `update-user-picture` | `platform/views/Applications/ApplicantPicture.vue` | Update applicant picture |
 | `/app/applications/:id/update-user-photo` | `update-user-photo` | `v3/pages/applications/ApplicationPhotoUpload.vue` | Upload applicant photo |
 | `/app/applications/:id/update-license-informations` | `professional-diver-application-license-informations` | `platform/views/Applications/professional-divers/LicenseInformations.vue` | PD license informations |
 | `/app/applications/:id/add-new-athlete` | `add-new-athletes` | `platform/views/Applications/AddAthletes.vue` | Add new athletes |
-| `/app/applications/:id/add-professional-diver-contract` | `add-professional-diver-contract` | `platform/views/Applications/professional-divers/AddWorkContract.vue` | Add PD work contract |
-| `/app/applications/:id/register-professional-diver-contract` | `register-professional-diver-contract` | `platform/views/Applications/professional-divers/AddWorkContract.vue` | Register PD contract |
-| `/app/applications/:id/professional-diver-work-contract` | `professional-diver-work-contract` | `platform/views/Applications/professional-divers/WorkContract.vue` | PD work contract view |
-| `/app/applications/:id/add-professional-diver-international-qualification` | `add-professional-diver-international-qualification` | `platform/views/Applications/professional-divers/AddQualification.vue` | Add PD international qualification |
-| `/app/applications/:id/add-professional-diver-international-qualifications` | `add-professional-diver-international-qualifications` | `platform/views/Applications/professional-divers/AddProfissionalQualification.vue` | Add PD international qualifications |
 | `/app/applications/:id/new-file` | `new-application-file` | `v3/components/Applications/UploadFiles.vue` | Upload new file |
 | `/app/applications/:id/add-new-file` | `add-new-file` | `v3/components/Applications/UploadFiles.vue` | Add new file |
 

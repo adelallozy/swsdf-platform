@@ -32,7 +32,7 @@ Refactoring guide: `../guides/refactoring-guide.md`
 | Field | Value |
 |-------|-------|
 | Source | `src/website/components/inputs/BaseInput.vue` |
-| Consumers | `NewWorkLeave.vue`, `MembershipForm.vue`, `TeamForm.vue`, `JetskyForm.vue`, `FreeDivingForm.vue`, `UserProfileForm.vue` (6 files) |
+| Consumers | `NewWorkLeave.vue`, `TeamForm.vue`, `JetskyForm.vue`, `FreeDivingForm.vue`, `UserProfileForm.vue` (5 files — MembershipForm.vue removed) |
 | Suggested target | `src/v3/components/inputs/V3Input.vue` (or reuse PrimeVue `InputText`) |
 | Notes | Used across competition and professional-diver forms. Low complexity. |
 
@@ -43,7 +43,7 @@ Refactoring guide: `../guides/refactoring-guide.md`
 | Field | Value |
 |-------|-------|
 | Source | `src/website/components/inputs/BaseSelect.vue` |
-| Consumers | `NewWorkLeave.vue`, `NewFileStep.vue`, `WorkContractForm.vue`, `TeamForm.vue`, `JetskyForm.vue`, `FreeDivingForm.vue`, `UserProfileForm.vue` (7 files) |
+| Consumers | `NewWorkLeave.vue`, `NewFileStep.vue`, `TeamForm.vue`, `JetskyForm.vue`, `FreeDivingForm.vue`, `UserProfileForm.vue` (6 files — WorkContractForm.vue removed) |
 | Suggested target | `src/v3/components/inputs/V3Select.vue` (or reuse PrimeVue `Select` / MasterForm select field) |
 | Notes | Most widely imported website component. Consider MasterForm field integration. |
 
@@ -54,7 +54,7 @@ Refactoring guide: `../guides/refactoring-guide.md`
 | Field | Value |
 |-------|-------|
 | Source | `src/website/components/inputs/BaseDate.vue` |
-| Consumers | `NewFileStep.vue`, `WorkContractForm.vue`, `FreeDivingForm.vue`, `UserProfileForm.vue` (4 files, 7 locations) |
+| Consumers | `NewFileStep.vue`, `FreeDivingForm.vue`, `UserProfileForm.vue` (3 files, 7 locations — WorkContractForm.vue removed) |
 | Suggested target | `src/v3/components/inputs/V3Date.vue` (or MasterForm DatePicker field) |
 | Notes | Date handling. Check MasterForm guide for DatePicker patterns. |
 
@@ -76,7 +76,7 @@ Refactoring guide: `../guides/refactoring-guide.md`
 | Field | Value |
 |-------|-------|
 | Source | `src/website/components/inputs/BaseFileWithCrop.vue` |
-| Consumers | `NewFileStep.vue`, `UserPicture.vue` (2 files) |
+| Consumers | `NewFileStep.vue` (1 file — UserPicture.vue removed) |
 | Suggested target | `src/v3/components/inputs/V3FileCrop.vue` or enhance `PhotoInput.vue` |
 | Notes | Image upload with crop. Check if `v3/components/PhotoInput.vue` can replace. |
 
@@ -98,7 +98,7 @@ Refactoring guide: `../guides/refactoring-guide.md`
 | Field | Value |
 |-------|-------|
 | Source | `src/website/components/inputs/UploadFile.vue` |
-| Consumers | `WorkContractForm.vue`, `MembershipForm.vue` (2 files) |
+| Consumers | _(all legacy consumers removed — WorkContractForm.vue, MembershipForm.vue deleted)_ |
 | Suggested target | `src/v3/components/inputs/V3Upload.vue` or reuse `FileUploader.vue` |
 | Notes | File upload for contracts/memberships. |
 
@@ -109,7 +109,7 @@ Refactoring guide: `../guides/refactoring-guide.md`
 | Field | Value |
 |-------|-------|
 | Source | `src/website/components/base/BaseModal.vue` |
-| Consumers | `Files.vue`, `WorkContract.vue`, `AddProfissionalQualification.vue`, `WorkContracts.vue`, `MembershipsReview.vue`, `UserProfileFiles.vue` (6 files) |
+| Consumers | `Files.vue`, `UserProfileFiles.vue` (2 files — legacy consumers `WorkContract.vue`, `AddProfissionalQualification.vue`, `WorkContracts.vue`, `MembershipsReview.vue` removed) |
 | Suggested target | `src/v3/components/V3Modal.vue` or PrimeVue `Dialog` |
 | Notes | Widely used. If replacing with PrimeVue `Dialog`, update all 6 consumers at once. |
 
@@ -120,7 +120,7 @@ Refactoring guide: `../guides/refactoring-guide.md`
 | Field | Value |
 |-------|-------|
 | Source | `src/website/components/MainModal.vue` |
-| Consumers | `WorkLeaveCard.vue`, `AthletesCard.vue`, `ApplicationActionCard.vue` (3 files) |
+| Consumers | `WorkLeaveCard.vue`, `AthletesCard.vue` (2 files — ApplicationActionCard.vue removed) |
 | Suggested target | `src/v3/components/V3Modal.vue` or PrimeVue `Dialog` |
 | Notes | Different from BaseModal — check if both can be consolidated into one v3 modal. |
 

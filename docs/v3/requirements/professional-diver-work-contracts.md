@@ -10,12 +10,17 @@
 
 Professional Diver applicants must provide at least **one active work contract**. Contracts are managed in the application summary via the `PDWorkContractsCard`, and new contracts are added through the dedicated `AddContract` page (MasterForm-driven).
 
+The term **active** is the canonical UI/business term for the backend `approved` status. The two words are interchangeable; `active` is used in prose and `approved` appears in the raw payload value.
+
+Submission eligibility is based on the contract's **proposed** status (`new_status`), not its current reviewed status (`status`). A contract that is currently `unverified` but proposed as `approved` in the current application satisfies the requirement; the application is then approved (or rejected) by admins, who promote `new_status` to the live `status`.
+
 ---
 
 ## Business Requirements
 
 1. **Minimum Requirement**
-   - At least **one approved** contract is required before submission.
+   - At least **one active** contract is required before submission.
+   - "Active" here means a contract whose `new_status === 'approved'` (proposed as active in this application).
 2. **Maximum Limit**
    - Applicants can add contracts only until `MAX_CONTRACTS` is reached.
 3. **Edit Permissions**
@@ -31,11 +36,11 @@ Professional Diver applicants must provide at least **one active work contract**
 
 ### FR‑1: Display Contracts
 - Show each contract with:
-  - Dive center name
-  - Start date
-  - End date (optional)
-  - Contract copy link (opens in new tab)
-  - Status tag (Approved / Unverified / Inactive / Pending Cancel)
+   - Dive center name
+   - Start date
+   - End date (optional)
+   - Contract copy link (opens in new tab)
+   - Status tag (Active / Unverified / Inactive / Pending Cancel)
 
 ### FR‑2: Add Contract
 - Provide **Add Work Contract** action when editable and under max.
@@ -43,11 +48,11 @@ Professional Diver applicants must provide at least **one active work contract**
 
 ### FR‑3: Delete Contract
 - Show **Delete** only when:
-  - `new_status === 'approved'`
+   - `new_status === 'approved'` (proposed active in this application)
 
 ### FR‑4: Restore Contract
 - Show **Restore** only when:
-  - `new_status === 'inactive'` and `status === 'approved'`
+   - `new_status === 'inactive'` and `status === 'approved'` (currently active, proposed for cancellation)
 
 ### FR‑5: Validation
 - Validation errors are reported to the store:
@@ -152,11 +157,11 @@ This ensures “Next” takes the user directly to the Add Contract page.
 
 - [ ] No contracts + not editable → empty state shows “No work contracts registered”
 - [ ] No contracts + editable → add card visible, warning shown
-- [ ] Approved contracts show **Delete**
+- [ ] Contracts proposed active (`new_status === 'approved'`) show **Delete**
 - [ ] Inactive contracts show **Restore**
 - [ ] `MAX_CONTRACTS` hides Add button
 - [ ] Contract copy link opens correctly
-- [ ] Validation cleared when at least one approved contract exists
+- [ ] Validation cleared when at least one contract is proposed active (`new_status === 'approved'`)
 
 ---
 

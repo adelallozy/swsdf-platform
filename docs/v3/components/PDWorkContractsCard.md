@@ -42,13 +42,17 @@
 {
   id: number,
   center_name: string,
-  new_status: 'approved' | 'inactive' | string,
-  status: 'approved' | 'unverified' | 'inactive' | string,
+  new_status: 'approved' | 'inactive' | string,  // proposed status in this application; 'approved' = "active"
+  status: 'approved' | 'unverified' | 'inactive' | string,  // current reviewed status; 'approved' = "active"
   start_date: 'YYYY-MM-DD',
   end_date: 'YYYY-MM-DD' | null,
   contract_copy_link: string
 }
 ```
+
+**Status terminology:** `active` is the canonical UI/business term for the backend `approved` value. The payload emits `approved`; the card and documentation refer to it as "active" in prose.
+
+**Submission eligibility uses `new_status` (proposed), not `status` (current):** a contract currently `unverified` but proposed as `approved` (`new_status === 'approved'`) counts toward the minimum and satisfies validation. Admin review then promotes `new_status` to the live `status`.
 
 ---
 
@@ -76,12 +80,14 @@ const visibleComponent = computed(() =>
 
 ## Validation Rules
 
-Minimum required contracts are enforced using **approved** contracts only:
+Minimum required contracts are enforced by counting contracts proposed as active in the current application (`new_status === 'approved'`):
 
 ```js
 const activeCount = contracts.value.filter(c => lc(c?.new_status) === 'approved').length;
 if (activeCount < MIN_CONTRACTS) errors.push(t('At least one work contract is required'));
 ```
+
+This is intentional: submission eligibility is based on the **proposed** status, so a contract that is currently `unverified` but proposed as `approved` satisfies the minimum. Admin review later promotes `new_status` to the live `status`.
 
 Validation is synced to the store:
 
@@ -107,7 +113,7 @@ router.push({ name: 'pd-contract-add', params: { appId, locale } })
 ### Delete Contract
 Shown when:
 - `canEdit === true`
-- `contract.new_status === 'approved'`
+- `contract.new_status === 'approved'` (proposed active in this application)
 
 Calls:
 ```js
@@ -118,7 +124,7 @@ api.deleteContract(contractId)
 Shown when:
 - `canEdit === true`
 - `contract.new_status === 'inactive'`
-- `contract.status === 'approved'`
+- `contract.status === 'approved'` (currently active, proposed for cancellation)
 
 Calls:
 ```js
@@ -129,12 +135,12 @@ api.restoreContract(contractId)
 
 ## Status Display Logic
 
-Priority order for contract status:
+Priority order for contract status (display label → underlying `new_status`/`status` combination):
 
-1. **Pending Cancel** (`new_status = inactive` + `status = approved`)
+1. **Pending Cancel** (`new_status = inactive` + `status = approved`) — currently active, proposed for cancellation
 2. **Inactive**
-3. **Unverified**
-4. **Approved**
+3. **Unverified** — newly added, awaiting admin review (`new_status = approved` + `status = unverified` renders as Unverified)
+4. **Active** (`new_status = approved` + `status = approved`)
 5. **Fallback**
 
 Severity → style mapping is handled in the card:
