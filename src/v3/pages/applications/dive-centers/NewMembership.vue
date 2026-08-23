@@ -122,7 +122,7 @@ async function initialize() {
     filterCitiesByRegion(null);
 
     setHeading({
-      title: t("Diving Center New Membership"),
+      title: "Diving Center New Membership",
       visible: true,
     });
   } catch (error) {

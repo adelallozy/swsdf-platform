@@ -207,7 +207,7 @@ async function initialize() {
     }
 
     setHeading({
-      title: t("Update Administrators"),
+      title: "Update Administrators",
       visible: true,
     });
 

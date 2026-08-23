@@ -149,7 +149,7 @@ async function initialize() {
       return;
     }
 
-    setHeading({ title: t('License Informations'), visible: true });
+    setHeading({ title: 'License Informations', visible: true });
   } catch (e) {
     capture(e, {
       context: 'UpdateLicenseInformations.initialize',

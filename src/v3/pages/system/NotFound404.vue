@@ -26,7 +26,7 @@ const destRecord = computed(() => router.getRoutes().find(r => r.name === props.
 
 
 console.log('destRecord' , destRecord.value);
-const destTitle  = computed(() => destRecord.value?.meta?.pageTitle || t('Home'))
+const destTitle  = computed(() => t(destRecord.value?.meta?.pageTitle || 'Home'))
 
 function goTarget() {
   if (destRecord.value) {

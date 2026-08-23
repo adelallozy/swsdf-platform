@@ -237,7 +237,7 @@ async function loadProfile() {
     sports.value = Array.isArray(data?.sports) ? data.sports : [];
 
     setHeading({
-      title: t('Athletes'),
+      title: 'Athletes',
       subtitle: displayName.value,
       visible: true
     });
@@ -365,7 +365,7 @@ function downloadCard(row) {
 }
 
 onMounted(async () => {
-  setHeading({ title: t('Athletes'), visible: true });
+  setHeading({ title: 'Athletes', visible: true });
   await loadProfile();
 });
 </script>

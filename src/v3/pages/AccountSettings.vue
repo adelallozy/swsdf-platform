@@ -5,9 +5,12 @@
     </div>
 
     <template v-else>
-      <div v-if="blockers.length" class="tw-bg-amber-50 tw-border tw-border-amber-300 tw-text-amber-800 tw-rounded-lg tw-p-4 tw-mb-6">
+      <!-- Soft-lock banner only: when the account type is fully locked
+           (canChangeAccountType === false) the selector is hidden and no
+           technical "account type is locked" notice is shown. -->
+      <div v-if="blockers.length && canChangeAccountType" class="tw-bg-amber-50 tw-border tw-border-amber-300 tw-text-amber-800 tw-rounded-lg tw-p-4 tw-mb-6">
         <p class="tw-font-semibold tw-mb-1">
-          {{ $t(canChangeAccountType ? 'Some account types are unavailable' : 'Account type is locked') }}
+          {{ $t('Some account types are unavailable') }}
         </p>
         <ul class="tw-list-disc tw-ps-5 tw-text-sm">
           <li v-for="(blocker, i) in blockers" :key="i">{{ $t(blocker) }}</li>
@@ -47,6 +50,9 @@
         >
           {{ submitting ? $t('Saving') + '...' : $t('Save changes') }}
         </AppButton>
+
+        <!-- Email change (dual confirmation: new-email OTP, then old-email confirmation OTP) -->
+        <EmailChangeCard class="tw-mt-10" />
       </div>
     </template>
   </div>
@@ -58,6 +64,7 @@ import { useI18n } from 'vue-i18n';
 
 import AppButton from '@/v3/components/ui/AppButton.vue';
 import MasterForm from '@/v3/components/Forms/MasterForm.vue';
+import EmailChangeCard from '@/v3/components/Account/EmailChangeCard.vue';
 import { makeAccountSettingsSchema } from '@/v3/schema/auth/accountSettings.js';
 import { useNotification } from '@/v3/composables/useNotification.js';
 import { useErrorHandler } from '@/v3/composables/useErrorHandler.js';

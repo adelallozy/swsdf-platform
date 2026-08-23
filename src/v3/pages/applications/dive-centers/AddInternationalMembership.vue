@@ -109,7 +109,7 @@ async function initialize() {
     }
 
     setHeading({
-      title: t("Add International Membership"),
+      title: "Add International Membership",
       visible: true,
     });
   } catch (error) {

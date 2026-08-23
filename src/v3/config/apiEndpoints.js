@@ -39,6 +39,14 @@ export const AUTH_SEND_VERIFICATION_CODE =
   import.meta.env.VITE_SEND_VERIFICATION_CODE || "users/send-verification-code";
 export const AUTH_VERIFY_CODE =
   import.meta.env.VITE_VERIFY_CODE || "users/verify-code";
+export const AUTH_CHANGE_UNVERIFIED_EMAIL =
+  import.meta.env.VITE_CHANGE_UNVERIFIED_EMAIL || "users/change-unverified-email";
+export const AUTH_REQUEST_EMAIL_CHANGE =
+  import.meta.env.VITE_REQUEST_EMAIL_CHANGE || "users/request-email-change";
+export const AUTH_VERIFY_EMAIL_CHANGE =
+  import.meta.env.VITE_VERIFY_EMAIL_CHANGE || "users/verify-email-change";
+export const AUTH_VERIFY_EMAIL_CHANGE_CONFIRM =
+  import.meta.env.VITE_VERIFY_EMAIL_CHANGE_CONFIRM || "users/verify-email-change-confirm";
 export const AUTH_GET_DOCUMENTS =
   import.meta.env.VITE_USER_DOCUMENTS || "users/get-documents";
 export const AUTH_UPDATE_ACCOUNT =

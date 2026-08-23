@@ -165,7 +165,7 @@ async function initialize() {
     filterCitiesByRegion(centerProfile.region_id || null);
 
     setHeading({
-      title: t("Update Center Profile"),
+      title: "Update Center Profile",
       visible: true,
     });
   } catch (error) {

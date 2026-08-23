@@ -152,7 +152,7 @@ async function initialize() {
     await loadRegistrationOptions();
 
     setHeading({
-      title: t("Vendor Registration"),
+      title: "Vendor Registration",
       visible: true,
     });
   } catch (error) {

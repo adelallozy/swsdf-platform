@@ -1,17 +1,17 @@
 # Website Pages Inventory
 - Source: `src/router/index.js`
-- Generated: `2026-08-10 09:20:25`
+- Generated: `2026-08-18 09:58:35`
 ## Counts
-- Total route records: 81
-- Page routes (leaf component): 61
+- Total route records: 82
+- Page routes (leaf component): 62
 - Layout routes (component + children): 4
 - Group routes (children only): 1
 - Redirect-only routes: 15
-- Unique route components: 60
+- Unique route components: 61
 ## Unique Components By Prefix
 - `v3/pages`: 34
 - `platform/views`: 17
-- `v3/components`: 6
+- `v3/components`: 7
 - `v3/layouts`: 2
 - `website/profile`: 1
 ## Page Routes
@@ -63,6 +63,7 @@
 | `/:locale(ar\|en)/applications/vendor-registration` | `vendor-registration` | `page` | `@/v3/pages/applications/vendors/NewRegistration.vue` |  |
 | `/:locale(ar\|en)/athlete-profile` | `athlete-profile` | `page` | `@/v3/pages/athletes/AthleteProfile.vue` |  |
 | `/:locale(ar\|en)/athlete-registration` | `athlete-registration` | `page` | `@/platform/views/athletes/Profile.vue` |  |
+| `/:locale(ar\|en)/auth/change-email` | `change-email` | `page` | `@/v3/components/Authentication/ChangeEmail.vue` |  |
 | `/:locale(ar\|en)/auth/forgot-password` | `forgot-password` | `page` | `@/v3/components/Authentication/ForgotPassword.vue` |  |
 | `/:locale(ar\|en)/auth/reset-password/:token?` | `reset-password ` | `page` | `@/v3/components/Authentication/ResetPassword.vue` |  |
 | `/:locale(ar\|en)/auth/sign-in` | `sign-in` | `page` | `@/v3/components/Authentication/SignIn.vue` |  |

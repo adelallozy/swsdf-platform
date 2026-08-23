@@ -137,7 +137,7 @@ async function initialize() {
     unclassifiedActivities.value = initialActivityValues.unclassifiedActivities;
 
     setHeading({
-      title: t("Update Diving Activities"),
+      title: "Update Diving Activities",
       visible: true,
     });
   } catch (error) {

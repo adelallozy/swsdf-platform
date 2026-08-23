@@ -167,7 +167,7 @@ async function initialize() {
       initialValues.value = {};
     }
 
-    setHeading({ title: t('Professional Diver New License Application'), visible: true });
+    setHeading({ title: 'Professional Diver New License Application', visible: true });
   } catch (e) {
     // Handle 409 conflicts separately
     if (e?.status === 409) {

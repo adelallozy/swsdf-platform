@@ -15,10 +15,12 @@ Read these documents before implementation:
 - `swsdf-platform/docs/hr-leave-deferred-work.md` - deferred employee leave application scope and dependencies.
 - `Docs/Vendor Registration/vendor-registration-resume-context.md` - active
   cross-project Vendor Registration checkpoint and ordered remaining work.
-- `Docs/Account Registration/README.md` - canonical account types, public email
-  verification, application eligibility, migration, and rollout plan.
-- `Docs/account-registration-security-fixes-changelog.md` - complete record of
-  security fixes, OTP API, mailer, and frontend verification implementation.
+- `Docs/Account Registration/README.md` - canonical account types and
+  public email-verification product contract.
+- `api/docs/authentication.md` - authoritative API authentication
+  implementation spec (login, OTP, email change, reset, rate limits).
+- `Docs/Account Registration/account-registration-security-fixes-changelog.md` -
+  historical record of the July 2026 security fixes and OTP implementation.
 
 For application workflows, also read:
 
@@ -115,20 +117,21 @@ For the applications index UI improvement work, read:
 
 ### OTP email verification — implemented
 
-Backend (see `Docs/account-registration-security-fixes-changelog.md` for full
-details):
+Backend implementation is specified solely by
+`api/docs/authentication.md` (authoritative — endpoints, canonical
+`users_emails` store, login gates, OTP binding, rate limits). Summary of
+what shipped:
 
-- `sendVerificationCode` and `verifyCode` endpoints added to
-  `Api/UsersController.php`. Six-digit OTP, 10-minute expiry, 5-attempt lock,
-  60-second resend cooldown, no email enumeration.
-- `UserMailer::verificationCode()` sends the code with spam/junk guidance and
-  the "staff will never ask for the code" warning. Templates in
-  `api/templates/email/{text,html}/verification_code.php`.
+- `sendVerificationCode` and `verifyCode` in `Api/UsersController.php`.
+  Six-digit OTP, 10-minute expiry; abuse control via dedicated
+  rate-limit buckets; a resend invalidates all prior codes.
 - Login gate: correct credentials + unverified email returns
-  `403 verification_required` (no JWT). Correct credentials + suspended account
-  returns `403 account_suspended`.
-- `users_emails` migration written (`20260725140000_CreateUsersEmails.php`) but
-  not yet run by the user.
+  `403 verification_required` (no JWT). Correct credentials + suspended
+  account returns `403 account_suspended`.
+- Canonical email store `users_emails` is LIVE: migrations
+  `20260725140000` (table + ids_seq trigger) and `20260816120000`
+  (users_email_id token binding) ran and were verified end-to-end in
+  August 2026. Email change uses the verify-then-switch flow.
 
 Frontend (under `src/v3/`):
 
@@ -136,32 +139,43 @@ Frontend (under `src/v3/`):
   non-digits before `maxlength=6` can truncate; `watch` on `code` cleans
   non-digits on any change. Uses `inputmode="numeric"`,
   `autocomplete="one-time-code"`, monospace centered input, 60s resend
-  cooldown, centered red banner for 429 errors.
+  cooldown, centered red banner for 429 errors. Both states carry a
+  prominent amber "Don't have access to this email?" banner linking to the
+  password-based email correction page (`change-email`).
+- `ChangeEmail.vue` — unverified-email correction page
+  (`/app/:locale/auth/change-email`, product §4.6, API §6.5
+  `users/change-unverified-email`): current email (from `?email=`) +
+  password + new/confirm email; per-field 422 errors; on success returns
+  to `verify-email?email=<new>` in the pre-send state (no code is sent
+  automatically).
 - `useAuth.js` `signIn()` redirects to `/auth/verify-email?email=...` on
   `403 verification_required`; `setAuthManually()` completes sign-in after OTP
   verification.
 - `SignIn.vue`, `SignUp.vue`, `ForgotPassword.vue`, `ResetPassword.vue` —
   rate-limit banners for 429; SignUp redirects to verify-email after signup;
   ResetPassword accepts token from `?token=` query param.
-- `/auth/verify-email` route added; `AUTH_SEND_VERIFICATION_CODE` and
-  `AUTH_VERIFY_CODE` endpoint constants added.
+- `/auth/verify-email` and `/auth/change-email` routes added;
+  `AUTH_SEND_VERIFICATION_CODE`, `AUTH_VERIFY_CODE`, and
+  `AUTH_CHANGE_UNVERIFIED_EMAIL` endpoint constants added.
 
-Pending (blocked on user action or future work):
+Remaining (open items only):
 
-- User must run the `users_emails` migration. Email-verification backfill must
-  preverify only administrator accounts; existing public users must remain
-  unverified and complete the OTP flow.
-- `schema-dump-default.lock` needs `bin/cake migrations dump` after migration.
-- ORM classes `UsersEmailsTable` / `UsersEmail` not yet created.
 - `ids_seq` audit for 5 tables not done (payment_transfers, hr_leave_records,
   vendor_services, vendor_profile_entries, file_attachments).
 - Signup account-type (personal/business) selection tiles and the account
-  settings page are implemented. Workspace filtering by account type, route
-  gating by account type, unclassified-legacy-user type-selection gate, and
-  `mixed` read-only display remain pending.
-- Production still needs the account-type schema/backfill operation. The
-  temporary `backfillAccountTypes` controller action must be removed immediately
-  after its production run.
+  settings page are implemented. A locked account type (mixed, or an account
+  with existing domain relationships) hides the account-type selector in
+  account settings with no "locked" notice (revised 2026-08-18 — the previous
+  technical "Account type is locked / Mixed accounts cannot change account
+  type." banner was removed). Workspace filtering by account type, route
+  gating by account type, the unclassified-legacy-user type-selection gate,
+  and the workspace-level mixed-account persistent warning remain pending.
+
+Completed since the previous revision of this file (do not re-plan):
+`users_emails` migration + ORM + auth cutover ran and was verified
+(see `api/docs/authentication.md`); `schema-dump-default.lock` was dumped;
+the temporary account-types backfill action was removed after its
+production run.
 
 ## Translation Contract
 
@@ -169,6 +183,14 @@ Pending (blocked on user action or future work):
 - Add Arabic translations to `src/locales/ar.json`.
 - Do not add generated or nested keys such as `locale.ar`, `actions.toggleLanguage`, `labels.*`, or template-literal key composition.
 - Do not pass already-localized Arabic API values to `$t()`. API-backed translatable values should arrive as canonical English display phrases, then be translated by the frontend.
+- Route `meta.title` and `meta.pageTitle`, and `setHeading({ title })`, hold the
+  literal English key only. Translate exactly once at the consumption point:
+  `Breadcrumb.vue` (`$t(item.name)`), `PageHeading.vue` (`$t(title)`), the
+  router guard (`t()` for `document.title`), and `NotFound404.vue`
+  (`t(meta.pageTitle || 'Home')`). Never pre-translate with `t()` where the
+  consumer translates again — that produced the fixed
+  `الملف الشخصي` / `الغواصين المحترفين` / `طلب رخصة غواص محترف`
+  double-translation warnings and froze breadcrumbs in the module-load locale.
 - Current known backend/data issue: some application, breadcrumb, and entity labels arrive already translated in Arabic, producing warnings such as `الطلبات`, `مراكز الغوص`, and Arabic application names when passed to `$t()`.
 
 ## Static Assets
@@ -180,6 +202,113 @@ Pending (blocked on user action or future work):
 - Do not restore Keen/Metronic demo fonts, avatars, flags, images, icons, or obsolete logo variants without an active reference and a concrete requirement.
 
 ## Recently Completed
+
+**Account-settings locked-type UX (August 2026):**
+- A locked account type (mixed, or an account with existing domain
+  relationships) now HIDES the account-type selector in Account Settings
+  instead of showing a disabled input plus the technical "Account type is
+  locked / Mixed accounts cannot change account type." banner. The
+  account-name field and the email-change card remain. Soft locks (some
+  options unavailable) keep the selector with the "Some account types are
+  unavailable" banner. No notice is shown for fully locked accounts —
+  product §7.2 revised (2026-08-18) to require the mixed-account
+  persistent warning only in the workspace, not account settings.
+  Unused Arabic key "Account type is locked" removed.
+
+**Reserved-email fix for email changes (August 2026):**
+- API (user-directed change): completed email changes now DELETE the old
+  `users_emails` row (address released immediately — no more `superseded`
+  tombstones), and `request-email-change` REVIVES the user's existing
+  row for the address on restart (revive-or-create) plus deletes other
+  stale pending rows. Fixes: same-address restart after an abandoned
+  attempt was blocked forever by global email uniqueness, and replaced
+  addresses were permanently reserved. Conflict errors now report
+  `new_email = "Unable to change email"`. The planned cleanup migration
+  for legacy `superseded` rows was dropped by owner decision (no
+  migration needed); see `api/docs/authentication.md` §2.1/§11 for the
+  residual-data note.
+- No platform code changes (the restart flow works unchanged from the
+  UI); specs updated (`api/docs/authentication.md` §2/§6/§11, product
+  §4.6, `docs/v3/specs/account-settings-email-change.md`).
+
+**Verified-email change with dual confirmation (August 2026):**
+- API (approved change): email change is now two-stage —
+  `request-email-change` (OTP to the NEW address) → `verify-email-change`
+  stage 1 (new-email OTP confirmed; mails an `EMAIL_CHANGE_CONFIRM` OTP
+  to the OLD address) → new `verify-email-change-confirm` stage 2
+  (executes the switch, consumes all tokens, fresh JWT). Spec:
+  `api/docs/authentication.md` §6; product decision 2026-08-18 recorded
+  in §4.6 and the §11 backlog.
+- Platform: `EmailChangeCard.vue` in `src/v3/components/Account/` mounted
+  in Account Settings — four-phase flow (idle → request → newCode →
+  oldCode), paste-safe OTP inputs, 60s stage-1 resend cooldown,
+  per-field 422/429 handling, `setAuthManually()` on completion; three
+  endpoint constants; Arabic translations (including previously missing
+  VerifyEmail toast keys); platform spec
+  `docs/v3/specs/account-settings-email-change.md`.
+- Cleanup from the prior session applied: the unverified-email
+  correction page's confirm-email field removal is reflected in the spec
+  and ar.json (three unused keys removed).
+
+**Unverified-email correction by password (August 2026):**
+- API (approved change): `POST /api/users/change-unverified-email`
+  (unauthenticated, bucket `changeUnverifiedEmail` 5/hour per IP+email) —
+  password reauth replaces an unverified primary address in place, frees
+  the mistyped address for its true owner, invalidates every outstanding
+  challenge, dual-writes the `users.email` mirror, and never mails an OTP
+  automatically. Spec: `api/docs/authentication.md` §6.5; product §4.6
+  un-deferred.
+- Platform: `ChangeEmail.vue` page at `/app/:locale/auth/change-email`;
+  prominent "Don't have access to this email?" banner on both
+  `VerifyEmail.vue` states; `AUTH_CHANGE_UNVERIFIED_EMAIL` constant;
+  Arabic translations; platform spec
+  `docs/v3/specs/auth-verification-pages.md`.
+
+**Translation double-translation fix (August 2026):**
+- Eliminated the frontend double-translation that produced intlify
+  `Not found 'الملف الشخصي'`, `'الغواصين المحترفين'`, and
+  `'طلب رخصة غواص محترف'` warnings: all router `meta.title`/`meta.pageTitle`
+  values and all `setHeading({ title: t(...) })` call sites now hold literal
+  English keys, translated once by `Breadcrumb.vue`, `PageHeading.vue`, the
+  router guard (`document.title`), and `NotFound404.vue`.
+- Removed the unused `meta.pageTitleKey` guard branch; `meta.pageTitle` is the
+  single canonical field. Legacy router keys `NAV.changePassword`,
+  `NAV.resetPassword`, and `athletes-sport` were replaced with the literal
+  keys `Change password`, `Reset password`, and `Update Sport`.
+- Second batch: `MasterForm` resolves schema `label`/`placeholder`/validation
+  messages through `t()` exactly once (`resolveText`/`formatMsg`), so schemas
+  must pass literal English keys. Removed schema pre-translation in
+  `ApplicantPersonalPhotoUpload.vue`, `ApplicationPhotoUpload.vue`,
+  `UploadFiles.vue`, and `ApplicationFileUpload.vue` (fixed the
+  `الصورة الشخصية` / `اسحب الملفات هنا أو اضغط لرفعها` /
+  `أختر نوع الملف` / `اختر ملفًا أو اسحبه إلى هنا` /
+  `ادخل تاريخ الإنتهاء` warnings). Replaced composed
+  `t('choose'/'enter'/'isRequired', { name })` schema keys with the literal
+  keys `Choose file type`, `Enter expiry date`, `File Type is required`, and
+  `File is required`. `attrs.description` is NOT MasterForm-resolved, so the
+  schema-level `t()` remains its single translation pass.
+- Quotation item descriptions arrive from the API as canonical English
+  display phrases and are translated by `$t(it.description)` in
+  `QuotationItemsView.vue` per the translation data-shape contract.
+- Application action timelines render API `action_key` values through
+  `$t()` in `ActionsTrackingCard.vue` (canonical English display phrases
+  defined by `ApplicationsActionsTable::findApplicantNotes` and the
+  `actionDesc` entries in the API `applications_configs.php` /
+  `vendor_registration_config.php` flows). `ar.json` carries the Arabic for
+  that full label set, including the API's historical `Submited` spelling —
+  match the stored value exactly; do not "fix" the key.
+- Added missing `ar.json` entries: `Unable to complete registration` (API
+  signup validation message per `api/docs/authentication.md`),
+  `No Professional License Found`, `It looks like you don't have a
+  professional diver license linked to this account yet.`,
+  `Apply for New License`, `Update Administrators`, `New Application File`,
+  the seven `NotFound404.vue` page keys, `Loading application...`,
+  `Submitting...`, `Drop your photo here or click to upload`, the
+  professional-diver-contract schema validation messages, and the quotation
+  fee phrases `Printing and delivery of the license card` and
+  `Professional diver license annual fees`.
+- Runtime-verified `/app/ar/auth/sign-up` and `/app/404/...` with zero intlify
+  warnings; production build passes.
 
 **Locale-prefixed routing unification:**
 - Restructured the router so **all** application routes require a `:locale(ar|en)` segment. The top-level `AppRoot` route moved from `/` to `/:locale(ar|en)`.
@@ -244,20 +373,25 @@ Pending (blocked on user action or future work):
 - Added missing Arabic translations for application statuses, card actions, profile menu, footer, and authentication text.
 
 **Account registration security fixes and OTP email verification:**
-See `Docs/account-registration-security-fixes-changelog.md` for the complete 25-file inventory.
-- Backend: entity lockdown, signup whitelist, JWT hardening, rate limiting, login verification gate (403 verification_required / account_suspended), OTP endpoints (`sendVerificationCode`/`verifyCode`), `UserMailer` verification template, `users_emails` migration (written, not yet run).
+See `Docs/Account Registration/account-registration-security-fixes-changelog.md` for the July 2026 25-file inventory; current implementation is `api/docs/authentication.md`.
+- Backend: entity lockdown, signup whitelist, JWT hardening, rate limiting, login verification gate (403 verification_required / account_suspended), OTP endpoints (`sendVerificationCode`/`verifyCode`), `UserMailer` verification template, canonical `users_emails` store (migrations run and verified August 2026).
 - Frontend: `VerifyEmail.vue` verification page with paste-safe OTP input, `useAuth.js` gate handling, rate-limit banners across all auth pages, `/auth/verify-email` route, endpoint constants.
-- Blocked: user must run the `users_emails` migration and the existing-users `email_confirmed_at` backfill before the verification gate is live.
 
 ## Known Follow-Up Work
 
+- Add automated API test coverage for the two email-identity change flows:
+  unverified-email correction (`change-unverified-email`, §6.5) and the
+  verified-email dual confirmation (`verify-email-change` stage 1 +
+  `verify-email-change-confirm` stage 2) — races, token invalidation on
+  re-request, and stale-OTP behavior are covered by design but not by
+  tests (live E2E only).
 - Implement HR Leave Wave 2 only after the decisions in `docs/hr-leave-deferred-work.md` and the canonical API registry are approved.
 - Continue the applications-index UI task list with optional filtering, date/numeral verification, and final accessibility/verification passes. Core header, footer, breadcrumb, page heading, card redesign, date formatting, and responsive grid phases are complete.
 - Trace and correct API-backed Arabic values that are passed back through `$t()`. Prefer canonical English display phrases from the API instead of frontend Arabic-key compatibility entries.
 - Correct applicant portrait/file URLs that may arrive as absolute local API URLs such as `http://localhost:8915/applications_files/...`. File URLs should use the configured public files boundary and must not embed a deployment-specific localhost origin.
 - Continue auditing active nested translation keys such as `Common.*`, `labels.*`, and `fileUploader.*`; replace them with literal English keys when touching those components.
 - Regenerate `docs/reference/website-pages.md` after route changes with `node scripts/generate-pages-inventory.js`.
-- Account registration remaining work: direct post-sign-in workspace navigation, canonical workspace ordering (Applications, Professional Divers, Athletes, Dive Centers, Vendors, Account Settings), workspace filtering by account type, route gating by account type, unclassified-legacy-user type-selection gate, `mixed` read-only display, account-type freezing on vendor/dive-center approval, `UsersEmailsTable`/`UsersEmail` ORM classes, `ids_seq` audit for 5 tables (payment_transfers, hr_leave_records, vendor_services, vendor_profile_entries, file_attachments). Signup personal/business selection tiles and the account settings page (alias editing + account-type switching with API blockers) are implemented.
+- Account registration remaining work: workspace filtering by account type, route gating by account type, unclassified-legacy-user type-selection gate, the workspace-level mixed-account persistent warning, and the `ids_seq` audit for 5 tables (payment_transfers, hr_leave_records, vendor_services, vendor_profile_entries, file_attachments). Already done — do not re-plan: signup personal/business selection tiles, the account settings page (with locked-account-type selector hidden and no technical notice), direct post-sign-in workspace navigation with canonical ordering, account-type freezing on vendor/dive-center approval, and the `UsersEmailsTable`/`UsersEmail` ORM classes.
 
 ## Verification
 
@@ -273,6 +407,7 @@ For `/app/` deployment changes, verify these routes directly:
 
 - `/app/ar/auth/sign-in`
 - `/app/ar/auth/verify-email` (OTP email verification page — needs `?email=` query param)
+- `/app/ar/auth/change-email` (password-based unverified-email correction — carries `?email=`)
 - `/app/ar` (workspace dashboard)
 - `/app/ar/applications`
 - `/app/ar/applications/professional-diver-new-license`

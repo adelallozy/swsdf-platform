@@ -158,7 +158,7 @@ async function initialize() {
     }
 
     setHeading({
-      title: pageTitle.value,
+      title: isEdit.value ? "Update Administrator" : "Add Administrator",
       visible: true,
     });
   } catch (error) {

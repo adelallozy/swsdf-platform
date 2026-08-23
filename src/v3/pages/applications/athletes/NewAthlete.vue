@@ -115,7 +115,7 @@ async function onSubmit({ formData }) {
 
 onMounted(() => {
   setHeading({
-    title: t('New Athlete Registration'),
+    title: 'New Athlete Registration',
     visible: true
   });
 });

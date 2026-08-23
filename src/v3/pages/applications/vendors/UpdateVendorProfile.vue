@@ -205,7 +205,7 @@ async function initialize() {
     }
 
     setHeading({
-      title: t("Update Vendor Profile"),
+      title: "Update Vendor Profile",
       visible: true,
     });
   } catch (error) {

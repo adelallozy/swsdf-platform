@@ -163,7 +163,7 @@ async function initialize() {
       }
     }
 
-    setHeading({ title: t('Update Profile'), visible: true });
+    setHeading({ title: 'Update Profile', visible: true });
   } catch (e) {
     capture(e, {
       context: 'UserProfileUpsert.initialize',

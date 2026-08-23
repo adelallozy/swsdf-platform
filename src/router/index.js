@@ -71,8 +71,8 @@ const routes = [
             meta: {
               auth: true,
               authGuard: "auth",
-              pageTitle: t("My applications"),
-              title: t("My applications"),
+              pageTitle: "My applications",
+              title: "My applications",
             },
           },
 
@@ -86,8 +86,8 @@ const routes = [
             meta: {
               auth: true,
               authGuard: "auth",
-              pageTitle: t("Professional Diver New License Application"),
-              title: t("Professional Diver New License Application"),
+              pageTitle: "Professional Diver New License Application",
+              title: "Professional Diver New License Application",
             },
           },
           {
@@ -98,8 +98,8 @@ const routes = [
             meta: {
               auth: true,
               authGuard: "auth",
-              pageTitle: t("New Athlete Registration"),
-              title: t("New Athlete Registration"),
+              pageTitle: "New Athlete Registration",
+              title: "New Athlete Registration",
             },
           },
 
@@ -111,8 +111,8 @@ const routes = [
             meta: {
               auth: true,
               authGuard: "auth",
-              pageTitle: t("Diving Center New Membership"),
-              title: t("Diving Center New Membership"),
+              pageTitle: "Diving Center New Membership",
+              title: "Diving Center New Membership",
             },
           },
 
@@ -124,8 +124,8 @@ const routes = [
             meta: {
               auth: true,
               authGuard: "auth",
-              pageTitle: t("Vendor Registration"),
-              title: t("Vendor Registration"),
+              pageTitle: "Vendor Registration",
+              title: "Vendor Registration",
             },
           },
 
@@ -137,7 +137,7 @@ const routes = [
                 "@/platform/views/Applications/competitions/underwater-photography/NewRegistration.vue"
               ),
             meta: {
-              pageTitle: t("Freediving Competition Participation"),
+              pageTitle: "Freediving Competition Participation",
               auth: true,
             },
           },
@@ -149,7 +149,7 @@ const routes = [
                 "@/platform/views/Applications/competitions/free-diving/NewRegistration.vue"
               ),
             meta: {
-              pageTitle: t("Freediving Competition Participation"),
+              pageTitle: "Freediving Competition Participation",
               auth: true,
             },
           },
@@ -161,7 +161,7 @@ const routes = [
                 "@/platform/views/Applications/competitions/jetsky/NewRegistration.vue"
               ),
             meta: {
-              pageTitle: t("Jetsky Competition Participation"),
+              pageTitle: "Jetsky Competition Participation",
               auth: true,
             },
           },
@@ -172,9 +172,7 @@ const routes = [
             component: () =>
               import("@/v3/pages/applications/sport-fishing/TeamUpsert.vue"),
             meta: {
-              pageTitle: t(
-                "Sport Fishing Championship Registration Application"
-              ),
+              pageTitle: "Sport Fishing Championship Registration Application",
             },
           },
 
@@ -186,7 +184,7 @@ const routes = [
                 "@/platform/views/Applications/competitions/underwater-photography/NewRegistration.vue"
               ),
             meta: {
-              pageTitle: t("Jetsky Competition Participation"),
+              pageTitle: "Jetsky Competition Participation",
             },
           },
           {
@@ -199,7 +197,7 @@ const routes = [
               },
             }),
             meta: {
-              pageTitle: t("New Athlete Registration"),
+              pageTitle: "New Athlete Registration",
             },
           },
 
@@ -306,7 +304,7 @@ const routes = [
               import("@/v3/pages/applications/UserProfileUpsert.vue"),
             meta: {
               requiresAuth: true,
-              pageTitle: t("Update personal information"),
+              pageTitle: "Update personal information",
             },
           },
           {
@@ -316,7 +314,7 @@ const routes = [
               import("@/v3/pages/applications/athletes/UpdateAthleteSport.vue"),
             meta: {
               requiresAuth: true,
-              pageTitle: t("Update Sport"),
+              pageTitle: "Update Sport",
               title: "Update Sport",
             },
           },
@@ -329,7 +327,7 @@ const routes = [
               ),
             meta: {
               requiresAuth: true,
-              pageTitle: t("License Informations"),
+              pageTitle: "License Informations",
               title: "License Informations",
             },
           },
@@ -342,7 +340,7 @@ const routes = [
               ),
             meta: {
               requiresAuth: true,
-              pageTitle: t("Update Center Profile"),
+              pageTitle: "Update Center Profile",
               title: "Update Center Profile",
             },
           },
@@ -353,7 +351,7 @@ const routes = [
               import("@/v3/pages/applications/vendors/UpdateVendorProfile.vue"),
             meta: {
               requiresAuth: true,
-              pageTitle: t("Update Vendor Profile"),
+              pageTitle: "Update Vendor Profile",
               title: "Update Vendor Profile",
             },
           },
@@ -364,7 +362,7 @@ const routes = [
               import("@/v3/pages/applications/vendors/AddVendorContactUpdate.vue"),
             meta: {
               requiresAuth: true,
-              pageTitle: t("Add Contact"),
+              pageTitle: "Add Contact",
               title: "Add Contact",
             },
           },
@@ -377,7 +375,7 @@ const routes = [
               ),
             meta: {
               requiresAuth: true,
-              pageTitle: t("Update Diving Activities"),
+              pageTitle: "Update Diving Activities",
               title: "Update Diving Activities",
             },
           },
@@ -400,7 +398,7 @@ const routes = [
               ),
             meta: {
               requiresAuth: true,
-              pageTitle: t("Add Administrator"),
+              pageTitle: "Add Administrator",
               title: "Add Administrator",
             },
           },
@@ -413,7 +411,7 @@ const routes = [
               ),
             meta: {
               requiresAuth: true,
-              pageTitle: t("Update Administrator"),
+              pageTitle: "Update Administrator",
               title: "Update Administrator",
             },
           },
@@ -426,7 +424,7 @@ const routes = [
               ),
             meta: {
               requiresAuth: true,
-              pageTitle: t("Add International Membership"),
+              pageTitle: "Add International Membership",
               title: "Add International Membership",
             },
           },
@@ -487,7 +485,7 @@ const routes = [
                     "@/platform/views/Applications/competitions/free-diving/ApplicationReview.vue"
                   ),
                 meta: {
-                  pageTitle: t("Freediving Competition Participation"),
+                  pageTitle: "Freediving Competition Participation",
                 },
               },
               {
@@ -498,7 +496,7 @@ const routes = [
                     "@/platform/views/Applications/competitions/free-diving/NewWorkLeave.vue"
                   ),
                 meta: {
-                  pageTitle: t("Add working leave"),
+                  pageTitle: "Add working leave",
                 },
               },
 
@@ -508,7 +506,7 @@ const routes = [
                 component: () =>
                   import("@/platform/views/Applications/UpdateUserProfile.vue"),
                 meta: {
-                  pageTitle: t("Applicant Personal Information"),
+                  pageTitle: "Applicant Personal Information",
                 },
               },
               {
@@ -519,7 +517,7 @@ const routes = [
                     "@/platform/views/Applications/professional-divers/LicenseInformations.vue"
                   ),
                 meta: {
-                  pageTitle: t("License Informations"),
+                  pageTitle: "License Informations",
                 },
               },
               {
@@ -528,7 +526,7 @@ const routes = [
                 component: () =>
                   import("@/platform/views/Applications/AddAthletes.vue"),
                 meta: {
-                  pageTitle: t("Add New Athletes"),
+                  pageTitle: "Add New Athletes",
                 },
               },
               {
@@ -542,7 +540,7 @@ const routes = [
                   },
                 }),
                 meta: {
-                  pageTitle: t("athletes-sport"),
+                  pageTitle: "Update Sport",
                 },
               },
               {
@@ -556,7 +554,7 @@ const routes = [
                   },
                 }),
                 meta: {
-                  pageTitle: t("New Athlete Registration"),
+                  pageTitle: "New Athlete Registration",
                 },
               },
 
@@ -566,7 +564,7 @@ const routes = [
                 component: () =>
                   import("@/v3/pages/applications/ApplicationPhotoUpload.vue"),
                 meta: {
-                  pageTitle: t("Personal Picture"),
+                  pageTitle: "Personal Picture",
                 },
               },
               {
@@ -584,7 +582,7 @@ const routes = [
                 component: () =>
                   import("@/v3/components/Applications/UploadFiles.vue"),
                 meta: {
-                  pageTitle: t("Upload New File"),
+                  pageTitle: "Upload New File",
                 },
               },
             ],
@@ -618,7 +616,7 @@ const routes = [
           auth: true,
           authGuard: "auth",
           title: "Dive Centers",
-          pageTitle: t("Dive Centers"),
+          pageTitle: "Dive Centers",
         },
       },
       {
@@ -630,7 +628,7 @@ const routes = [
           auth: true,
           authGuard: "auth",
           title: "Dive Centers",
-          pageTitle: t("Dive Centers"),
+          pageTitle: "Dive Centers",
         },
       },
       {
@@ -642,7 +640,7 @@ const routes = [
           auth: true,
           authGuard: "auth",
           title: "Vendors",
-          pageTitle: t("Vendor Profile"),
+          pageTitle: "Vendor Profile",
         },
       },
 
@@ -654,8 +652,8 @@ const routes = [
         meta: {
           auth: true,
           authGuard: "auth",
-          pageTitle: t("Personal profile"),
-          title: t("Professional Divers"),
+          pageTitle: "Personal profile",
+          title: "Professional Divers",
         },
       },
       {
@@ -665,8 +663,8 @@ const routes = [
         meta: {
           auth: true,
           authGuard: "auth",
-          pageTitle: t("Personal profile"),
-          title: t("Athletes"),
+          pageTitle: "Personal profile",
+          title: "Athletes",
         },
       },
       {
@@ -697,7 +695,7 @@ const routes = [
         component: () => import("@/v3/pages/invoices/index.vue"),
         meta: {
           auth: true,
-          pageTitle: t("Invoices"),
+          pageTitle: "Invoices",
           authGuard: "auth",
         },
       },
@@ -707,7 +705,7 @@ const routes = [
         component: () => import("@/platform/views/invoices/Review.vue"),
         meta: {
           auth: true,
-          pageTitle: t("Invoice Review"),
+          pageTitle: "Invoice Review",
           authGuard: "auth",
         },
       },
@@ -826,7 +824,7 @@ const routes = [
         name: "sign-up",
         component: () => import("@/v3/components/Authentication/SignUp.vue"),
         meta: {
-          pageTitle: t("Register new User account"),
+          pageTitle: "Register new User account",
           guest: true,
         },
       },
@@ -837,7 +835,7 @@ const routes = [
         component: () =>
           import("@/v3/components/Authentication/ResetPassword.vue"),
         meta: {
-          pageTitle: t("NAV.changePassword"),
+          pageTitle: "Change password",
           guest: false,
         },
       },
@@ -847,7 +845,7 @@ const routes = [
         component: () =>
           import("@/v3/components/Authentication/ForgotPassword.vue"),
         meta: {
-          pageTitle: t("NAV.resetPassword"),
+          pageTitle: "Reset password",
           guest: true,
         },
       },
@@ -857,7 +855,17 @@ const routes = [
         component: () =>
           import("@/v3/components/Authentication/VerifyEmail.vue"),
         meta: {
-          pageTitle: t("Verify your email"),
+          pageTitle: "Verify your email",
+          guest: true,
+        },
+      },
+      {
+        path: "change-email",
+        name: "change-email",
+        component: () =>
+          import("@/v3/components/Authentication/ChangeEmail.vue"),
+        meta: {
+          pageTitle: "Change email",
           guest: true,
         },
       },
@@ -949,16 +957,19 @@ router.beforeEach((to, from, next) => {
     document.documentElement.setAttribute("dir", loc === "ar" ? "rtl" : "ltr");
   }
 
-  // —— Title / heading handling (supports i18n keys) ——
-  const pageTitleKey = to.meta && to.meta.pageTitleKey;
-  const rawPageTitle = to.meta && to.meta.pageTitle;
-  const pageTitle = pageTitleKey ? t(pageTitleKey) : rawPageTitle || "";
+  // —— Title / heading handling ——
+  // meta.pageTitle holds the literal English key. Translate exactly once
+  // here for the browser tab title; PageHeading performs its own single
+  // translation pass when rendering the heading.
+  const pageTitleKey = (to.meta && to.meta.pageTitle) || "";
 
-  document.title = [pageTitle, t("appName")].filter(Boolean).join(" | ");
+  document.title = pageTitleKey
+    ? [t(pageTitleKey), t("appName")].filter(Boolean).join(" | ")
+    : t("appName");
 
-  if (pageTitle) {
+  if (pageTitleKey) {
     setHeading({
-      title: pageTitle,
+      title: pageTitleKey,
       visible: true,
     });
   }

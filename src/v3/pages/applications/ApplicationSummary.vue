@@ -254,6 +254,9 @@ const COMPONENT_REGISTRY = {
       "@/v3/components/applications/cards/DivingCenterProfessionalDiverContractUpdateCard.vue"
     )
   ),
+  ApplicationWaiver: defineAsyncComponent(() =>
+    import("@/v3/components/applications/cards/ApplicationWaiver.vue")
+  ),
   ActiveFilesCard: defineAsyncComponent(() =>
     import("@/v3/components/applications/cards/ActiveFilesCard.vue")
   ),
@@ -347,7 +350,17 @@ const layoutComponents = computed(() => {
     return [];
   }
 
+  // Components hidden while the application is still applicant-editable
+  // (draft / applicant_revision). The actions log only matters after submit.
+  const HIDE_WHEN_EDITABLE = ["ActionsTrackingCard"];
+
   return layout
+    .filter((componentName) => {
+      if (canModifyApplication.value && HIDE_WHEN_EDITABLE.includes(componentName)) {
+        return false;
+      }
+      return true;
+    })
     .map((componentName) => {
       const component = COMPONENT_REGISTRY[componentName];
 

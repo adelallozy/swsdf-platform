@@ -114,7 +114,7 @@ async function initialize() {
 
     initialValues.value = { sport: currentSport };
 
-    setHeading({ title: t('Update Sport'), visible: true });
+    setHeading({ title: 'Update Sport', visible: true });
   } catch (e) {
     capture(e, {
       context: 'UpdateAthleteSport.initialize',

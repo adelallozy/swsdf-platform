@@ -10,7 +10,7 @@ export function makeAccountSettingsSchema({
   canChangeAccountType = true,
   accountTypeOptions = {},
 } = {}) {
-  return {
+  const schema = {
     alias: {
       type: "text",
       label: "Account name",
@@ -27,8 +27,16 @@ export function makeAccountSettingsSchema({
       },
       required: true,
     },
+  };
 
-    account_type: {
+  // A locked account type (e.g. `mixed`, or one with existing domain
+  // relationships) cannot be changed — hide the selector entirely instead
+  // of showing a disabled input plus a technical "account type is locked"
+  // banner. The user keeps the alias field and the email-change card.
+  // Soft locks (canChangeAccountType === true with some options blocked)
+  // still render the selector with the disallowed options disabled.
+  if (canChangeAccountType) {
+    schema.account_type = {
       type: "radioTiles",
       label: "Account type",
       value: accountType,
@@ -36,17 +44,16 @@ export function makeAccountSettingsSchema({
         ...option,
         disabled: accountTypeOptions[option.value]?.allowed === false,
       })),
-      validation: canChangeAccountType
-        ? pipe(
-            string("Account type is required"),
-            minLength(1, "Account type is required")
-          )
-        : undefined,
+      validation: pipe(
+        string("Account type is required"),
+        minLength(1, "Account type is required")
+      ),
       attrs: {
         class: "account-type-tiles",
-        disabled: !canChangeAccountType,
       },
-      required: canChangeAccountType,
-    },
-  };
+      required: true,
+    };
+  }
+
+  return schema;
 }

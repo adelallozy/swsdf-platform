@@ -149,6 +149,32 @@ function createDivingCenterSteps() {
 }
 
 // ────────────────────────────────────────────────────────────────────────────
+// APPLICATION WAIVERS
+// ────────────────────────────────────────────────────────────────────────────
+// Waiver acknowledgement texts keyed by a unique id. Each entry provides
+// localized text for both English and Arabic. A flow references a waiver by
+// setting `waiverId` in its config below. The frontend renders the text for
+// the active locale and blocks submit until the applicant checks the box.
+// Text lives here (not in vue-i18n locale files) so it stays a single source
+// of truth per waiver id.
+export const APPLICATION_WAIVERS = {
+  contract_cancellation_acknowledgement: {
+    en: "Contract cancellation requires notifying the contracted pro diver through the official channels agreed upon in the contract and settling all outstanding dues.",
+    ar: "إلغاء العقد يستوجب إخطار الغواص المحترف المتعاقد عبر القنوات الرسمية المتفق عليها في العقد وتسوية جميع المستحقات المعلقة.",
+  },
+};
+
+/**
+ * Get the waiver config for a given waiver id.
+ * @param {string} id - Waiver id
+ * @returns {object|null} Waiver config or null if not found
+ */
+export function getApplicationWaiver(id) {
+  if (!id) return null;
+  return APPLICATION_WAIVERS[id] || null;
+}
+
+// ────────────────────────────────────────────────────────────────────────────
 // APPLICATION-SPECIFIC CONFIGURATIONS
 // ────────────────────────────────────────────────────────────────────────────
 
@@ -797,6 +823,7 @@ export const APPLICATION_CONFIG = {
       "Commercial Registration",
       "VAT Registration Certificate",
       "National Address",
+      "Company Profile",
       "Other",
     ],
 
@@ -847,6 +874,7 @@ export const APPLICATION_CONFIG = {
       "Commercial Registration",
       "VAT Registration Certificate",
       "National Address",
+      "Company Profile",
       "Other",
     ],
 
@@ -945,6 +973,8 @@ export const APPLICATION_CONFIG = {
 
     payloadKeys: ["center_profile", "center_active_contracts", "actions"],
 
+    waiverId: "contract_cancellation_acknowledgement",
+
     requiredFiles: [],
     acceptedFiles: [],
 
@@ -956,11 +986,19 @@ export const APPLICATION_CONFIG = {
         blocking: true,
         component: "DivingCenterProfessionalDiverContractUpdateCard",
       },
+      {
+        id: "waiver",
+        label: "Waiver & Acknowledgement",
+        type: "waiver",
+        blocking: true,
+        component: "ApplicationWaiver",
+      },
     ],
 
     summaryLayout: [
       "ApplicationInfoCard",
       "DivingCenterProfessionalDiverContractUpdateCard",
+      "ApplicationWaiver",
       "ActionsTrackingCard",
     ],
   },

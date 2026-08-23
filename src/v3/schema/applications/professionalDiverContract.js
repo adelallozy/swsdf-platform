@@ -60,7 +60,7 @@ export const makePDContractSchema = (diveCenters = []) => ({
     value: "",
     validation: pipe(
       string("Contract End Date must be a valid date"),
-      maxLength(10, "Contract End Date must be valid date")
+      maxLength(10, "Contract End Date must be a valid date")
     ),
     attrs: {
       placeholder: "YYYY-MM-DD",

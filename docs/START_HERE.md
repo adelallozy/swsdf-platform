@@ -13,10 +13,10 @@ Active Vendor Registration context:
 
 Active account registration, account-type, email-verification, and application
 eligibility context:
-[root documentation index](../../Docs/Account%20Registration/README.md),
-[requirements](../../Docs/Account%20Registration/account-registration-requirements.md),
-and
-[implementation plan](../../Docs/Account%20Registration/account-registration-implementation-plan.md).
+[root documentation index](../../Docs/Account%20Registration/README.md) and
+[requirements](../../Docs/Account%20Registration/account-registration-requirements.md).
+API authentication implementation (login, OTP verification, email change,
+password reset): [`api/docs/authentication.md`](../../api/docs/authentication.md).
 
 ## SWSDF Platform Boundary
 

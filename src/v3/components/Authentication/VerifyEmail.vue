@@ -42,6 +42,24 @@
           {{ sending ? $t('Sending') + '...' : $t('Send verification code') }}
         </AppButton>
 
+        <!-- No access to this email → big change-email link -->
+        <div class="tw-mt-6 tw-border tw-border-amber-300 tw-bg-amber-50 tw-rounded-lg tw-p-5 tw-text-center">
+          <p class="tw-text-base tw-font-semibold tw-text-amber-800 tw-mb-1">
+            <i class="pi pi-exclamation-triangle tw-me-1"></i>
+            {{ $t("Don't have access to this email?") }}
+          </p>
+          <p class="tw-text-sm tw-text-amber-800 tw-mb-4">
+            {{ $t('You can change your email address using your password.') }}
+          </p>
+          <RouterLink
+            :to="{ name: 'change-email', params: { locale: authLocale }, query: { email } }"
+            class="tw-inline-flex tw-items-center tw-justify-center tw-gap-2 tw-w-full sm:tw-w-auto tw-px-6 tw-py-3 tw-rounded-lg tw-bg-amber-600 tw-text-white tw-text-lg tw-font-semibold hover:tw-bg-amber-700"
+          >
+            <i class="pi pi-envelope tw-text-base"></i>
+            <span>{{ $t('Change email with password') }}</span>
+          </RouterLink>
+        </div>
+
         <p class="tw-mt-6 tw-text-center tw-text-muted tw-mb-0 tw-text-sm">
           <RouterLink :to="{ name: 'sign-in', params: { locale: authLocale } }" class="tw-text-primary tw-font-medium">
             {{ $t('Back to sign in') }}
@@ -129,6 +147,24 @@
 
           <RouterLink :to="{ name: 'sign-in', params: { locale: authLocale } }" class="tw-text-muted tw-font-medium tw-text-sm">
             {{ $t('Back to sign in') }}
+          </RouterLink>
+        </div>
+
+        <!-- No access to this email → big change-email link -->
+        <div class="tw-mt-6 tw-border tw-border-amber-300 tw-bg-amber-50 tw-rounded-lg tw-p-5 tw-text-center">
+          <p class="tw-text-base tw-font-semibold tw-text-amber-800 tw-mb-1">
+            <i class="pi pi-exclamation-triangle tw-me-1"></i>
+            {{ $t("Don't have access to this email?") }}
+          </p>
+          <p class="tw-text-sm tw-text-amber-800 tw-mb-4">
+            {{ $t('You can change your email address using your password.') }}
+          </p>
+          <RouterLink
+            :to="{ name: 'change-email', params: { locale: authLocale }, query: { email } }"
+            class="tw-inline-flex tw-items-center tw-justify-center tw-gap-2 tw-w-full sm:tw-w-auto tw-px-6 tw-py-3 tw-rounded-lg tw-bg-amber-600 tw-text-white tw-text-lg tw-font-semibold hover:tw-bg-amber-700"
+          >
+            <i class="pi pi-envelope tw-text-base"></i>
+            <span>{{ $t('Change email with password') }}</span>
           </RouterLink>
         </div>
       </div>

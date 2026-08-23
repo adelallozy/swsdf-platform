@@ -295,6 +295,7 @@ onBeforeUnmount(() => {
             <!-- ════════════════════════════════════════════════════════════ -->
             <!-- SECTION 2: Active contracts (collapsed, show all on click) -->
             <!-- ════════════════════════════════════════════════════════════ -->
+
             <div v-if="activeContracts.length > 0">
                 <div class="tw-mb-3 tw-flex tw-items-center tw-gap-2">
                     <i class="pi pi-check-circle tw-text-green-500" aria-hidden="true"></i>

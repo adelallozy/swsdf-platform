@@ -109,8 +109,8 @@ function buildSchema() {
   return {
     photo: {
       type: 'PhotoInput',
-      label: t('Personal photo'),
-      placeholder: t('Drop files here or click to upload'),
+      label: 'Personal photo',
+      placeholder: 'Drop files here or click to upload',
       value: null,
       required: true,
       attrs: {
@@ -121,7 +121,7 @@ function buildSchema() {
       },
       validation: custom(
         (value) => value instanceof File,
-        t('Photo is required')
+        'Photo is required'
       )
     }
   };
@@ -234,7 +234,7 @@ async function onSubmit({ formData }) {
 
 onMounted(async () => {
   setHeading({
-    title: t('Upload personal photo'),
+    title: 'Upload personal photo',
     visible: true
   });
 

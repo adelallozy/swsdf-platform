@@ -188,31 +188,31 @@ const formSchema = computed(() => {
     type: {
       type: 'select',
       label: 'File Type',
-      placeholder: t('choose', { name: t('File Type') }),
+      placeholder: 'Choose file type',
       value: preselectedType || '',
       options: availableFileTypes.value,
       required: true,
       validation: pipe(
         string(),
-        minLength(1, t('isRequired', { name: t('File Type') }))
+        minLength(1, 'File Type is required')
       )
     },
     file: {
       type: 'file',
       label: 'File',
-      placeholder: t('Choose a file or drag it here'),
+      placeholder: 'Choose a file or drag it here',
       value: null,
       required: true,
       attrs: {
         accept: 'image/png,image/webp,image/jpeg,application/pdf',
-        maxSize: 2 * 1024 * 1024, // 2MB
+        maxSize: 5 * 1024 * 1024, // 5MB
         description: t('Accepted formats: PNG, WEBP, JPEG, PDF')
       },
       validation: pipe(
-        custom((value) => value instanceof File, t('isRequired', { name: t('File') })),
+        custom((value) => value instanceof File, 'File is required'),
         custom(
-          (value) => value && value.size <= 2 * 1024 * 1024,
-          t('File size must be less than 2MB')
+          (value) => value && value.size <= 5 * 1024 * 1024,
+          'File size must be less than 5MB'
         ),
         custom(
           (value) => {
@@ -220,14 +220,14 @@ const formSchema = computed(() => {
             const type = value.type;
             return type === 'application/pdf' || type.startsWith('image/');
           },
-          t('File must be in format of PDF or Image')
+          'File must be in format of PDF or Image'
         )
       )
     },
     expire_date: {
       type: 'DatePicker',
       label: 'Expire Date',
-      placeholder: t('enter', { name: t('Expire Date') }),
+      placeholder: 'Enter expiry date',
       value: null,
       required: false,
       attrs: {
