@@ -65,6 +65,6 @@ Serves product requirement §4.6 (API mechanism:
 All UI text uses literal English keys; Arabic lives in `src/locales/ar.json`.
 API-returned error strings are literal English phrases translated exactly
 once at the consumption point (`$t(errors.<field>)`); the shared unique-rule
-message `Unable to complete registration` and `Unable to change email` are
+message `This email is already registered.` and `Unable to change email` are
 covered there. Toast strings passed to `useNotification` are translated
 internally by that composable.

@@ -28,7 +28,11 @@
 
 ## UI/UX Patterns
 - **Card Headings**: Place the section header **outside the card**, left-aligned, bold label line above the white card (following the Participants card pattern).
-- **Repeated Review Cards**: For repeated review records (for example contracts, administrators, memberships, and current files), use full-width card surfaces by default. Put the record title/status row outside the white card when it identifies the record, then render the record fields inside a `card-surface` with `kv-grid`. Avoid nested headers inside the card body.
+- **Cards Are Optional Surfaces**: A card is not a required header/body/footer template. Use one only when its content needs grouping.
+- **Repeated Records**: Render contracts, administrators, memberships, and files as flat full-width rows or surfaces by default. Keep identity, status, concise metadata, and item actions on the same visual plane. Use `kv-grid` only for records with enough structured fields to need it.
+- **Operational Records**: Keep identity, status, key evidence, and the next action together for candidates, assignments, and approvals. Dense lists may alternate between two quiet background tones; the tones do not encode status.
+- **No Miniature Sections**: Do not give a simple file or list item its own title region, subtitle, body, and footer. Do not nest cards.
+- **No Decorative Dividers**: Do not use horizontal divider lines inside cards or between ordinary rows. Use spacing, typography, alignment, and restrained background color to group content.
 - **Layout-owned Breadcrumbs and Page Headings**: Pages rendered under `src/v3/layouts/MainLayout.vue` must **not** import or render `Breadcrumb` or `PageHeading`. `MainLayout.vue` already renders them once around `router-view`. Child pages may call `usePageHeading().setHeading(...)` to set the displayed title, but must not duplicate the components in their templates.
 - **Mobile Tuning**: Reduce gutters and connector spacing; ensure stacked layout without overlapping markers.
 - **RTL Support**: Align timeline to **right in LTR** and **left in RTL** so the vertical line sits near the reading edge.
@@ -55,7 +59,7 @@ The following libraries **must not be used** in new implementations:
 - SweetAlert
 - Vue3-Toastify
 
-**Note:** Previous builds shipped with some of these dependencies (e.g., WOW.js). They have now been removed from the app, so do not reintroduce them. If you discover lingering imports, delete them as part of your change.
+Do not use WOW.js or another dependency that duplicates the current animation utilities. Remove unused imports when working in the affected file.
 
 ## Allowed Alternatives
 - **PrimeVue** is the recommended UI component library. Use its components instead of Bootstrap or other UI libraries.

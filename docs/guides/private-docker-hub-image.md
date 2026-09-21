@@ -130,11 +130,12 @@ docker login --username "your-username"
 Create the deployment directories:
 
 ```bash
-mkdir -p /home/www/swsdf-platform/dist
+mkdir -p /home/www/swsdf-production /home/www/swsdf-platform/dist
 ```
 
-Copy `docker-compose.yml` to `/home/www/swsdf-platform/docker-compose.yml` and
-deploy the separately built application bundle into
+Copy `deploy/production/compose.yml` to
+`/home/www/swsdf-production/compose.yml`, configure
+`/home/www/swsdf-production/.env.production`, and deploy the separately built application bundle into
 `/home/www/swsdf-platform/dist/`. Follow the ownership, permissions, and rsync
 commands in [Production Deployment](./production-deployment.md).
 
@@ -143,16 +144,22 @@ Dockerfile, or `nginx.conf` because those server files are already in the image.
 
 ## 8. Pull And Start On Production
 
-Run from `/home/www/swsdf-platform`:
+Set the complete image reference in `.env.production`:
+
+```dotenv
+SWSDF_PLATFORM_IMAGE=your-username/swsdf-platform-nginx:1.0.0
+SWSDF_PLATFORM_DIST_PATH=/home/www/swsdf-platform/dist
+```
+
+Then run:
 
 ```bash
-export SWSDF_PLATFORM_NGINX_IMAGE="your-username/swsdf-platform-nginx"
-export SWSDF_PLATFORM_NGINX_TAG="1.0.0"
-export SWSDF_PLATFORM_DIST_PATH="/home/www/swsdf-platform/dist"
-
-docker compose pull
-docker compose up -d --no-build
-docker compose ps
+cd /home/www/swsdf-production
+docker compose --env-file .env.production -f compose.yml \
+  --profile frontends pull swsdf-platform
+docker compose --env-file .env.production -f compose.yml \
+  --profile frontends up -d --no-build swsdf-platform
+docker compose --env-file .env.production -f compose.yml ps swsdf-platform
 ```
 
 Verify the local container and public endpoint:
@@ -167,13 +174,18 @@ The host nginx reverse proxy must preserve `/app/` when proxying to
 
 ## 9. Update The Nginx Image
 
-Build and push a new immutable version, then update only the tag on production:
+Build and push a new immutable version, then update the complete image reference
+in `.env.production`:
+
+```dotenv
+SWSDF_PLATFORM_IMAGE=your-username/swsdf-platform-nginx:1.0.1
+```
 
 ```bash
-export SWSDF_PLATFORM_NGINX_TAG="1.0.1"
-
-docker compose pull
-docker compose up -d --no-build
+docker compose --env-file .env.production -f compose.yml \
+  --profile frontends pull swsdf-platform
+docker compose --env-file .env.production -f compose.yml \
+  --profile frontends up -d --no-build --force-recreate swsdf-platform
 ```
 
 Do not rebuild the nginx image for normal frontend changes. Build a new `dist/`
@@ -182,13 +194,17 @@ path changes.
 
 ## 10. Roll Back The Nginx Image
 
-Set the previous known-good image tag and recreate the service:
+Restore the previous known-good image reference and recreate the service:
+
+```dotenv
+SWSDF_PLATFORM_IMAGE=your-username/swsdf-platform-nginx:1.0.0
+```
 
 ```bash
-export SWSDF_PLATFORM_NGINX_TAG="1.0.0"
-
-docker compose pull
-docker compose up -d --no-build
+docker compose --env-file .env.production -f compose.yml \
+  --profile frontends pull swsdf-platform
+docker compose --env-file .env.production -f compose.yml \
+  --profile frontends up -d --no-build --force-recreate swsdf-platform
 ```
 
 Application-bundle rollback is separate: restore the previous versioned `dist/`

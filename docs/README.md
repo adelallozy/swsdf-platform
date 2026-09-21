@@ -96,7 +96,7 @@ docs/
 
 **Working on Vendor Registration?**
 → `../../Docs/Vendor Registration/README.md` for the cross-project document index
-→ `../../Docs/Vendor Registration/vendor-registration-resume-context.md` for the current checkpoint and next tasks
+→ `../../Docs/Vendor Registration/vendor-registration-resume-context.md` for authoritative links, remaining work, and release checks
 → `v3/requirements/vendor-contacts.md` and `v3/specs/vendor-contacts.md` for local pointers to the canonical contact documents
 
 **Publishing the private nginx image?**

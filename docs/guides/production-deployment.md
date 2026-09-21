@@ -44,16 +44,19 @@ Local project root:
 Production deployment root:
 
 ```text
-/home/www/swsdf-platform
+/home/www/swsdf-production
 ```
 
-Recommended production layout:
+Production layout:
 
 ```text
-/home/www/swsdf-platform/
-├── .env
-├── docker-compose.yml
-└── dist/
+/home/www/
+├── swsdf-production/
+│   ├── compose.yml
+│   ├── .env.production
+│   └── fastupload/nginx.conf
+└── swsdf-platform/
+    └── dist/
     ├── index.html
     ├── new-front/
     ├── fonts/
@@ -164,6 +167,61 @@ printed by `docker push`.
 The examples below use `allozy` as the SSH deployment user and `www` as the
 shared web group.
 
+### Configure the production API JWT signing secret
+
+The platform depends on the CakePHP API at `/www/wwwroot/swsdf.sa`. Before
+deploying the frontend, configure a dedicated JWT signing secret for that API.
+Production API requests fail closed when `debug` is disabled and `JWT_SECRET`
+is missing.
+
+Run the following once as `root` on the production server. The command appends
+a cryptographically random 256-bit secret without printing it. It exits without
+changing the file if `JWT_SECRET` is already configured.
+
+```bash
+cd /www/wwwroot/swsdf.sa
+
+php -r '
+$path = "config/.env";
+$content = file_get_contents($path);
+
+if (preg_match("/^(?:export\s+)?JWT_SECRET=/m", $content)) {
+    fwrite(STDERR, "JWT_SECRET already exists\n");
+    exit(1);
+}
+
+$secret = bin2hex(random_bytes(32));
+file_put_contents(
+    $path,
+    PHP_EOL . "export JWT_SECRET=\"" . $secret . "\"" . PHP_EOL,
+    FILE_APPEND | LOCK_EX
+);
+'
+
+chown www:www config/.env
+chmod 600 config/.env
+```
+
+Keep this value stable across deployments and application instances. Never
+commit `config/.env`, print the secret in deployment logs, or place it in a
+`VITE_*` variable. Changing the value invalidates all JWTs signed with the
+previous secret and requires users and administrators to sign in again.
+
+Verify that the API can read the protected environment file and complete its
+bootstrap:
+
+```bash
+sudo -u www /www/server/php/83/bin/php bin/cake.php version
+
+curl -sS -o /dev/null -w 'HTTP %{http_code}\n' \
+  -X POST https://swsdf.sa/api/users/verify-token
+```
+
+The CakePHP command must print its version without a `JWT_SECRET` exception.
+The unauthenticated HTTP check must return `401`, not `500`.
+
+### Prepare the platform deployment directory
+
 On the production server:
 
 ```bash
@@ -177,19 +235,19 @@ sudo find /home/www/swsdf-platform -type f -exec chmod 664 {} \;
 The deployment user must belong to the `www` group. Directory mode `2775`
 keeps the setgid bit so newly deployed files inherit that group.
 
-Copy the standalone Compose file from the build machine:
+Copy the shared production Compose file from the workspace root:
 
 ```bash
 rsync -rz \
-  /home/adelallozy/workspace/swsdf.sa/swsdf-platform/docker-compose.yml \
-  allozy@185.206.29.97:/home/www/swsdf-platform/docker-compose.yml
+  /home/adelallozy/workspace/swsdf.sa/deploy/production/compose.yml \
+  allozy@185.206.29.97:/home/www/swsdf-production/compose.yml
 ```
 
-Create `/home/www/swsdf-platform/.env` on the server:
+Configure the platform entries in
+`/home/www/swsdf-production/.env.production` on the server:
 
 ```dotenv
-SWSDF_PLATFORM_NGINX_IMAGE=your-dockerhub-username/swsdf-platform-nginx
-SWSDF_PLATFORM_NGINX_TAG=1.0.0
+SWSDF_PLATFORM_IMAGE=your-dockerhub-username/swsdf-platform-nginx:1.0.0
 SWSDF_PLATFORM_DIST_PATH=/home/www/swsdf-platform/dist
 SWSDF_PLATFORM_PORT=8911
 SWSDF_PLATFORM_CONTAINER=swsdf-platform
@@ -261,10 +319,12 @@ from the remote `dist/`; never point this command at the deployment root.
 On the production server:
 
 ```bash
-cd /home/www/swsdf-platform
-docker compose pull
-docker compose up -d --no-build --force-recreate
-docker compose ps
+cd /home/www/swsdf-production
+docker compose --env-file .env.production -f compose.yml \
+  --profile frontends pull swsdf-platform
+docker compose --env-file .env.production -f compose.yml \
+  --profile frontends up -d --no-build --force-recreate swsdf-platform
+docker compose --env-file .env.production -f compose.yml ps swsdf-platform
 ```
 
 Normal frontend-only updates to the existing `dist/` mount do not require a
@@ -418,17 +478,21 @@ curl --fail https://swsdf.sa/app/
 
 ## 16. Nginx Image Update And Rollback
 
-After publishing a new nginx image, update `.env` on the production server:
+After publishing a new nginx image, update `.env.production` on the production
+server:
 
 ```dotenv
-SWSDF_PLATFORM_NGINX_TAG=1.0.1
+SWSDF_PLATFORM_IMAGE=your-dockerhub-username/swsdf-platform-nginx:1.0.1
 ```
 
 Then:
 
 ```bash
-docker compose pull
-docker compose up -d --no-build --force-recreate
+cd /home/www/swsdf-production
+docker compose --env-file .env.production -f compose.yml \
+  --profile frontends pull swsdf-platform
+docker compose --env-file .env.production -f compose.yml \
+  --profile frontends up -d --no-build --force-recreate swsdf-platform
 ```
 
 To roll back, restore the previous tag and run the same commands.
@@ -516,7 +580,9 @@ Log in again using the production read-only token:
 ```bash
 docker logout
 docker login --username "your-dockerhub-username"
-docker compose pull
+docker compose --env-file /home/www/swsdf-production/.env.production \
+  -f /home/www/swsdf-production/compose.yml \
+  --profile frontends pull swsdf-platform
 ```
 
 ### Cloudflare shows stale content
@@ -543,6 +609,8 @@ Before deployment:
 
 - [ ] Intended source is committed.
 - [ ] `.env.production` URLs are correct.
+- [ ] The production API has a persistent `JWT_SECRET` and its unauthenticated
+      token-verification check returns `401`, not `500`.
 - [ ] `npm ci` succeeds.
 - [ ] `npm run build` succeeds.
 - [ ] `dist/index.html` exists and identifies SWSDF Platform.

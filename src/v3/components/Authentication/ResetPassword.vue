@@ -59,8 +59,8 @@
           type="submit"
           class="tw-w-full tw-mt-10"
           :label="submitting ? $t('Changing…') : $t('Change password')"
-          :loading="submitting || verifying"
-          :disabled="submitting || verifying"
+          :loading="submitting"
+          :disabled="submitting"
         />
       </form>
 
@@ -82,7 +82,7 @@ import { useI18n } from 'vue-i18n'
 import Password from 'primevue/password'
 import Button from 'primevue/button' 
 import { useToast } from 'primevue/usetoast'
-import { apiPost, apiGet } from '@/v3/services/httpClient.js'
+import { apiPost } from '@/v3/services/httpClient.js'
 import { useErrorHandler } from '@/v3/composables/useErrorHandler'
 
 const router = useRouter()
@@ -94,8 +94,6 @@ const { capture } = useErrorHandler()
 const form = reactive({ password: '', confirm: '' })
 const errors = reactive({ password: '', confirm: '' })
 const submitting = ref(false)
-const verifying = ref(false)
-const jwtToken = ref('')
 const apiError = ref('')
 const rateLimitError = ref('')
 const authLocale = computed(() => {
@@ -106,7 +104,6 @@ const authLocale = computed(() => {
     return locale.value === 'en' ? 'en' : 'ar'
 })
 
-const VERIFY_URL = import.meta.env.VITE_USERS_VERIFY_TOKEN || '/users/verify-token'
 const RESET_URL  = import.meta.env.VITE_RESET_PASSWORD_URL || '/users/reset-password'
 
 function validate() {
@@ -127,39 +124,6 @@ function validate() {
     }
 
     return !errors.password && !errors.confirm
-}
-
-async function checkToken() {
-  return ;
-    const token = route.query.token
-    if (!token) {
-        router.push({ name: 'forgot-password', params: { locale: authLocale.value } })
-        return
-    }
-
-    verifying.value = true
-
-    try {
-        // Prefer GET, fallback to POST if apiGet isn't available
-
-        const params = new URLSearchParams();
-        params.append("token", token );
-
-        const res =   await apiGet(VERIFY_URL + '?' + params  ) 
-
-        // Support both shapes: { api_jwtoken } or direct { token }
-        jwtToken.value = res?.jwt || res?.api_jwtoken || ''
-
-        // If backend signals unauthorized explicitly
-        if (!jwtToken.value && (res?.status === 401 || res?.code === 401)) {
-            router.push({ name: 'forgot-password', params: { locale: authLocale.value } })
-        }
-    } catch (e) {
-        capture(e?.message || 'verify_error', { where: 'Reset user password, From ResetPassword.vue by checkToken' })
-        router.push({ name: 'forgot-password', params: { locale: authLocale.value } })
-    } finally {
-        verifying.value = false
-    }
 }
 
 async function onSubmit() {
@@ -201,7 +165,16 @@ async function onSubmit() {
     }
 }
 
-onMounted(() => checkToken())
+// The reset token is validated server-side when the new password is
+// submitted (POST reset-password rejects invalid/expired tokens). There is
+// no client-side validity check because the backend offers no non-consuming
+// reset-token check; users without a token in the URL are sent back to the
+// request page.
+onMounted(() => {
+    if (!route.query.token) {
+        router.push({ name: 'forgot-password', params: { locale: authLocale.value } })
+    }
+})
 </script>
 
 <style scoped>

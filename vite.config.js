@@ -11,8 +11,17 @@ export default defineConfig({
     port: 8080,
     host: "0.0.0.0",
     hmr: {
-      clientPort: 8911,
+      // The gateway terminates TLS on https://swsdf.test (443) and proxies
+      // /app/ (including the websocket Upgrade) to this dev server; the
+      // browser must dial HMR through the gateway, not the direct container
+      // port.
+      protocol: "wss",
+      host: "swsdf.test",
+      clientPort: 443,
     },
+    // The gateway proxies /app/ with Host: swsdf.test (HTTPS on 443); Vite
+    // blocks non-localhost Host headers unless listed here.
+    allowedHosts: ["swsdf.test", "swsdf.sa"],
     // hot: true,
     // watch: {
     //   usePolling: true,

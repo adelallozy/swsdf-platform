@@ -10,6 +10,11 @@ This guide establishes translation strategy for V3 components in SWSDF website.
 - **DO NOT** add English translations to `src/locales/en.json`
 - Use **hardcoded English text** directly in Vue components
 - English is the default/fallback language and should be written as literal strings in code
+- The i18n runtime has locale fallback disabled and uses the missing literal key
+  itself as the formatted English output. Generic missing/fallback warnings are
+  disabled because absent English mirror entries are intentional. In development,
+  a custom warning reports missing Arabic translations only; the translation
+  audit remains the comprehensive check.
 
 ### Arabic Text
 - **MUST** add Arabic translations to `src/locales/ar.json`

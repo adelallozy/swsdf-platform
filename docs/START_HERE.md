@@ -26,6 +26,7 @@ This repository is the private platform split of the larger public website.
 - The app is exposed externally under `/app/` through Vite's base URL and nginx. Router paths are relative to that base; do not define another `/app` route segment.
 - Auth and payment compatibility redirects remain only where they are needed by the private app.
 - When porting fixes from the original/public project, port the behavior intentionally. Do not copy removed public pages, routes, headers, footers, home sections, verification pages, or public-only API endpoints back into this project unless the task explicitly says to restore them.
+- New work must use [`src/v3/services/httpClient.js`](../src/v3/services/httpClient.js) for HTTP and [`src/v3/composables/useAuth.js`](../src/v3/composables/useAuth.js) for auth state; do not import or extend the legacy user store ([`src/store/user.js`](../src/store/user.js)) or the axios plugin ([`src/core/plugins/axios.ts`](../src/core/plugins/axios.ts)) — they remain only for legacy pages not yet migrated.
 
 ## Source Of Truth Order
 

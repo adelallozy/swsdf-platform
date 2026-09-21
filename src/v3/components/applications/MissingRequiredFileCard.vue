@@ -15,11 +15,14 @@
       <i class="pi pi-exclamation-triangle tw-text-2xl tw-text-red-600"></i>
     </div>
     <h4 class="tw-font-semibold tw-text-lg tw-text-foreground tw-text-center">
-      {{ $t("Upload Required File") }}
+      {{ $t("Upload File") }}
     </h4>
     <div class="tw-mt-3 tw-w-full tw-flex tw-flex-col tw-items-center tw-gap-1">
       <span class="tw-text-red-700 tw-font-medium tw-text-sm tw-text-center file-name-clamp">
         {{ $t(name) }}
+      </span>
+      <span class="tw-inline-flex tw-items-center tw-gap-1 tw-px-3 tw-py-1.5 tw-rounded-full tw-bg-red-100 tw-text-red-700 tw-text-xs tw-font-bold">
+        {{ $t("Required Document") }}
       </span>
     </div>
   </router-link>

@@ -1,0 +1,543 @@
+/*
+    Shared styles for the vendor RFP pages (view + upload):
+    the SWSDF design language, file cards, notices, pills, and forms.
+    Import from a component <style scoped> block.
+*/
+/* Back link — a quiet line above everything. */
+.rfp-back {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  color: #36556e;
+  font-size: 0.875rem;
+  font-weight: 600;
+  text-decoration: none;
+  transition: color 150ms ease;
+}
+.rfp-back:hover {
+  color: #035796;
+}
+
+/* Header band — the reference and its deadline lead the page. */
+.rfp-hero {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: stretch;
+  justify-content: space-between;
+  gap: 1rem;
+  overflow: hidden;
+  border: 1px solid #dce8f0;
+  border-radius: 1rem;
+  background: #ffffff;
+  box-shadow: 0 14px 42px rgba(15, 45, 76, 0.08);
+}
+
+.rfp-hero__main {
+  display: flex;
+  flex: 1 1 20rem;
+  flex-direction: column;
+  gap: 0.6rem;
+  justify-content: center;
+  padding: 1.5rem;
+}
+
+.rfp-hero__back {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  color: #36566e;
+  font-size: 0.8125rem;
+  font-weight: 600;
+  text-decoration: none;
+  transition: color 150ms ease;
+}
+.rfp-hero__back:hover {
+  color: #035796;
+}
+
+.rfp-hero__reference {
+  margin: 0;
+  color: #062f50;
+  font-size: 1.625rem;
+  font-weight: 800;
+  letter-spacing: 0.01em;
+  direction: ltr;
+  unicode-bidi: isolate;
+}
+
+/* Deadline block — the fact the vendor plans around. */
+.rfp-deadline {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 0.25rem;
+  flex: 0 1 16rem;
+  padding: 1.25rem 1.5rem;
+  background: #f0f7ff;
+}
+.rfp-deadline--calm {
+  background: #f0f7ff;
+}
+.rfp-deadline--soon {
+  background: #fff7ed;
+}
+.rfp-deadline--past {
+  background: #f8fafc;
+}
+
+.rfp-deadline__label {
+  color: #36566e;
+  font-size: 0.6875rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+}
+.rfp-deadline--soon .rfp-deadline__label {
+  color: #c2410c;
+}
+
+.rfp-deadline__date {
+  color: #062f50;
+  font-size: 1rem;
+  font-weight: 800;
+}
+
+.rfp-deadline__note {
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: #0369a1;
+}
+.rfp-deadline--soon .rfp-deadline__note {
+  color: #c2410c;
+}
+.rfp-deadline--past .rfp-deadline__note {
+  color: #64748b;
+}
+
+/* Status pills */
+.rfp-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  align-self: flex-start;
+  width: fit-content;
+  border-radius: 999px;
+  border: 1px solid transparent;
+  padding: 0.25rem 0.75rem;
+  font-size: 0.75rem;
+  font-weight: 700;
+  white-space: nowrap;
+}
+.rfp-pill--invited {
+  border-color: #badbff;
+  background: #f0f7ff;
+  color: #035796;
+}
+.rfp-pill--review {
+  border-color: #fde68a;
+  background: #fffbeb;
+  color: #b45309;
+}
+.rfp-pill--accepted {
+  border-color: #a7f3d0;
+  background: #ecfdf5;
+  color: #047857;
+}
+
+/* Sections: title sits above the card, not inside it. */
+.rfp-section {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+.rfp-section__title {
+  margin: 0;
+  color: #062f50;
+  font-size: 1.25rem;
+  font-weight: 800;
+}
+.rfp-section__desc {
+  margin: 0;
+  color: #697e95;
+  font-size: 0.875rem;
+}
+
+.rfp-card {
+  border: 1px solid #dce8f0;
+  border-radius: 1rem;
+  background: #ffffff;
+  box-shadow: 0 1px 3px rgba(15, 45, 76, 0.08);
+  padding: 1.5rem;
+}
+
+.rfp-facts {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(14rem, 1fr));
+  gap: 1rem;
+  margin: 0 0 1.25rem;
+}
+.rfp-facts__item dt {
+  margin-bottom: 0.25rem;
+  color: #94a3b8;
+  font-size: 0.6875rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+.rfp-facts__item dd {
+  margin: 0;
+  color: #062f50;
+  font-size: 0.9rem;
+  font-weight: 700;
+}
+
+.rfp-description {
+  margin: 0 0 1.25rem;
+  color: #36556e;
+  font-size: 0.95rem;
+  line-height: 1.9;
+  white-space: pre-line;
+}
+
+.rfp-services {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+.rfp-services__chip {
+  border-radius: 999px;
+  border: 1px solid #dce8f0;
+  background: #f8fbfd;
+  padding: 0.3rem 0.85rem;
+  color: #062f50;
+  font-size: 0.8125rem;
+  font-weight: 600;
+}
+
+/* File cards: one card per request document. */
+.rfp-files {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(15rem, 1fr));
+  gap: 1rem;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+.rfp-file {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 0.6rem;
+  border: 1px solid #dce8f0;
+  border-radius: 1rem;
+  background: #ffffff;
+  padding: 1.25rem;
+  box-shadow: 0 1px 3px rgba(15, 45, 76, 0.08);
+}
+.rfp-file__icon {
+  color: #035796;
+  font-size: 2.6rem;
+  line-height: 1;
+}
+.rfp-file__name {
+  color: #062f50;
+  font-weight: 800;
+  font-size: 0.95rem;
+  word-break: break-word;
+}
+.rfp-file__download {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.45rem;
+  width: 100%;
+  margin-top: auto;
+  border: 1px solid #badbff;
+  border-radius: 0.75rem;
+  background: #ffffff;
+  color: #035796;
+  padding: 0.55rem 1rem;
+  font-size: 0.8125rem;
+  font-weight: 700;
+  transition: background-color 150ms ease, color 150ms ease;
+}
+.rfp-file__download:hover:not(:disabled) {
+  background: #035796;
+  color: #ffffff;
+}
+.rfp-file__download:focus-visible {
+  outline: 3px solid rgba(69, 213, 223, 0.55);
+  outline-offset: 2px;
+}
+.rfp-file__download:disabled {
+  opacity: 0.45;
+  cursor: not-allowed;
+}
+
+/* Footer buttons row: download (primary) + remove (subtle danger). */
+.rfp-file__buttons {
+  display: flex;
+  gap: 0.5rem;
+  width: 100%;
+  margin-top: auto;
+}
+.rfp-file__buttons .rfp-file__download {
+  flex: 1 1 auto;
+  width: auto;
+  margin-top: 0;
+}
+.rfp-file__remove {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.45rem;
+  border: 1px solid #fecaca;
+  border-radius: 0.75rem;
+  background: #fef2f2;
+  color: #b91c1c;
+  padding: 0.55rem 0.9rem;
+  font-size: 0.8125rem;
+  font-weight: 700;
+  white-space: nowrap;
+  transition: background-color 150ms ease, border-color 150ms ease;
+}
+.rfp-file__remove:hover:not(:disabled) {
+  background: #fee2e2;
+  border-color: #fca5a5;
+}
+.rfp-file__remove:focus-visible {
+  outline: 3px solid rgba(69, 213, 223, 0.55);
+  outline-offset: 2px;
+}
+.rfp-file__remove:disabled {
+  opacity: 0.45;
+  cursor: not-allowed;
+}
+
+.rfp-badge {
+  border-radius: 999px;
+  padding: 0.15rem 0.6rem;
+  font-size: 0.6875rem;
+  font-weight: 700;
+}
+.rfp-badge--nda {
+  background: #f0f7ff;
+  color: #035796;
+}
+.rfp-badge--open {
+  background: #ecfdf5;
+  color: #047857;
+}
+.rfp-badge--gated {
+  background: #fffbeb;
+  color: #b45309;
+}
+
+/* NDA panel */
+.rfp-nda {
+  border-color: #badbff;
+  box-shadow: 0 6px 22px rgba(3, 87, 150, 0.08);
+}
+.rfp-nda--done {
+  border-color: #a7f3d0;
+  box-shadow: 0 6px 22px rgba(4, 120, 87, 0.1);
+}
+
+.rfp-nda__done {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.75rem;
+  color: #047857;
+  font-weight: 600;
+}
+.rfp-nda__done i {
+  font-size: 1.35rem;
+  margin-top: 0.1rem;
+}
+.rfp-nda__done p {
+  margin: 0;
+}
+
+.rfp-notice {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.75rem;
+  margin-bottom: 1.25rem;
+  border-radius: 0.875rem;
+  padding: 0.85rem 1rem;
+  font-size: 0.875rem;
+}
+.rfp-notice--waiting {
+  border-inline-start: 3px solid #f59e0b;
+  background: #fffbeb;
+  color: #92400e;
+}
+.rfp-notice--rejected {
+  border-inline-start: 3px solid #ef4444;
+  background: #fef2f2;
+  color: #991b1b;
+}
+.rfp-notice--done {
+  border-inline-start: 3px solid #10b981;
+  background: #ecfdf5;
+  color: #047857;
+}
+.rfp-notice p {
+  margin: 0;
+}
+
+/* NDA attachments grid — same file-card language as the documents grid. */
+.rfp-files--nda {
+  grid-template-columns: repeat(auto-fill, minmax(18rem, 1fr));
+  margin-bottom: 1.5rem;
+}
+.rfp-file--signed {
+  border-color: #a7f3d0;
+  background: #f6fefb;
+}
+.rfp-file__icon-wrap {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+}
+.rfp-file__icon--dashed {
+  color: #94a3b8;
+}
+.rfp-file__meta {
+  display: flex;
+  flex-direction: column;
+  gap: 0.2rem;
+}
+.rfp-file__sub {
+  color: #697e95;
+  font-size: 0.8rem;
+  font-weight: 600;
+}
+/* Missing required file: red outline, the required word emphasized —
+   the applications MissingRequiredFileCard language. */
+.rfp-file--missing {
+  border-style: dashed;
+  border-width: 2px;
+  border-color: #fca5a5;
+  background: #fffafa;
+}
+.rfp-file--missing .rfp-file__icon--dashed {
+  color: #dc2626;
+}
+.rfp-file--missing .rfp-file__name {
+  color: #7f1d1d;
+}
+.rfp-badge--required {
+  background: #fee2e2;
+  border: 1px solid #ef4444;
+  color: #b91c1c;
+  font-weight: 800;
+  letter-spacing: 0.03em;
+}
+
+.rfp-nda__picked {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin-bottom: 1.25rem;
+  border: 1px solid #dce8f0;
+  border-radius: 0.75rem;
+  background: #f8fbfd;
+  padding: 0.6rem 0.9rem;
+  color: #062f50;
+  font-size: 0.85rem;
+  font-weight: 600;
+  word-break: break-all;
+}
+.rfp-nda__picked i {
+  color: #035796;
+}
+
+/* Required-file form: one column, applications-style fields. */
+.rfp-required__form {
+  display: flex;
+  flex-direction: column;
+  max-width: 30rem;
+}
+.rfp-field {
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 1.25rem;
+}
+.rfp-field__label {
+  display: block;
+  margin-bottom: 0.25rem;
+  color: #1f2937;
+  font-weight: 600;
+}
+.rfp-asterisk {
+  font-size: 0.7rem;
+  font-variant-position: super;
+  color: #dc2626;
+}
+.rfp-nda__upload {
+  margin-bottom: 1.25rem;
+}
+.rfp-field__error {
+  margin: 0.5rem 0 0;
+  color: #dc2626;
+  font-size: 0.78rem;
+  font-weight: 600;
+}
+
+.rfp-required__actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+}
+.rfp-btn {
+  display: inline-flex;
+  min-height: 2.75rem;
+  align-items: center;
+  gap: 0.5rem;
+  border-radius: 0.75rem;
+  padding: 0.7rem 1.25rem;
+  font-size: 0.875rem;
+  font-weight: 700;
+  transition: background-color 150ms ease, box-shadow 150ms ease, border-color 150ms ease;
+}
+.rfp-btn--primary {
+  border: none;
+  background: #035796;
+  color: #ffffff;
+}
+.rfp-btn--primary:hover:not(:disabled) {
+  background: #034d86;
+  box-shadow: 0 10px 25px rgba(3, 87, 150, 0.2);
+}
+.rfp-btn--ghost {
+  border: 1px dashed #8ac2ff;
+  background: #f0f7ff;
+  color: #035796;
+  max-width: 100%;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.rfp-btn--ghost:hover:not(:disabled) {
+  border-color: #035796;
+  border-style: solid;
+}
+.rfp-btn:focus-visible {
+  outline: 3px solid rgba(69, 213, 223, 0.55);
+  outline-offset: 3px;
+}
+.rfp-btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+@media (max-width: 640px) {
+  .rfp-hero {
+    flex-direction: column;
+  }
+}

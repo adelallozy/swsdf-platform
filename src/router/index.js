@@ -643,6 +643,39 @@ const routes = [
           pageTitle: "Vendor Profile",
         },
       },
+      {
+        path: "rfps",
+        name: "vendor-rfps",
+        component: () => import("@/v3/pages/app/rfps/RfpsIndex.vue"),
+        meta: {
+          auth: true,
+          authGuard: "auth",
+          title: "Requests for Proposal",
+          pageTitle: "Requests for Proposal",
+        },
+      },
+      {
+        path: "rfps/:id(\\d+)",
+        name: "vendor-rfp-view",
+        component: () => import("@/v3/pages/app/rfps/RfpView.vue"),
+        meta: {
+          auth: true,
+          authGuard: "auth",
+          title: "Request for Proposal",
+          pageTitle: "Request for Proposal",
+        },
+      },
+      {
+        path: "rfps/:id(\\d+)/upload",
+        name: "vendor-rfp-upload",
+        component: () => import("@/v3/pages/app/rfps/RfpUpload.vue"),
+        meta: {
+          auth: true,
+          authGuard: "auth",
+          title: "RFP Files",
+          pageTitle: "RFP Files",
+        },
+      },
 
       {
         path: "professional-diver-license",

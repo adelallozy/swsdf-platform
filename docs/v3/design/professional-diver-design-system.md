@@ -28,6 +28,18 @@ Main containers use a glassmorphic effect with blurred transparency and subtle w
 -   **Classes**: `tw-bg-white/90 tw-backdrop-blur-xl tw-border tw-border-white/60 tw-shadow-xl tw-rounded-[2.5rem]`
 -   **Usage**: Wraps the main profile info or validation results.
 
+### Surface Restraint
+
+- A card is a single optional grouping surface, not a mandatory
+  header/body/footer composition.
+- Keep simple repeated items flat with identity, status, concise metadata, and
+  actions on the same visual plane.
+- Keep operational records scannable: identity, status, key evidence, and the
+  next action stay together. Dense lists may alternate between two quiet
+  background tones that do not encode status.
+- Do not nest cards or add decorative horizontal divider lines. Use spacing,
+  typography, alignment, and restrained background tint for hierarchy.
+
 ## 2. Typography
 
 ### Headings

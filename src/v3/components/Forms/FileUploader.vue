@@ -61,13 +61,24 @@
         class="tw-text-xl !tw-text-muted tw-rounded-lg !tw-flex tw-items-center tw-justify-between tw-gap-3 tw-cursor-pointer"
         :class="{ 'tw-opacity-50': disabled }"
       >
-        <div class="tw-flex tw-items-center tw-gap-2">
-          <img
-            src="@/assets/images/icons/document-upload.svg"
-            alt="Upload"
-            class="tw-w-6 tw-h-6"
-          />
-          {{ placeholder || $t('Choose a file or drag it here') }}
+        <div class="tw-flex tw-flex-wrap tw-items-center tw-gap-2">
+          <div class="tw-flex tw-items-center tw-gap-2">
+            <img
+              src="@/assets/images/icons/document-upload.svg"
+              alt="Upload"
+              class="tw-w-6 tw-h-6"
+            />
+            {{ placeholder || $t('Choose a file or drag it here') }}
+          </div>
+          <!-- Accepted formats for the current file type — highlighted,
+               interactive chips mirroring the picker's accept list. -->
+          <span
+            v-for="code in attrs?.typeCodes"
+            :key="code"
+            class="tw-inline-flex tw-items-center tw-px-2.5 tw-py-0.5 tw-rounded-full tw-text-xs tw-font-bold tw-tracking-wide tw-bg-[#02579614] tw-text-[#035796] tw-border tw-border-[#0257962e]"
+          >
+            {{ code.toUpperCase() }}
+          </span>
         </div>
       </label>
     </div>

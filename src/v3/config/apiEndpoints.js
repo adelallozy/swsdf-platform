@@ -40,13 +40,15 @@ export const AUTH_SEND_VERIFICATION_CODE =
 export const AUTH_VERIFY_CODE =
   import.meta.env.VITE_VERIFY_CODE || "users/verify-code";
 export const AUTH_CHANGE_UNVERIFIED_EMAIL =
-  import.meta.env.VITE_CHANGE_UNVERIFIED_EMAIL || "users/change-unverified-email";
+  import.meta.env.VITE_CHANGE_UNVERIFIED_EMAIL ||
+  "users/change-unverified-email";
 export const AUTH_REQUEST_EMAIL_CHANGE =
   import.meta.env.VITE_REQUEST_EMAIL_CHANGE || "users/request-email-change";
 export const AUTH_VERIFY_EMAIL_CHANGE =
   import.meta.env.VITE_VERIFY_EMAIL_CHANGE || "users/verify-email-change";
 export const AUTH_VERIFY_EMAIL_CHANGE_CONFIRM =
-  import.meta.env.VITE_VERIFY_EMAIL_CHANGE_CONFIRM || "users/verify-email-change-confirm";
+  import.meta.env.VITE_VERIFY_EMAIL_CHANGE_CONFIRM ||
+  "users/verify-email-change-confirm";
 export const AUTH_GET_DOCUMENTS =
   import.meta.env.VITE_USER_DOCUMENTS || "users/get-documents";
 export const AUTH_UPDATE_ACCOUNT =
@@ -212,6 +214,32 @@ export const VENDORS_APPS_UPDATE_PROFILE =
   import.meta.env.VITE_VENDORS_APPS_UPDATE_PROFILE ||
   "vendors-applications/update-profile/";
 export const VENDORS_INDEX = import.meta.env.VITE_VENDORS_INDEX || "vendors";
+
+// ─── Vendor RFPs (requests for proposal) ──────────────────────────────
+export const RFPS_INDEX = import.meta.env.VITE_RFPS_INDEX || "rfps";
+export const RFPS_VIEW = import.meta.env.VITE_RFPS_VIEW || "rfps/{id}";
+export const RFPS_DOCUMENT_DOWNLOAD =
+  import.meta.env.VITE_RFPS_DOCUMENT_DOWNLOAD ||
+  "rfps/{id}/documents/{documentId}/download";
+export const RFPS_UPLOAD_NDA =
+  import.meta.env.VITE_RFPS_UPLOAD_NDA || "rfps/{id}/nda";
+export const RFPS_REMOVE_NDA =
+  import.meta.env.VITE_RFPS_REMOVE_NDA || "rfps/{id}/nda/remove";
+// ─── Vendor RFP offer (single offer flow: upload, submit, recall) ───────
+export const RFPS_OFFER_UPLOAD_TOKEN =
+  import.meta.env.VITE_RFPS_OFFER_UPLOAD_TOKEN || "rfps/{id}/offer/upload-token";
+export const RFPS_OFFER_ATTACH_FILE =
+  import.meta.env.VITE_RFPS_OFFER_ATTACH_FILE || "rfps/{id}/offer/files";
+export const RFPS_OFFER_REMOVE_FILE =
+  import.meta.env.VITE_RFPS_OFFER_REMOVE_FILE ||
+  "rfps/{id}/offer/files/{fileRowId}/remove";
+export const RFPS_OFFER_FILE_DOWNLOAD =
+  import.meta.env.VITE_RFPS_OFFER_FILE_DOWNLOAD ||
+  "rfps/{id}/offer/files/{fileRowId}/download";
+export const RFPS_OFFER_SUBMIT =
+  import.meta.env.VITE_RFPS_OFFER_SUBMIT || "rfps/{id}/offer/submit";
+export const RFPS_OFFER_RECALL =
+  import.meta.env.VITE_RFPS_OFFER_RECALL || "rfps/{id}/offer/recall";
 export const VENDORS_PICK =
   import.meta.env.VITE_VENDORS_PICK || "vendors/view/";
 export const VENDORS_APPS_CREATE_PROFILE_UPDATE =

@@ -47,6 +47,7 @@ For the applications index UI improvement work, read:
 - Backward-compatible redirect shims (`workspace`, `user-applications`, `platform-applications`) resolve the locale and redirect to the canonical locale-prefixed target.
 - The standalone Docker Compose service is `swsdf-platform`, exposed on host loopback port `8911` and container port `8080`.
 - The host nginx location block for `/app/` must preserve the `/app/` request URI when proxying to port `8911`. A reference snippet exists at `Docs/nginx-current-app.conf`.
+- `vite.config.js` sets `server.allowedHosts: ["swsdf.test", "swsdf.sa"]` — the gateway proxies `/app/` with `Host: swsdf.test`, and Vite (≥6 default) blocks non-localhost Host headers unless whitelisted (otherwise the gateway returns `Blocked request. This host ("swsdf.test") is not allowed.` — 403). Direct localhost:8911 access stays allowed by Vite's defaults.
 
 ## Active Source Boundary
 
@@ -54,6 +55,7 @@ For the applications index UI improvement work, read:
 - Treat `src/platform/**` as legacy/reference unless route and import inspection proves the file is active.
 - Some files outside `src/v3/**`, including the shared header, footer, router, store, and bootstrap code, remain active. Confirm imports before changing or removing them.
 - Prefer the v3 HTTP client, endpoint configuration, application store, PrimeVue components, and Tailwind classes with the `tw-` prefix.
+- New work must use [`src/v3/services/httpClient.js`](../src/v3/services/httpClient.js) for HTTP and [`src/v3/composables/useAuth.js`](../src/v3/composables/useAuth.js) for auth state. Do not import or extend the legacy user store ([`src/store/user.js`](../src/store/user.js)) or the axios plugin ([`src/core/plugins/axios.ts`](../src/core/plugins/axios.ts)); both remain only for legacy pages not yet migrated.
 - Do not add contract-normalization helpers, alias maps, or old/new field loops. Fix drift at its source boundary.
 
 ## Current Application Workflow Contract
@@ -65,6 +67,32 @@ For the applications index UI improvement work, read:
 - Applicant action URLs use the canonical application endpoints with an `{appId}` placeholder.
 - Applicant-facing cards display `status`; permissions and transitions use `stage` and backend policy.
 - Action timelines consume `action_key` and `created_at`.
+
+## RFP and FastUpload Context
+
+The product and technical contracts live in
+`Docs/Vendor Registration/request-for-proposal-market-research.md` and
+`Docs/Vendor Registration/request-for-proposal-technical-design.md`. This file
+records only platform-specific boundaries:
+
+- Routes are `/app/:locale/rfps`, `/app/:locale/rfps/:id`, and
+  `/app/:locale/rfps/:id/upload`.
+- The offer is the primary task on the RFP detail page. Required slots,
+  uploaded files, security state, receipt, submission, and recall are presented
+  together without nested article-like cards or decorative divider lines.
+- `RfpUpload.vue` is the single upload experience for the signed NDA,
+  configured offer slots, and **Other**. Available types are derived from the
+  RFP payload; slots at capacity are not offered for another upload.
+- Upload is explicit. The selected type controls accepted extensions, size,
+  help text, and the target RFP endpoint. Success is reported only after the
+  assignment reaches a usable state and the business attachment succeeds.
+- All file download, removal, submission, and recall actions use the governed
+  RFP endpoints through `apiEndpoints` and `httpClient`.
+- Raw assignment codes are mapped to literal English display phrases before
+  translation. Both locales preserve native direction without ancestor
+  transforms.
+- Release evidence belongs to the release run; this context must not store
+  dated test counts or browser-session results.
 
 ## Active Vendor Registration Context
 
@@ -203,6 +231,13 @@ production run.
 
 ## Recently Completed
 
+**Gateway host allow-list (2026-08-26):**
+- Added `server.allowedHosts: ["swsdf.test", "swsdf.sa"]` to `vite.config.js`.
+  The dev client was returning 403 `Blocked request. This host ("swsdf.test")
+  is not allowed.` through the gateway (the gateway forwards `Host: swsdf.test`;
+  Vite ≥6 blocks unknown hosts). Verified 200 at `https://swsdf.test/app/en/`
+  after the change. Same fix applied to the `admins` client.
+
 **Account-settings locked-type UX (August 2026):**
 - A locked account type (mixed, or an account with existing domain
   relationships) now HIDES the account-type selector in Account Settings
@@ -297,8 +332,8 @@ production run.
   `vendor_registration_config.php` flows). `ar.json` carries the Arabic for
   that full label set, including the API's historical `Submited` spelling —
   match the stored value exactly; do not "fix" the key.
-- Added missing `ar.json` entries: `Unable to complete registration` (API
-  signup validation message per `api/docs/authentication.md`),
+- Added missing `ar.json` entries: `This email is already registered.` (API
+  signup duplicate-email message per `api/docs/authentication.md`),
   `No Professional License Found`, `It looks like you don't have a
   professional diver license linked to this account yet.`,
   `Apply for New License`, `Update Administrators`, `New Application File`,
@@ -379,6 +414,8 @@ See `Docs/Account Registration/account-registration-security-fixes-changelog.md`
 
 ## Known Follow-Up Work
 
+- RFP remaining work is listed only in
+  `Docs/Vendor Registration/vendor-registration-resume-context.md`.
 - Add automated API test coverage for the two email-identity change flows:
   unverified-email correction (`change-unverified-email`, §6.5) and the
   verified-email dual confirmation (`verify-email-change` stage 1 +

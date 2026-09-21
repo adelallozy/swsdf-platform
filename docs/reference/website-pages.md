@@ -1,15 +1,15 @@
 # Website Pages Inventory
 - Source: `src/router/index.js`
-- Generated: `2026-08-18 09:58:35`
+- Generated: `2026-09-17 19:07:22`
 ## Counts
-- Total route records: 82
-- Page routes (leaf component): 62
+- Total route records: 85
+- Page routes (leaf component): 65
 - Layout routes (component + children): 4
 - Group routes (children only): 1
 - Redirect-only routes: 15
-- Unique route components: 61
+- Unique route components: 64
 ## Unique Components By Prefix
-- `v3/pages`: 34
+- `v3/pages`: 37
 - `platform/views`: 17
 - `v3/components`: 7
 - `v3/layouts`: 2
@@ -77,6 +77,9 @@
 | `/:locale(ar\|en)/paylink/confirm-payment` | `confirm-paylink-payment` | `page` | `@/platform/views/paylink/ConfirmPayment.vue` |  |
 | `/:locale(ar\|en)/payments/confirm-payment/:id(\d+)` | `confirm-payment` | `page` | `@/v3/pages/payments/ConfirmPayment.vue` |  |
 | `/:locale(ar\|en)/professional-diver-license` | `professional-diver-license` | `page` | `@/v3/pages/professional-divers/ProfessionalDiverProfile.vue` |  |
+| `/:locale(ar\|en)/rfps` | `vendor-rfps` | `page` | `@/v3/pages/app/rfps/RfpsIndex.vue` |  |
+| `/:locale(ar\|en)/rfps/:id(\d+)` | `vendor-rfp-view` | `page` | `@/v3/pages/app/rfps/RfpView.vue` |  |
+| `/:locale(ar\|en)/rfps/:id(\d+)/upload` | `vendor-rfp-upload` | `page` | `@/v3/pages/app/rfps/RfpUpload.vue` |  |
 | `/:locale(ar\|en)/vendors` | `vendor-profile` | `page` | `@/v3/pages/app/vendors/VendorProfileView.vue` |  |
 | `/404/:redirect(.*)?` | `error-404` | `page` | `@/v3/pages/system/NotFound404.vue` |  |
 ## Layout Routes

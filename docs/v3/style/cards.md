@@ -9,11 +9,22 @@ Applies to every application “card” rendered inside `ApplicationSummary.vue`
   - Include a Prime icon with `aria-hidden="true"`.
   - Heading text uses `tw-font-bold tw-text-slate-700 tw-text-xl`.
 - **Action links/buttons**: align them on the right using `tw-inline-flex tw-items-center tw-gap-2 tw-text-sm tw-font-medium`. Use router-links for navigation, `AppButton` for operations.
+- **Card anatomy is not mandatory**: do not create separate header, body, and
+  footer regions for a simple item. A file, attachment, person, or action should
+  normally be one flat row with its identity, state, metadata, and actions on
+  the same visual plane.
 
 ## 2. Card Shell
 - Shared shell classes: `tw-bg-white tw-rounded-2xl tw-border tw-border-slate-200 tw-shadow-sm`.
 - Padding defaults to `tw-p-5` for dense grids and `tw-p-6` when centering a single item (photo card).
 - No extra wrappers—the summary page already sets spacing.
+- Do not nest cards or bordered panels inside the shell.
+- Do not use horizontal divider lines inside the shell or between ordinary
+  rows. Express grouping through spacing, typography, alignment, and restrained
+  background tint.
+- Operational records keep identity, status, key evidence, and the next action
+  together. Dense lists may alternate between two quiet background tones that
+  do not encode status.
 
 ## 3. Content Layout
 - **Grids**: `tw-grid sm:tw-grid-cols-2 lg:tw-grid-cols-3 tw-gap-4`. Use `sm:tw-col-span-2` for wide fields (e.g., participant leave addressee at `SFParticipantsCard.vue:224-233`).
@@ -28,6 +39,8 @@ Applies to every application “card” rendered inside `ApplicationSummary.vue`
 
 ## 5. Actions & CTAs
 - Inline buttons (edit/delete) live in the heading row; use subtle colors and disabled opacity states (`tw-inline-flex tw-items-center tw-gap-2 tw-px-3 tw-py-1.5`).
+- For repeated items, keep item-specific actions beside that item; do not create
+  an action footer below it.
 - Block CTAs (add participant) use dashed borders: `tw-border-2 tw-border-dashed tw-border-slate-300` with centered contents.
 
 ## 6. Typography & Icons

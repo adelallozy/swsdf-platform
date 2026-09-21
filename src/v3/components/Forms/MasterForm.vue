@@ -154,6 +154,22 @@ const vErrors = reactive({})
 const schemaData = reactive({ ...props.schema })
 const showSummary = ref(false)
 const formData = reactive({}) // Track current user input to prevent premature validation
+
+// Keep the rendered schema current when a parent recomputes it (e.g. a
+// file field whose accept list follows the selected type). Entered
+// values and errors are preserved; only field definitions refresh.
+watch(() => props.schema, (newSchema) => {
+  if (!newSchema || typeof newSchema !== 'object') return
+  Object.keys(newSchema).forEach((k) => {
+    // Replace wholesale so computed attrs (accept, description, …)
+    // reach the fields; formData holds the user's values separately.
+    schemaData[k] = newSchema[k]
+  })
+  // Drop fields that no longer exist in the schema.
+  Object.keys(schemaData).forEach((k) => {
+    if (!(k in newSchema)) delete schemaData[k]
+  })
+}, { deep: true })
   
 /* Lazy-load inputs */
 const loadFieldComponent = async (type) => {
@@ -189,6 +205,10 @@ function getFieldOptions(key) {
 /* Select component helpers */
 function getOptionLabel(option) {
   try {
+    // Some options contain user-authored display text rather than i18n keys.
+    if (option && typeof option === 'object' && option.translateLabel === false) {
+      return option.label || option.name || ''
+    }
     // If option is a string, translate it
     if (typeof option === 'string') {
       return t(option);
@@ -460,6 +480,10 @@ watch(() => props.initialValues, (newValues) => {
         formData[k] = newValues[k]
       }
     })
+    // Re-validate: an externally cleared field (e.g. a picked file
+    // dropped on type switch) must not keep its previous valid state.
+    validateForm()
+    emitValidity()
   }
 }, { deep: true })
   

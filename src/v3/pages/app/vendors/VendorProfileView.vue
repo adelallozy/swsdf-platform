@@ -67,6 +67,72 @@
         </button>
       </div>
 
+      <section v-if="openRfps.length">
+        <div class="tw-mb-3 tw-flex tw-flex-wrap tw-items-center tw-justify-between tw-gap-3">
+          <h2 class="tw-text-xl tw-font-bold tw-text-slate-800">
+            {{ t("Requests for Proposal") }}
+          </h2>
+          <span
+            class="tw-inline-flex tw-items-center tw-gap-2 tw-rounded-full tw-bg-emerald-50 tw-px-3 tw-py-1 tw-text-sm tw-font-semibold tw-text-emerald-700"
+          >
+            <span class="tw-h-2 tw-w-2 tw-rounded-full tw-bg-emerald-500" aria-hidden="true" />
+            {{ openRfps.length }} {{ t("Open") }}
+          </span>
+        </div>
+
+        <div class="tw-grid tw-gap-4 md:tw-grid-cols-2">
+          <RouterLink
+            v-for="rfp in openRfps"
+            :key="rfp.id"
+            :to="{ name: 'vendor-rfp-view', params: { id: rfp.id } }"
+            class="group tw-flex tw-min-h-40 tw-flex-col tw-justify-between tw-rounded-2xl tw-border tw-border-cyan-200 tw-bg-gradient-to-br tw-from-cyan-50 tw-to-white tw-p-5 tw-no-underline tw-shadow-sm tw-transition hover:-tw-translate-y-0.5 hover:tw-border-cyan-400 hover:tw-shadow-md focus-visible:tw-outline focus-visible:tw-outline-2 focus-visible:tw-outline-offset-2 focus-visible:tw-outline-primary"
+          >
+            <div>
+              <div class="tw-flex tw-items-start tw-justify-between tw-gap-4">
+                <strong class="tw-text-lg tw-font-extrabold tw-text-slate-900" dir="ltr">
+                  {{ rfp.reference || "—" }}
+                </strong>
+                <span class="tw-rounded-full tw-bg-emerald-100 tw-px-2.5 tw-py-1 tw-text-xs tw-font-bold tw-text-emerald-700">
+                  {{ t("Open") }}
+                </span>
+              </div>
+              <p
+                v-if="rfpDescription(rfp)"
+                class="tw-mt-3 tw-line-clamp-2 tw-text-sm tw-leading-6 tw-text-slate-600"
+              >
+                {{ rfpDescription(rfp) }}
+              </p>
+            </div>
+
+            <div class="tw-mt-5 tw-flex tw-items-end tw-justify-between tw-gap-4 tw-border-t tw-border-cyan-100 tw-pt-4">
+              <div>
+                <span class="tw-block tw-text-xs tw-font-medium tw-text-slate-500">
+                  {{ t("Closes") }}
+                </span>
+                <strong class="tw-text-sm tw-text-slate-800">
+                  {{ formatDateTime(rfp.closes_at) }}
+                </strong>
+              </div>
+              <i
+                :class="[
+                  'pi tw-text-sm tw-text-primary tw-transition-transform group-hover:tw-translate-x-1 rtl:group-hover:-tw-translate-x-1',
+                  isRTL ? 'pi-arrow-left' : 'pi-arrow-right',
+                ]"
+                aria-hidden="true"
+              />
+            </div>
+          </RouterLink>
+        </div>
+
+        <RouterLink
+          :to="{ name: 'vendor-rfps' }"
+          class="tw-mt-4 tw-inline-flex tw-items-center tw-gap-2 tw-text-sm tw-font-semibold !tw-text-primary tw-no-underline hover:tw-underline"
+        >
+          {{ t("All requests") }}
+          <i :class="['pi tw-text-xs', isRTL ? 'pi-arrow-left' : 'pi-arrow-right']" aria-hidden="true" />
+        </RouterLink>
+      </section>
+
       <section>
         <h2 class="tw-mb-3 tw-text-xl tw-font-bold tw-text-slate-800">
           {{ t("Vendor Details") }}
@@ -233,6 +299,7 @@ import Message from "primevue/message";
 import ProgressSpinner from "primevue/progressspinner";
 import UploadedFileCard from "@/v3/components/applications/UploadedFileCard.vue";
 import {
+  RFPS_INDEX,
   VENDORS_INDEX,
   VENDORS_PICK,
   VENDORS_APPS_CREATE_PROFILE_UPDATE,
@@ -262,8 +329,34 @@ const openRegistration = ref(null);
 const loadFailed = ref(false);
 const isLoading = ref(true);
 const vendorRootId = ref(null);
+const openRfps = ref([]);
 
 const isRTL = computed(() => locale.value === "ar");
+
+function isCurrentlyOpenRfp(rfp) {
+  if (String(rfp?.status || "") !== "open") return false;
+  const closesAt = new Date(rfp?.closes_at);
+  return !Number.isNaN(closesAt.getTime()) && closesAt.getTime() > Date.now();
+}
+
+function rfpDescription(rfp) {
+  return isRTL.value
+    ? rfp?.description_ar || rfp?.description_en || ""
+    : rfp?.description_en || rfp?.description_ar || "";
+}
+
+function formatDateTime(value) {
+  const date = new Date(value);
+  if (Number.isNaN(date.getTime())) return "—";
+  return new Intl.DateTimeFormat(isRTL.value ? "ar-SA" : "en-GB", {
+    day: "numeric",
+    month: "short",
+    year: "numeric",
+    hour: "numeric",
+    minute: "2-digit",
+    timeZone: "Asia/Riyadh",
+  }).format(date);
+}
 
 const profileFields = computed(() => [
   { label: "Company Name (Arabic)", value: profile.value?.name_ar },
@@ -333,6 +426,7 @@ async function loadVendorState() {
   files.value = [];
   openRegistration.value = null;
   vendorRootId.value = null;
+  openRfps.value = [];
 
   try {
     const vendorResponse = await apiGet(VENDORS_INDEX, {
@@ -361,6 +455,19 @@ async function loadVendorState() {
       files.value = Array.isArray(detailResponse?.files)
         ? detailResponse.files
         : [];
+
+      try {
+        const rfpResponse = await apiGet(RFPS_INDEX, {
+          context: "VendorProfile.loadOpenRfps",
+        });
+        openRfps.value = (Array.isArray(rfpResponse?.rfps) ? rfpResponse.rfps : [])
+          .filter(isCurrentlyOpenRfp);
+      } catch (error) {
+        capture(error, {
+          context: "VendorProfile.loadOpenRfps",
+          fallback: "Failed to load RFPs",
+        });
+      }
 
       const vendorName = isRTL.value
         ? profile.value?.name_ar || profile.value?.name_en

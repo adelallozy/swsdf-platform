@@ -77,7 +77,10 @@ async function apiRequest(url, method = "GET", options = {}) {
   }
 
   try {
-    const res = await fetch(API_URL + url, init);
+    // Absolute URLs pass through untouched (e.g. the FastUpload service
+    // base); relative paths get the API base prepended.
+    const targetUrl = /^https?:\/\//i.test(url) ? url : API_URL + url;
+    const res = await fetch(targetUrl, init);
 
     // 401 → sign out + bubble
     if (res.status === 401) {

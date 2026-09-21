@@ -14,6 +14,15 @@ let locale = localStorage.getItem("locale") || import.meta.env.VITE_DEFAULT_LOCA
 const i18n = createI18n({
   legacy: false,
   locale,
+  fallbackLocale: false,
+  fallbackFormat: true,
+  missingWarn: false,
+  fallbackWarn: false,
+  missing: (missingLocale, key) => {
+    if (import.meta.env.DEV && missingLocale === "ar") {
+      console.warn(`[i18n] Missing Arabic translation for "${key}"`);
+    }
+  },
   globalInjection: true,
   messages,
 });
