@@ -158,7 +158,7 @@ const routes = [
             name: "jetsky-competition-registration",
             component: () =>
               import(
-                "@/platform/views/Applications/competitions/jetsky/NewRegistration.vue"
+                "@/v3/pages/applications/jetski/ParticipationUpsert.vue"
               ),
             meta: {
               pageTitle: "Jetsky Competition Participation",
@@ -463,17 +463,7 @@ const routes = [
 
                 component: () =>
                   import(
-                    "@/platform/views/Applications/competitions/jetsky/UpdateInformation.vue"
-                  ),
-              },
-              {
-                path: "jetsky-competition-application",
-                name: "jetsky-competition-application",
-                props: true,
-
-                component: () =>
-                  import(
-                    "@/platform/views/Applications/competitions/jetsky/ApplicationReview.vue"
+                    "@/v3/pages/applications/jetski/ParticipationUpsert.vue"
                   ),
               },
 

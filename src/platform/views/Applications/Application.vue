@@ -75,17 +75,18 @@
 					},
 				});
 			}
-			if (
-				target == "Events" &&
-				application.purpose == "Jetski Competition Participation"
-				) {
-					router.replace({
-						name: "jetsky-competition-application",
-						params: {
-						id: application.id,
-						},
-					});
-			}
+		if (
+			target == "Events" &&
+			application.purpose == "Jetski Competition Participation"
+			) {
+				router.replace({
+					name: "app-summary",
+					params: {
+					appId: application.id,
+					locale: route.params.locale || locale.value || "ar",
+					},
+				});
+		}
 			if (
 				target == "Events" &&
 				application.purpose == "Underwater Photography Competition Participation"

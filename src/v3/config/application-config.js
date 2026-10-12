@@ -1005,46 +1005,29 @@ export const APPLICATION_CONFIG = {
 
   //============================================================================
   // JETSKI COMPETITION PARTICIPATION
+  // Keyed by the legacy `purpose` value carried by every jetski application
+  // row (the backend flow key 'jetski-competition-participation' is not yet
+  // stored on applications). JetskiParticipationCard loads its own data
+  // through pick-relatives; the backend payload resolver only provides the
+  // generic files/actions keys for this flow today.
   //============================================================================
   "Jetski Competition Participation": {
     displayName: "Jetski Competition Participation",
 
-    // Payload keys for backend loading
-    payloadKeys: [
-      "event",
-      "participation",
-      "user_profile",
-      "user_profile_picture",
-      "files",
-      "quotations",
-      "actions",
-    ],
+    // Payload keys resolved by the backend payload component for this flow
+    payloadKeys: ["files", "actions"],
 
     requiredFiles: ["Medical Examination", "National Identity"],
     acceptedFiles: ["Medical Examination", "National Identity", "Other"],
 
+    // Workflow steps (execution order)
     steps: [
       {
-        id: "sport_participation",
-        label: "Sport Participation Details",
+        id: "jetski_participation",
+        label: "Racer Information",
         type: "entity",
         blocking: true,
-        component: "SportParticipation",
-        validation: {
-          type: "callback",
-          handler: "validateSportParticipation",
-        },
-      },
-      {
-        id: "user_profile",
-        label: "User Profile",
-        type: "profile",
-        blocking: true,
-        component: "ProfileDetails",
-        validation: {
-          type: "callback",
-          handler: "validateUserProfile",
-        },
+        component: "JetskiParticipationCard",
       },
       {
         id: "files",
@@ -1059,28 +1042,14 @@ export const APPLICATION_CONFIG = {
       },
     ],
 
+    // Summary page layout (card order)
     summaryLayout: [
       "ApplicationInfoCard",
-      "EventInfoCard",
-      "SportParticipation",
-      "ProfileDetails",
+      "JetskiParticipationCard",
       "FilesCard",
       "ApplicationFeesCard",
       "ActionsTrackingCard",
     ],
-
-    dataLoaders: {
-      event: {
-        endpoint: "/events/{targetId}",
-        payloadKey: "event",
-        loadingKey: "event",
-      },
-      participation: {
-        endpoint: "/jetski-participations/by-application-id/{appId}",
-        payloadKey: "participation",
-        loadingKey: "participation",
-      },
-    },
   },
 
   "Freediving Competition Participation": {

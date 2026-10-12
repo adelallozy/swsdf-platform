@@ -33,10 +33,10 @@ Mapping rules:
 | M | `src/platform/components/applications/ApplicationCard.vue` | `src/platform/components/applications/ApplicationCard.vue` | Equivalent exists. |
 | M | `src/platform/components/applications/ProfileDetails.vue` | `src/platform/components/applications/ProfileDetails.vue` | Equivalent exists. |
 | ~~M~~ | ~~`src/platform/components/applications/Summary.vue`~~ | — | **Removed** — legacy, replaced by v3 `ApplicationSummary.vue`. |
-| M | `src/platform/components/applications/UserProfileFiles.vue` | `src/platform/components/applications/UserProfileFiles.vue` | Equivalent exists. |
+| ~~M~~ | ~~`src/platform/components/applications/UserProfileFiles.vue`~~ | — | **Removed** — only consumer was the legacy jetski review, deleted with it. |
 | M | `src/platform/components/applications/compititons/free-diving/AthletesCard.vue` | `src/platform/components/applications/compititons/free-diving/AthletesCard.vue` | Equivalent exists. |
 | M | `src/platform/components/applications/compititons/free-diving/WorkLeaveCard.vue` | `src/platform/components/applications/compititons/free-diving/WorkLeaveCard.vue` | Equivalent exists. |
-| M | `src/platform/components/applications/compititons/jetsky/Details.vue` | `src/platform/components/applications/compititons/jetsky/Details.vue` | Equivalent exists. |
+| ~~M~~ | ~~`src/platform/components/applications/compititons/jetsky/Details.vue`~~ | — | **Removed** — legacy jetski registration tree replaced by v3. |
 | M | `src/platform/components/applications/compititons/underwater-photography/Details.vue` | `src/platform/components/applications/compititons/underwater-photography/Details.vue` | Equivalent exists. |
 | ~~M~~ | ~~`src/platform/components/applications/professional-diver/MembershipsReview.vue`~~ | — | **Removed** — legacy, orphaned. |
 | M | `src/platform/components/applications/professional-diver/ProfileDetails.vue` | `src/platform/components/applications/professional-diver/ProfileDetails.vue` | Equivalent exists. |

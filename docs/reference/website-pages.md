@@ -1,16 +1,16 @@
 # Website Pages Inventory
 - Source: `src/router/index.js`
-- Generated: `2026-09-17 19:07:22`
+- Generated: `2026-10-09 18:29:36`
 ## Counts
-- Total route records: 85
-- Page routes (leaf component): 65
+- Total route records: 84
+- Page routes (leaf component): 64
 - Layout routes (component + children): 4
 - Group routes (children only): 1
 - Redirect-only routes: 15
-- Unique route components: 64
+- Unique route components: 62
 ## Unique Components By Prefix
-- `v3/pages`: 37
-- `platform/views`: 17
+- `v3/pages`: 38
+- `platform/views`: 14
 - `v3/components`: 7
 - `v3/layouts`: 2
 - `website/profile`: 1
@@ -41,10 +41,9 @@
 | `/:locale(ar\|en)/applications/:id(\d+)/add-new-file` | `add-new-file` | `page` | `@/v3/components/Applications/UploadFiles.vue` |  |
 | `/:locale(ar\|en)/applications/:id(\d+)/add-working-leave` | `add-working-leave` | `page` | `@/platform/views/Applications/competitions/free-diving/NewWorkLeave.vue` |  |
 | `/:locale(ar\|en)/applications/:id(\d+)/freediving-competition-application` | `freediving-competition-application` | `page` | `@/platform/views/Applications/competitions/free-diving/ApplicationReview.vue` |  |
-| `/:locale(ar\|en)/applications/:id(\d+)/jetsky-competition-application` | `jetsky-competition-application` | `page` | `@/platform/views/Applications/competitions/jetsky/ApplicationReview.vue` |  |
 | `/:locale(ar\|en)/applications/:id(\d+)/new-file` | `new-application-file` | `page` | `@/v3/components/Applications/UploadFiles.vue` |  |
 | `/:locale(ar\|en)/applications/:id(\d+)/underwater-photography-competition-application` | `underwater-photography-competition-application` | `page` | `@/platform/views/Applications/competitions/underwater-photography/ApplicationReview.vue` |  |
-| `/:locale(ar\|en)/applications/:id(\d+)/update-jetsky-competition-application/:event` | `update-jetsky-competition-application` | `page` | `@/platform/views/Applications/competitions/jetsky/UpdateInformation.vue` |  |
+| `/:locale(ar\|en)/applications/:id(\d+)/update-jetsky-competition-application/:event` | `update-jetsky-competition-application` | `page` | `@/v3/pages/applications/jetski/ParticipationUpsert.vue` |  |
 | `/:locale(ar\|en)/applications/:id(\d+)/update-license-informations` | `professional-diver-application-license-informations` | `page` | `@/platform/views/Applications/professional-divers/LicenseInformations.vue` |  |
 | `/:locale(ar\|en)/applications/:id(\d+)/update-underwater-participation-competition-application/:participantId` | `update-underwater-participation-competition-application` | `page` | `@/platform/views/Applications/competitions/underwater-photography/UpdateInformation.vue` |  |
 | `/:locale(ar\|en)/applications/:id(\d+)/update-user-photo` | `update-user-photo` | `page` | `@/v3/pages/applications/ApplicationPhotoUpload.vue` |  |
@@ -53,7 +52,7 @@
 | `/:locale(ar\|en)/applications/diving-centers-new-membership` | `diving-centers-new-membership` | `page` | `@/v3/pages/applications/dive-centers/NewMembership.vue` |  |
 | `/:locale(ar\|en)/applications/fishing-new-team-registration/:eventId(\d+)` | `fishing-new-team-registration` | `page` | `@/v3/pages/applications/sport-fishing/TeamUpsert.vue` |  |
 | `/:locale(ar\|en)/applications/freediving-competition-registration/:id(\d+)` | `freediving-competition-registration` | `page` | `@/platform/views/Applications/competitions/free-diving/NewRegistration.vue` |  |
-| `/:locale(ar\|en)/applications/jetsky-competition-registration/:event` | `jetsky-competition-registration` | `page` | `@/platform/views/Applications/competitions/jetsky/NewRegistration.vue` |  |
+| `/:locale(ar\|en)/applications/jetsky-competition-registration/:event` | `jetsky-competition-registration` | `page` | `@/v3/pages/applications/jetski/ParticipationUpsert.vue` |  |
 | `/:locale(ar\|en)/applications/professional-diver-new-license` | `professional-diver-new-license` | `page` | `@/v3/pages/applications/professional-divers/NewLicense.vue` |  |
 | `/:locale(ar\|en)/applications/sport-fishing-register/:eventId(\d+)` | `sport-fishing-register` | `page` | `@/v3/pages/applications/sport-fishing/TeamUpsert.vue` |  |
 | `/:locale(ar\|en)/applications/sport-fishing-team-update/:appId(\d+)` | `fishing-team-update` | `page` | `@/v3/pages/applications/sport-fishing/TeamUpsert.vue` |  |

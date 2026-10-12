@@ -1,6 +1,6 @@
-// VERSION: 2.3.0
+// VERSION: 2.4.0
 // FILE: src/v3/composables/application/useEventsApplicationsApi.js
-// Event applications API - Sport Fishing specific operations
+// Event applications API - Sport Fishing and Jetski operations
 
 import { ref } from "vue";
 import {
@@ -35,6 +35,15 @@ const SF_PARTICIPANTS_ADD =
 const SF_PARTICIPANTS_DELETE =
   import.meta.env.VITE_EVENTS_SF_PARTICIPANTS_DELETE_URL ||
   "events-fishing-participants/{participantId}";
+const JETSKI_CREATE =
+  import.meta.env.VITE_EVENTS_JETSKI_CREATE_APPLICATION ||
+  "events-applications/new-jetski-application/{targetId}";
+const JETSKI_UPDATE =
+  import.meta.env.VITE_EVENTS_JETSKI_UPDATE_APPLICATION ||
+  "events-applications/update-jetski-participation/{appId}";
+const JETSKI_PICK_RELATIVES =
+  import.meta.env.VITE_EVENTS_APPLICATIONS_PICK_RELATIVES ||
+  "events-applications/pick-relatives/{appId}";
 
 // ──────────────────────────────────────────────────────────────────────────────
 
@@ -48,6 +57,7 @@ export default function useEventsApplicationsApi() {
   const event = ref(null);
   const team = ref(null);
   const participants = ref([]);
+  const participation = ref(null);
   const lastError = ref(null);
 
   // ─────────────────────────────────────────────────────────
@@ -325,6 +335,139 @@ export default function useEventsApplicationsApi() {
   }
 
   // ─────────────────────────────────────────────────────────
+  // JETSKI PARTICIPATION - CRUD
+  // ─────────────────────────────────────────────────────────
+
+  /**
+   * Create new jetski participation for event
+   * Loading key: jetski-participation-creating
+   * Payload: FormData (racer_number, work_leave, races[])
+   * Response structure: { application: { id: ... }, participants: {...} }
+   */
+  async function jetskiCreateParticipation(eventId, payload) {
+    lastError.value = null;
+
+    return withLoading("jetski-participation-creating", async () => {
+      try {
+        const endpoint = JETSKI_CREATE.replace("{targetId}", eventId);
+        const res = await apiPost(endpoint, payload, {
+          context: "EventsApi.jetskiCreateParticipation",
+        });
+
+        return res;
+      } catch (err) {
+        lastError.value = err;
+        if (shouldCapture(err)) {
+          capture(err, {
+            fallback: "Failed to create jetski participation",
+            context: "useEventsApplicationsApi.jetskiCreateParticipation",
+            meta: { eventId },
+          });
+        }
+        throw err;
+      }
+    });
+  }
+
+  /**
+   * Load jetski participation by application ID (via pick-relatives)
+   * Loading key: jetski-participation-fetching
+   * Response structure: { application, userProfile, event, jetskiParticipant, ... }
+   */
+  async function loadApplicationJetskiParticipation(appId) {
+    if (!appId) return null;
+
+    lastError.value = null;
+
+    return withLoading("jetski-participation-fetching", async () => {
+      try {
+        const endpoint = JETSKI_PICK_RELATIVES.replace("{appId}", appId);
+        const res = await apiGet(endpoint, {
+          context: "EventsApi.loadApplicationJetskiParticipation",
+        });
+
+        participation.value = res?.jetskiParticipant || null;
+        return participation.value;
+      } catch (err) {
+        lastError.value = err;
+        if (shouldCapture(err)) {
+          capture(err, {
+            fallback: "Failed to load jetski participation",
+            context: "useEventsApplicationsApi.loadApplicationJetskiParticipation",
+            meta: { appId },
+          });
+        }
+        throw err;
+      }
+    });
+  }
+
+  /**
+   * Load all event-application relatives (event, userProfile, sport participants)
+   * Loading key: event-application-relatives
+   * Response structure: { application, userProfile, event, jetskiParticipant, ... }
+   */
+  async function pickEventApplicationRelatives(appId) {
+    if (!appId) return null;
+
+    lastError.value = null;
+
+    return withLoading("event-application-relatives", async () => {
+      try {
+        const endpoint = JETSKI_PICK_RELATIVES.replace("{appId}", appId);
+        const res = await apiGet(endpoint, {
+          context: "EventsApi.pickEventApplicationRelatives",
+        });
+
+        event.value = res?.event || null;
+        participation.value = res?.jetskiParticipant || null;
+        return res;
+      } catch (err) {
+        lastError.value = err;
+        if (shouldCapture(err)) {
+          capture(err, {
+            fallback: "Failed to load application details",
+            context: "useEventsApplicationsApi.pickEventApplicationRelatives",
+            meta: { appId },
+          });
+        }
+        throw err;
+      }
+    });
+  }
+
+  /**
+   * Update jetski participation by application ID
+   * Loading key: jetski-participation-updating
+   * Payload: FormData (racer_number, work_leave, races[])
+   * Response structure: { application: { id: ... }, participants: {...} }
+   */
+  async function jetskiUpdateParticipation(appId, payload) {
+    lastError.value = null;
+
+    return withLoading("jetski-participation-updating", async () => {
+      try {
+        const endpoint = JETSKI_UPDATE.replace("{appId}", appId);
+        const res = await apiPost(endpoint, payload, {
+          context: "EventsApi.jetskiUpdateParticipation",
+        });
+
+        return res;
+      } catch (err) {
+        lastError.value = err;
+        if (shouldCapture(err)) {
+          capture(err, {
+            fallback: "Failed to update jetski participation",
+            context: "useEventsApplicationsApi.jetskiUpdateParticipation",
+            meta: { appId },
+          });
+        }
+        throw err;
+      }
+    });
+  }
+
+  // ─────────────────────────────────────────────────────────
   // Utilities
   // ─────────────────────────────────────────────────────────
 
@@ -335,6 +478,7 @@ export default function useEventsApplicationsApi() {
     event.value = null;
     team.value = null;
     participants.value = [];
+    participation.value = null;
     lastError.value = null;
   }
 
@@ -358,6 +502,12 @@ export default function useEventsApplicationsApi() {
     sportFishingAddParticipant,
     sportFishingDeleteParticipant,
 
+    // Jetski participation
+    jetskiCreateParticipation,
+    jetskiUpdateParticipation,
+    loadApplicationJetskiParticipation,
+    pickEventApplicationRelatives,
+
     // Utils
     resetLocal,
   };
@@ -367,8 +517,17 @@ export default function useEventsApplicationsApi() {
 // DOCUMENTATION
 // ──────────────────────────────────────────────────────────────────────────────
 /**
- * VERSION: 2.3.0
+ * VERSION: 2.4.0
  *
+ * CHANGES IN v2.4.0:
+ * ==================
+ * - Added jetski participation functions: jetskiCreateParticipation,
+ *   jetskiUpdateParticipation, loadApplicationJetskiParticipation
+ * - Added participation reactive state
+ * - New env constants: VITE_EVENTS_JETSKI_CREATE_APPLICATION,
+ *   VITE_EVENTS_JETSKI_UPDATE_APPLICATION, VITE_EVENTS_APPLICATIONS_PICK_RELATIVES
+ *
+ * v2.3.0:
  * CHANGES IN v2.3.0:
  * ==================
  * - Updated to use new endpoint structure with placeholders

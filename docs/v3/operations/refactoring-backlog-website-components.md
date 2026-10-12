@@ -32,7 +32,7 @@ Refactoring guide: `../guides/refactoring-guide.md`
 | Field | Value |
 |-------|-------|
 | Source | `src/website/components/inputs/BaseInput.vue` |
-| Consumers | `NewWorkLeave.vue`, `TeamForm.vue`, `JetskyForm.vue`, `FreeDivingForm.vue`, `UserProfileForm.vue` (5 files — MembershipForm.vue removed) |
+| Consumers | `NewWorkLeave.vue`, `TeamForm.vue`, `FreeDivingForm.vue`, `UserProfileForm.vue` (4 files — MembershipForm.vue and JetskyForm.vue removed) |
 | Suggested target | `src/v3/components/inputs/V3Input.vue` (or reuse PrimeVue `InputText`) |
 | Notes | Used across competition and professional-diver forms. Low complexity. |
 
@@ -43,7 +43,7 @@ Refactoring guide: `../guides/refactoring-guide.md`
 | Field | Value |
 |-------|-------|
 | Source | `src/website/components/inputs/BaseSelect.vue` |
-| Consumers | `NewWorkLeave.vue`, `NewFileStep.vue`, `TeamForm.vue`, `JetskyForm.vue`, `FreeDivingForm.vue`, `UserProfileForm.vue` (6 files — WorkContractForm.vue removed) |
+| Consumers | `NewWorkLeave.vue`, `NewFileStep.vue`, `TeamForm.vue`, `FreeDivingForm.vue`, `UserProfileForm.vue` (5 files — WorkContractForm.vue and JetskyForm.vue removed) |
 | Suggested target | `src/v3/components/inputs/V3Select.vue` (or reuse PrimeVue `Select` / MasterForm select field) |
 | Notes | Most widely imported website component. Consider MasterForm field integration. |
 
@@ -65,7 +65,7 @@ Refactoring guide: `../guides/refactoring-guide.md`
 | Field | Value |
 |-------|-------|
 | Source | `src/website/components/inputs/NoramlSelect.vue` |
-| Consumers | `NewWorkLeave.vue`, `JetskyForm.vue` (2 files) |
+| Consumers | `NewWorkLeave.vue` (1 file — JetskyForm.vue removed) |
 | Suggested target | Merge into `V3Select.vue` or replace with PrimeVue `Select` |
 | Notes | Typo in original name ("Noraml"). Only 2 consumers. |
 
@@ -109,7 +109,7 @@ Refactoring guide: `../guides/refactoring-guide.md`
 | Field | Value |
 |-------|-------|
 | Source | `src/website/components/base/BaseModal.vue` |
-| Consumers | `Files.vue`, `UserProfileFiles.vue` (2 files — legacy consumers `WorkContract.vue`, `AddProfissionalQualification.vue`, `WorkContracts.vue`, `MembershipsReview.vue` removed) |
+| Consumers | `Files.vue` (1 file — legacy consumers `WorkContract.vue`, `AddProfissionalQualification.vue`, `WorkContracts.vue`, `MembershipsReview.vue`, `UserProfileFiles.vue` removed) |
 | Suggested target | `src/v3/components/V3Modal.vue` or PrimeVue `Dialog` |
 | Notes | Widely used. If replacing with PrimeVue `Dialog`, update all 6 consumers at once. |
 

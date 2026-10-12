@@ -71,6 +71,12 @@ Registered current card names include:
 
 If a configured component is missing from the registry, the page logs a warning and skips it.
 
+### Card Visibility By Stage
+
+- `ActionsTrackingCard` is hidden only while the application stage is `draft` (no actions can exist before the first submission).
+- It is visible in `applicant_revision` — so the applicant sees the reviewer's `Return To Applicant` note — and in every later stage.
+- All other configured cards render in every stage.
+
 ---
 
 ## Validation Contract

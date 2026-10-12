@@ -28,7 +28,7 @@ All routes below are children of `/app` and require authentication. The root `/`
 | `/app/applications` | `applications` | `platform/views/Applications/Home.vue` | Applications hub (redirects to `applications-index`) |
 | `/app/applications/diving-centers-new-membership` | `diving-centers-new-membership` | `v3/pages/applications/dive-centers/NewMembership.vue` | New diving center membership application |
 | `/app/applications/freediving-competition-registration/:id` | `freediving-competition-registration` | `platform/views/Applications/competitions/free-diving/NewRegistration.vue` | Freediving competition registration |
-| `/app/applications/jetsky-competition-registration/:event` | `jetsky-competition-registration` | `platform/views/Applications/competitions/jetsky/NewRegistration.vue` | Jetsky competition registration |
+| `/app/applications/jetsky-competition-registration/:event` | `jetsky-competition-registration` | `v3/pages/applications/jetski/ParticipationUpsert.vue` | Jetski competition registration |
 | `/app/applications/underwater-photography-competition-registration/:eventId` | `underwater-photography-competition-registration` | `platform/views/Applications/competitions/underwater-photography/NewRegistration.vue` | Underwater photography competition registration |
 | `/app/applications/fishing-new-team-registration/:eventId` | `fishing-new-team-registration` | `v3/pages/applications/sport-fishing/TeamUpsert.vue` | Sport fishing team registration |
 | `/app/applications/new-athlete` | `new-athlete` | Redirect | Compatibility route that redirects to `athlete-new-registration` |
@@ -39,9 +39,8 @@ All routes below are children of `/app` and require authentication. The root `/`
 | Route | Route Name | Component | Description |
 |-------|-----------|-----------|-------------|
 | `/app/applications/:id/freediving-competition-application` | `freediving-competition-application` | `platform/views/Applications/competitions/free-diving/ApplicationReview.vue` | Freediving competition review |
-| `/app/applications/:id/jetsky-competition-application` | `jetsky-competition-application` | `platform/views/Applications/competitions/jetsky/ApplicationReview.vue` | Jetsky competition review |
 | `/app/applications/:id/underwater-photography-competition-application` | `underwater-photography-competition-application` | `platform/views/Applications/competitions/underwater-photography/ApplicationReview.vue` | Underwater photography review |
-| `/app/applications/:id/update-jetsky-competition-application/:event` | `update-jetsky-competition-application` | `platform/views/Applications/competitions/jetsky/UpdateInformation.vue` | Update jetsky competition info |
+| `/app/applications/:id/update-jetsky-competition-application/:event` | `update-jetsky-competition-application` | `v3/pages/applications/jetski/ParticipationUpsert.vue` | Update jetski participation |
 | `/app/applications/:id/update-underwater-participation-competition-application/:participantId` | `update-underwater-participation-competition-application` | `platform/views/Applications/competitions/underwater-photography/UpdateInformation.vue` | Update underwater photo info |
 | `/app/applications/:id/add-working-leave` | `add-working-leave` | `platform/views/Applications/competitions/free-diving/NewWorkLeave.vue` | Add working leave |
 | `/app/applications/:id/update-user-profile` | `update-user-profile` | `platform/views/Applications/UpdateUserProfile.vue` | Update applicant profile |

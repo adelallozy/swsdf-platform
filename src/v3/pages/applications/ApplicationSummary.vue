@@ -179,6 +179,7 @@ import { useNotification } from "@/v3/composables/useNotification.js";
 import usePageHeading from "@/v3/composables/layout/usePageHeading";
 import {
   getConflictApplicationId,
+  isApplicantDraftStage,
   isApplicantRevisionStage,
 } from "@/v3/utils/applicationWorkflow.js";
 
@@ -262,9 +263,11 @@ const COMPONENT_REGISTRY = {
   ),
 
   // Jetski Competition
-  // 'SportParticipation': defineAsyncComponent(() =>
-  //   import('@/v3/components/applications/cards/SportParticipation.vue')
-  // ),
+  JetskiParticipationCard: defineAsyncComponent(() =>
+    import(
+      "@/v3/components/applications/cards/JetskiParticipationCard.vue"
+    )
+  ),
   // 'ProfileDetails': defineAsyncComponent(() =>
   //   import('@/v3/components/applications/cards/ProfileDetails.vue')
   // ),
@@ -350,13 +353,15 @@ const layoutComponents = computed(() => {
     return [];
   }
 
-  // Components hidden while the application is still applicant-editable
-  // (draft / applicant_revision). The actions log only matters after submit.
-  const HIDE_WHEN_EDITABLE = ["ActionsTrackingCard"];
+  // Components hidden only while the application is still a draft (no
+  // actions can exist before the first submission). The actions timeline
+  // stays visible in applicant_revision so the applicant sees the return
+  // note, and in every later stage.
+  const HIDDEN_IN_DRAFT = ["ActionsTrackingCard"];
 
   return layout
     .filter((componentName) => {
-      if (canModifyApplication.value && HIDE_WHEN_EDITABLE.includes(componentName)) {
+      if (isDraftApplication.value && HIDDEN_IN_DRAFT.includes(componentName)) {
         return false;
       }
       return true;
@@ -402,6 +407,9 @@ const canSubmit = computed(() => {
 });
 
 const canModifyApplication = computed(() => store.canModifyApplication.value);
+const isDraftApplication = computed(() =>
+  isApplicantDraftStage(application.value?.stage)
+);
 const canDeleteApplication = computed(() => store.canDeleteApplication.value);
 const canRecallApplication = computed(() => store.canRecallApplication.value);
 
